@@ -9,6 +9,8 @@
       </div>
 
       <StartTracking @taskCreated="onTaskCreated" />
+
+      <CurrentTask :task="currentTask" @trackingStopped="onTrackingStopped" />
     </div>
   </div>
 </template>
@@ -18,6 +20,8 @@ import { ref, onMounted } from "vue";
 import { supabase } from "./main.ts";
 import Login from "./components/Login.vue";
 import StartTracking from "./components/StartTracking.vue";
+import CurrentTask from "./components/CurrentTask.vue";
+import { getCurrentTaskAndTimeEntry } from "./common/supabaseClient";
 
 const user = ref(null);
 const currentTask = ref(null);
@@ -28,8 +32,18 @@ onMounted(async () => {
 
   supabase.auth.onAuthStateChange((_event, session) => {
     user.value = session?.user || null;
+    fetchCurrentTask();
   });
 });
+
+const fetchCurrentTask = async () => {
+  if (!user.value) {
+    currentTask.value = null;
+    return;
+  }
+  const data = await getCurrentTaskAndTimeEntry();
+  currentTask.value = data;
+};
 
 const signOut = async () => {
   await supabase.auth.signOut();
@@ -38,6 +52,10 @@ const signOut = async () => {
 
 const onTaskCreated = async (task) => {
   currentTask.value = task;
+};
+
+const onTrackingStopped = async (task) => {
+  currentTask.value = null;
 };
 
 const helloWorld = async () => {
