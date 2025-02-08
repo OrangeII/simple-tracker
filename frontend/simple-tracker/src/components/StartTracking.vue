@@ -19,7 +19,7 @@
  * start time entry on new task
  */
 
-import { ref, defineEmits } from "vue";
+import { ref } from "vue";
 import { supabase } from "../main.ts";
 import {
   stopCurrentTracking,
