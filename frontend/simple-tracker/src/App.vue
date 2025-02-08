@@ -11,6 +11,14 @@
       <StartTracking @taskCreated="onTaskCreated" />
 
       <CurrentTask :task="currentTask" @trackingStopped="onTrackingStopped" />
+
+      <qrcode-stream
+        @detect="onDetect"
+        @error="onError"
+        @camera-on="onReady"
+      ></qrcode-stream>
+      <div>value: {{ capturedCode?.rawValue }}</div>
+      <div>err: {{ err }}</div>
     </div>
   </div>
 </template>
@@ -22,9 +30,13 @@ import Login from "./components/Login.vue";
 import StartTracking from "./components/StartTracking.vue";
 import CurrentTask from "./components/CurrentTask.vue";
 import { getCurrentTaskAndTimeEntry } from "./common/supabaseClient";
+import { QrcodeStream, QrcodeDropZone, QrcodeCapture } from "vue-qrcode-reader";
 
 const user = ref(null);
 const currentTask = ref(null);
+
+const capturedCode = ref(null);
+const err = ref("");
 
 onMounted(async () => {
   const { data } = await supabase.auth.getSession();
@@ -66,5 +78,18 @@ const helloWorld = async () => {
   } catch (error) {
     console.error("Error calling function:", error);
   }
+};
+
+const onDetect = async (detectedCodes) => {
+  console.log(detectedCodes);
+  capturedCode.value = detectedCodes[0];
+};
+
+const onError = async (error) => {
+  error.value = error.name;
+};
+
+const onReady = async (capabilities) => {
+  err.value;
 };
 </script>
