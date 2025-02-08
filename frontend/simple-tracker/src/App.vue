@@ -4,11 +4,11 @@
     <div v-else>
       <div>
         <h1>Welcome, {{ user.email }}</h1>
-        <button @click="helloWord">Hello word</button>
+        <button @click="helloWorld">Hello word</button>
         <button @click="signOut">Sign Out</button>
       </div>
 
-      <StartTracking />
+      <StartTracking @taskCreated="onTaskCreated" />
     </div>
   </div>
 </template>
@@ -20,6 +20,7 @@ import Login from "./components/Login.vue";
 import StartTracking from "./components/StartTracking.vue";
 
 const user = ref(null);
+const currentTask = ref(null);
 
 onMounted(async () => {
   const { data } = await supabase.auth.getSession();
@@ -35,7 +36,11 @@ const signOut = async () => {
   user.value = null;
 };
 
-const helloWord = async () => {
+const onTaskCreated = async (task) => {
+  currentTask.value = task;
+};
+
+const helloWorld = async () => {
   try {
     const response = await supabase.functions.invoke("hello-world", {
       body: { name: user.value.email },

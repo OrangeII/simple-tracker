@@ -13,13 +13,15 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, defineEmits } from "vue";
 import { supabase } from "../main.ts";
 
 const taskName = ref("");
 const altCode = ref("");
 const loading = ref(false);
 const message = ref("");
+
+const emit = defineEmits(["taskCreated"]);
 
 const startTracking = async () => {
   if (!taskName.value) {
@@ -30,24 +32,38 @@ const startTracking = async () => {
   loading.value = true;
   message.value = "";
 
-  const { data, error } = await supabase
+  //insert the new task
+  let { data: createdTask, error } = await supabase
     .from("tasks")
     .insert({
       name: taskName.value,
       alt_code: altCode.value,
     })
-    .select();
+    .select()
+    .single();
 
   if (error) {
     message.value = error.message;
-  } else {
-    message.value = "Task started succesfully!";
-    taskName.value = "";
-    altCode.value = "";
+    loading.value = false;
+    return;
   }
 
-  loading.value = false;
+  //if the alt code was not provided, set it equal to the id
+  if (!createdTask.alt_code) {
+    const { data: updatedData } = await supabase
+      .from("tasks")
+      .update({ alt_code: createdTask.id })
+      .eq("id", createdTask.id)
+      .select()
+      .single();
+    createdTask = updatedData;
+  }
 
-  console.log(data);
+  //emit the task created
+  emit("taskCreated", createdTask);
+  message.value = "Task started succesfully!";
+  taskName.value = "";
+  altCode.value = "";
+  loading.value = false;
 };
 </script>
