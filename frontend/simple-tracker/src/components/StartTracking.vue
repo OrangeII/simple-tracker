@@ -1,14 +1,15 @@
 <template>
   <div>
-    <h2>Start tracking</h2>
+    <input
+      type="text"
+      v-model="taskName"
+      placeholder="Task name"
+      class="w-full px-4 py-2 border-1 caret-primary focus:outline-primary mb-2"
+    />
 
-    <input type="text" v-model="taskName" placeholder="Task name" />
-    <input type="text" v-model="altCode" placeholder="alt code" />
-    <button @click="start">
+    <button @click="start" class="w-full">
       {{ loading ? "Starting..." : "Start Tracking" }}
     </button>
-
-    <p v-if="message">{{ message }}</p>
   </div>
 </template>
 

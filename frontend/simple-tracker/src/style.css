@@ -1,3 +1,40 @@
-* {
-  font-family: Helvetica, Arial, sans-serif;
+@import "tailwindcss";
+
+@layer base {
+  * {
+    font-family: Helvetica, Arial, sans-serif;
+  }
+
+  html {
+    background-color: var(--color-bg);
+  }
+
+  h1 {
+    font-size: var(--text-2xl);
+    font-weight: 700;
+  }
+  h2 {
+    font-weight: 700;
+    font-size: var(--text-xl);
+  }
+
+  button {
+    text-transform: uppercase;
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    font-weight: 500;
+    border-radius: 2px;
+    padding-inline: calc(var(--spacing) * 4);
+    padding-block: calc(var(--spacing) * 2);
+  }
+}
+
+@theme {
+  /* --color-bg: #e0e4c1; */
+  /* --color-bg: rgb(198, 219, 210); */
+  /* --color-bg: rgb(216, 240, 217); */
+
+  --color-wf: rgb(196, 196, 196);
+  --color-wfdark: rgb(158, 158, 158);
+  --color-primary: #004d69;
 }

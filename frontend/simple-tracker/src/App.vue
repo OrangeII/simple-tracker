@@ -1,16 +1,23 @@
 <template>
   <div>
     <Login v-if="!user" />
-    <div v-else>
-      <div>
+    <div v-else class="flex flex-col min-h-screen">
+      <header class="p-4 border-wfdark border-b-1">
         <h1>Welcome, {{ user.email }}</h1>
         <button @click="helloWorld">Hello word</button>
         <button @click="signOut">Sign Out</button>
-      </div>
+      </header>
 
-      <StartTracking @taskCreated="onTaskCreated" />
+      <main class="flex-1 p-6"></main>
 
-      <CurrentTask :task="currentTask" @trackingStopped="onTrackingStopped" />
+      <footer class="p-4 border-wfdark border-t-1">
+        <StartTracking v-if="!currentTask" @taskCreated="onTaskCreated" />
+        <CurrentTask
+          v-else
+          :task="currentTask"
+          @trackingStopped="onTrackingStopped"
+        />
+      </footer>
     </div>
   </div>
 </template>
