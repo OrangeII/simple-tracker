@@ -1,10 +1,8 @@
 <template>
   <div v-if="task">
-    <h2>Current Task</h2>
-    <div>{{ task.tasks.name }}</div>
+    <h2>{{ task.tasks.name }}</h2>
     <div>
-      start:
-      {{ new Date(task.time_entries.start_time).toLocaleTimeString() }}
+      {{ new Date(task.time_entries.start_time).toLocaleString() }}
     </div>
     <button @click="stopTracking">Stop</button>
   </div>
