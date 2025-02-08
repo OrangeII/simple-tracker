@@ -5,6 +5,9 @@ export const getCurrentTaskAndTimeEntry = async () => {
     const {
       data: { user },
     } = await supabase.auth.getUser();
+    if (!user) {
+      return null;
+    }
 
     const { data, error } = await supabase
       .from("current_tasks")
@@ -97,22 +100,25 @@ export const createTask = async (name: string, altCode: string) => {
 
 export const startTracking = async (taskId: string) => {
   try {
+    //set the current task for the user
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+      return null;
+    }
+
     //start a new time entry for the created task
-    const { data: createdTimeEntry, entryError } = await supabase
+    const { data: createdTimeEntry, error: entryError } = await supabase
       .from("time_entries")
       .insert({ task_id: taskId })
       .select()
       .single();
 
     if (entryError) {
-      console.error("Error inserting new time entry:", error);
+      console.error("Error inserting new time entry:", entryError);
       return null;
     }
-
-    //set the current task for the user
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
 
     const { error } = await supabase.from("current_tasks").upsert({
       user_id: user.id,
