@@ -4,6 +4,7 @@
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
 
     "allowJs": true,
+    "types": ["vite-plugin-pwa/client"],
 
     /* Linting */
     "strict": true,
