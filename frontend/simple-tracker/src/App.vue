@@ -7,7 +7,9 @@
         <button @click="signOut">Sign Out</button>
       </header>
 
-      <main class="flex-1 px-4 overflow-auto"><EntriesList /></main>
+      <main class="flex-1 px-4 overflow-auto">
+        <EntriesList @taskResumed="onTaskResumed" />
+      </main>
 
       <footer class="p-4 border-wfdark border-t-1">
         <StartTracking v-if="!currentTask" @taskCreated="onTaskCreated" />
@@ -63,5 +65,10 @@ const onTaskCreated = async (task) => {
 
 const onTrackingStopped = async (task) => {
   currentTask.value = null;
+};
+
+const onTaskResumed = async (task) => {
+  console.log(task);
+  currentTask.value = task;
 };
 </script>

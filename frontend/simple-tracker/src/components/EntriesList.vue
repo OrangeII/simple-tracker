@@ -37,7 +37,7 @@
 
 <script setup>
 import { onMounted, ref } from "vue";
-import { getEntries } from "../common/supabaseClient.ts";
+import { getEntries, track } from "../common/supabaseClient.ts";
 import { toTimeString } from "../common/timeUtils.ts";
 
 const limit = 10;
@@ -45,6 +45,9 @@ const page = ref(0);
 const loading = ref(false);
 const entries = ref([]);
 const observer = ref(null);
+const loadingResume = ref(false);
+
+const emit = defineEmits(["taskResumed"]);
 
 onMounted(async () => {
   fetchEntries();
@@ -77,7 +80,15 @@ const observerCallBack = (entries) => {
   }
 };
 
-const onResume = (taskId) => {
-  console.log("resume", taskId);
+const onResume = async (taskId) => {
+  loadingResume.value = true;
+  const ret = await track({ taskId });
+  if (!ret) {
+    loadingResume.value = false;
+    return;
+  }
+
+  emit("taskResumed", ret);
+  loadingResume.value = false;
 };
 </script>

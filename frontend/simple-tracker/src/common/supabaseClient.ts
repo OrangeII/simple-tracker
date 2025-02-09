@@ -216,8 +216,10 @@ export const track = async (params: {
 
     if (params.taskId) {
       //start tracking task by id
+      task = await getTaskById(params.taskId);
     } else if (params.altCode && !params.name) {
       //start tracking task by altCode
+      task = await getTaskByAltCode(params.taskId);
     } else if (params.name) {
       //make new task
       task = await createTask(params.name, params.altCode);
