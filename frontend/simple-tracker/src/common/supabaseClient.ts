@@ -65,7 +65,7 @@ export const stopCurrentTracking = async () => {
   }
 };
 
-export const createTask = async (name: string, altCode: string) => {
+export const createTask = async (name: string, altCode?: string) => {
   try {
     let { data: createdTask, error } = await supabase
       .from("tasks")
@@ -165,5 +165,80 @@ export const getEntries = async (limit: number, page: number) => {
     return data;
   } catch (error) {
     console.error("Error in getEntries:", error);
+  }
+};
+
+export const getTaskByAltCode = async (altCode: string) => {
+  try {
+    const { data, error } = await supabase
+      .from("tasks")
+      .select()
+      .eq("alt_code", altCode)
+      .maybeSingle();
+
+    if (error) {
+      console.error(error);
+      return null;
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error in getTaskByAltCode:", error);
+  }
+};
+
+export const getTaskById = async (id: string) => {
+  try {
+    const { data, error } = await supabase
+      .from("tasks")
+      .select()
+      .eq("id", id)
+      .maybeSingle();
+
+    if (error) {
+      console.error(error);
+      return null;
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error in getTaskById:", error);
+  }
+};
+
+export const track = async (params: {
+  taskId?: string;
+  altCode?: string;
+  name?: string;
+}): Promise<{ tasks: Object; time_entries: Object } | undefined | null> => {
+  try {
+    let task;
+
+    if (params.taskId) {
+      //start tracking task by id
+    } else if (params.altCode && !params.name) {
+      //start tracking task by altCode
+    } else if (params.name) {
+      //make new task
+      task = await createTask(params.name, params.altCode);
+    } else {
+      //can't do anything
+      return null;
+    }
+
+    if (!task) {
+      return null;
+    }
+
+    await stopCurrentTracking();
+
+    const timeEntry = await startTracking(task.id);
+    if (!timeEntry) {
+      return null;
+    }
+
+    return { tasks: task, time_entries: timeEntry };
+  } catch (error) {
+    console.error("Error in track:", error);
   }
 };

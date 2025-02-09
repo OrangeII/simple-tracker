@@ -6,18 +6,23 @@
         :key="entry.id"
         class="border-wfdark border-1 rounded-sm p-2 my-3 flex flex-row justify-between"
       >
-        <div class="flex-grow max-w-[75%]">
+        <div class="flex-grow max-w-[65%]">
           <h3 class="truncate">{{ entry.tasks.name }}</h3>
           <p>{{ new Date(entry.start_time).toLocaleDateString() }}</p>
         </div>
         <div>
-          {{
-            entry.end_time
-              ? toTimeString(
-                  new Date(entry.end_time) - new Date(entry.start_time)
-                )
-              : "ongoing"
-          }}
+          <div>
+            {{
+              entry.end_time
+                ? toTimeString(
+                    new Date(entry.end_time) - new Date(entry.start_time)
+                  )
+                : "ongoing"
+            }}
+          </div>
+          <button v-if="entry.end_time" @click="onResume(entry.tasks.id)">
+            resume
+          </button>
         </div>
       </div>
     </div>
@@ -70,5 +75,9 @@ const observerCallBack = (entries) => {
   if (entries[0].isIntersecting) {
     fetchEntries();
   }
+};
+
+const onResume = (taskId) => {
+  console.log("resume", taskId);
 };
 </script>

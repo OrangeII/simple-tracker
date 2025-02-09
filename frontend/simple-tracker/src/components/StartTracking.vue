@@ -22,11 +22,7 @@
 
 import { ref } from "vue";
 import { supabase } from "../main.ts";
-import {
-  stopCurrentTracking,
-  createTask,
-  startTracking,
-} from "../common/supabaseClient.ts";
+import { track } from "../common/supabaseClient.ts";
 
 const taskName = ref("");
 const altCode = ref("");
@@ -44,23 +40,15 @@ const start = async () => {
   loading.value = true;
   message.value = "";
 
-  await stopCurrentTracking();
-
-  const createdTask = await createTask(taskName.value, altCode.value);
-  if (!createdTask) {
+  const ret = await track({ name: taskName.value, altCode: altCode.value });
+  if (!ref) {
+    message.value = "Could not create new task to track";
     loading.value = false;
-    message.value = "Error creating the task";
-    return;
-  }
-  const createdTimeEntry = await startTracking(createdTask.id);
-  if (!createdTimeEntry) {
-    loading.value = false;
-    message.value = "Error creating the new time entry";
     return;
   }
 
   //emit the task created
-  emit("taskCreated", { tasks: createdTask, time_entries: createdTimeEntry });
+  emit("taskCreated", ret);
   message.value = "Task started succesfully!";
   taskName.value = "";
   altCode.value = "";
