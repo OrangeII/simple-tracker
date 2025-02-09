@@ -217,12 +217,17 @@ export const track = async (params: {
     if (params.taskId) {
       //start tracking task by id
       task = await getTaskById(params.taskId);
-    } else if (params.name) {
-      //make new task
-      task = await createTask(params.name, params.altCode);
     } else if (params.altCode) {
       //start tracking task by altCode
       task = await getTaskByAltCode(params.altCode);
+      if (!task) {
+        if (!params.name) params.name = params.altCode;
+        //make a new task if not found
+        task = await createTask(params.name, params.altCode);
+      }
+    } else if (params.name) {
+      //make new task
+      task = await createTask(params.name, params.altCode);
     } else {
       //can't do anything
       return null;

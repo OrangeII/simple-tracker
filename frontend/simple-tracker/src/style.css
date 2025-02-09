@@ -31,6 +31,10 @@
     padding-inline: calc(var(--spacing) * 4);
     padding-block: calc(var(--spacing) * 2);
   }
+
+  div {
+    border-color: var(--color-wfdark);
+  }
 }
 
 @theme {
@@ -38,6 +42,7 @@
   /* --color-bg: rgb(198, 219, 210); */
   /* --color-bg: rgb(216, 240, 217); */
 
+  --color-bg: #ffffff;
   --color-wf: rgb(196, 196, 196);
   --color-wfdark: rgb(158, 158, 158);
   --color-primary: #004d69;

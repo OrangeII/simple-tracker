@@ -5,20 +5,20 @@
       @error="onError"
       @camera-on="onReady"
     ></qrcode-stream>
-    <div>value: {{ capturedCode?.rawValue }}</div>
     <div>err: {{ err }}</div>
   </div>
 </template>
 
 <script setup>
+import { ref } from "vue";
 import { QrcodeStream } from "vue-qrcode-reader";
 
-const capturedCode = ref(null);
 const err = ref("");
 
+const emit = defineEmits(["codeCaptured"]);
+
 const onDetect = async (detectedCodes) => {
-  console.log(detectedCodes);
-  capturedCode.value = detectedCodes[0];
+  emit("codeCaptured", detectedCodes[0].rawValue);
 };
 
 const onError = async (error) => {

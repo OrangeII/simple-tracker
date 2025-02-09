@@ -12,7 +12,7 @@
       </main>
 
       <footer class="p-4 border-wfdark border-t-1">
-        <StartTracking v-if="!currentTask" @taskCreated="onTaskCreated" />
+        <StartTracking v-if="!currentTask" @taskStarted="onTaskstarted" />
         <CurrentTask
           v-else
           :task="currentTask"
@@ -59,7 +59,7 @@ const signOut = async () => {
   user.value = null;
 };
 
-const onTaskCreated = async (task) => {
+const onTaskstarted = async (task) => {
   currentTask.value = task;
 };
 
@@ -68,7 +68,6 @@ const onTrackingStopped = async (task) => {
 };
 
 const onTaskResumed = async (task) => {
-  console.log(task);
   currentTask.value = task;
 };
 </script>
