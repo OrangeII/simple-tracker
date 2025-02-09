@@ -135,3 +135,35 @@ export const startTracking = async (taskId: string) => {
     console.error("Error in startTracking:", error);
   }
 };
+
+export const getEntries = async (limit: number, page: number) => {
+  try {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+      return null;
+    }
+
+    const { data, error } = await supabase
+      .from("time_entries")
+      .select(
+        `
+      *, 
+      tasks (*)
+      `
+      )
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false })
+      .range(limit * page, limit * (page + 1) - 1);
+
+    if (error) {
+      console.error("Error fetching entries", error);
+      return null;
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error in getEntries:", error);
+  }
+};

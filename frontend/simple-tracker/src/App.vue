@@ -8,7 +8,7 @@
         <button @click="signOut">Sign Out</button>
       </header>
 
-      <main class="flex-1 p-6"></main>
+      <main class="flex-1 p-4"><EntriesList /></main>
 
       <footer class="p-4 border-wfdark border-t-1">
         <StartTracking v-if="!currentTask" @taskCreated="onTaskCreated" />
@@ -28,6 +28,7 @@ import { supabase } from "./main.ts";
 import Login from "./components/Login.vue";
 import StartTracking from "./components/StartTracking.vue";
 import CurrentTask from "./components/CurrentTask.vue";
+import EntriesList from "./components/EntriesList.vue";
 import { getCurrentTaskAndTimeEntry } from "./common/supabaseClient";
 
 const user = ref(null);
