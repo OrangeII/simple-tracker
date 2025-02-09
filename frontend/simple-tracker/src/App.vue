@@ -1,14 +1,14 @@
 <template>
   <div>
     <Login v-if="!user" />
-    <div v-else class="flex flex-col min-h-screen">
+    <div v-else class="flex flex-col min-h-screen max-h-screen">
       <header class="p-4 border-wfdark border-b-1">
         <h1>Welcome, {{ user.email }}</h1>
         <button @click="helloWorld">Hello word</button>
         <button @click="signOut">Sign Out</button>
       </header>
 
-      <main class="flex-1 p-4"><EntriesList /></main>
+      <main class="flex-1 px-4 overflow-auto"><EntriesList /></main>
 
       <footer class="p-4 border-wfdark border-t-1">
         <StartTracking v-if="!currentTask" @taskCreated="onTaskCreated" />
