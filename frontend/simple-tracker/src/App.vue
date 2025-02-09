@@ -4,7 +4,6 @@
     <div v-else class="flex flex-col min-h-screen max-h-screen">
       <header class="p-4 border-wfdark border-b-1">
         <h1>Welcome, {{ user.email }}</h1>
-        <button @click="helloWorld">Hello word</button>
         <button @click="signOut">Sign Out</button>
       </header>
 
@@ -64,15 +63,5 @@ const onTaskCreated = async (task) => {
 
 const onTrackingStopped = async (task) => {
   currentTask.value = null;
-};
-
-const helloWorld = async () => {
-  try {
-    const response = await supabase.functions.invoke("hello-world", {
-      body: { name: user.value.email },
-    });
-  } catch (error) {
-    console.error("Error calling function:", error);
-  }
 };
 </script>
