@@ -4,19 +4,19 @@
       <div
         v-for="entry in entries"
         :key="entry.id"
-        class="border-wfdark border-1 rounded-sm p-2 my-3 flex flex-row"
+        class="border-wfdark border-1 rounded-sm p-2 my-3 flex flex-row justify-between"
       >
-        <div class="flex-grow">
-          <h3>{{ entry.tasks.name }}</h3>
+        <div class="flex-grow max-w-[75%]">
+          <h3 class="truncate">{{ entry.tasks.name }}</h3>
           <p>{{ new Date(entry.start_time).toLocaleDateString() }}</p>
         </div>
-        <div class="flex-none">
+        <div>
           {{
             entry.end_time
               ? toTimeString(
                   new Date(entry.end_time) - new Date(entry.start_time)
                 )
-              : "ongoing..."
+              : "ongoing"
           }}
         </div>
       </div>
