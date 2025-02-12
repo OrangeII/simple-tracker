@@ -2,12 +2,12 @@
   <div v-if="message">{{ message }}</div>
   <div class="flex flex-row items-center">
     <div class="pr-2 size-12">
-      <QrCodeIcon v-if="!loading" @click="openQRModal" class="w-full h-full" />
-      <!--spinner-->
-      <div
-        v-else
-        class="size-10 border-4 border-primary border-solid border-t-transparent rounded-full animate-spin"
-      ></div>
+      <QrCodeIcon
+        v-if="!loading"
+        @click="openQRModal"
+        class="w-full h-full text-primary"
+      />
+      <Spinner v-else class="size-9" />
     </div>
     <div class="flex-grow">
       <input
@@ -23,11 +23,7 @@
         @click="start"
         class="w-full h-full text-primary"
       />
-      <!--spinner-->
-      <div
-        v-else
-        class="size-10 border-4 border-primary border-solid border-t-transparent rounded-full animate-spin"
-      ></div>
+      <Spinner v-else class="size-9" />
     </div>
   </div>
 
@@ -61,6 +57,7 @@ import { supabase } from "../main.ts";
 import { track } from "../common/supabaseClient.ts";
 import QRScanner from "./QRScanner.vue";
 import { QrCodeIcon, PlayIcon } from "@heroicons/vue/24/solid";
+import Spinner from "./Spinner.vue";
 
 const taskName = ref("");
 const altCode = ref("");
