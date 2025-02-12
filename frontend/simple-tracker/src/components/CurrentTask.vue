@@ -1,10 +1,10 @@
 <template>
   <div v-if="task" class="flex flex-row justify-between">
     <div class="flex-grow max-w-[60%]">
-      <h2 class="truncate">{{ task.tasks.name }}</h2>
-      <div>
+      <h2>
         <RunningTime :start="new Date(task.time_entries.start_time)" />
-      </div>
+      </h2>
+      <div class="truncate">{{ task.tasks.name }}</div>
     </div>
     <div class="size-12 flex items-center">
       <StopIcon
