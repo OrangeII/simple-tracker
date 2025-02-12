@@ -12,7 +12,7 @@
     <!-- right side of the card -->
     <div
       v-if="entry.end_time"
-      @click="onResume(entry.tasks.id)"
+      @click="onResume(entry)"
       class="flex flex-col items-end"
     >
       <div>
@@ -21,7 +21,7 @@
         }}
       </div>
       <div color="flex flex-col items-center">
-        <PlayIcon v-if="!loadingResume" class="size-8 text-primary" />
+        <PlayIcon v-if="!entry.loading" class="size-8 text-primary" />
         <Spinner v-else class="size-8" />
       </div>
     </div>
@@ -46,7 +46,6 @@ const page = ref(0);
 const loading = ref(false);
 const entries = ref([]);
 const observer = ref(null);
-const loadingResume = ref(false);
 
 const emit = defineEmits(["taskResumed"]);
 
@@ -70,6 +69,10 @@ const fetchEntries = async () => {
     return;
   }
 
+  newEntries.forEach((entry) => {
+    entry.loading = false;
+  });
+
   entries.value.push(...newEntries);
   page.value++;
   loading.value = false;
@@ -81,15 +84,15 @@ const observerCallBack = (entries) => {
   }
 };
 
-const onResume = async (taskId) => {
-  loadingResume.value = true;
-  const ret = await track({ taskId });
+const onResume = async (entry) => {
+  entry.loading = true;
+  const ret = await track({ taskId: entry.tasks.id });
   if (!ret) {
-    loadingResume.value = false;
+    entry.loading = false;
     return;
   }
 
   emit("taskResumed", ret);
-  loadingResume.value = false;
+  entry.loading = false;
 };
 </script>
