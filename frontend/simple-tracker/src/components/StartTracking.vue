@@ -1,7 +1,7 @@
 <template>
   <div v-if="message">{{ message }}</div>
   <div class="flex flex-row items-center">
-    <div class="pr-2 size-12">
+    <div class="pr-2 size-12 flex items-center">
       <QrCodeIcon
         v-if="!loading"
         @click="openQRModal"
@@ -17,7 +17,7 @@
         class="w-full px-4 py-2 border-1 rounded-sm caret-primary focus:outline-primary"
       />
     </div>
-    <div class="pl-2 size-12">
+    <div class="pl-2 size-12 flex items-center">
       <PlayIcon
         v-if="!loading"
         @click="start"

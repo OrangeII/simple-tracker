@@ -6,7 +6,7 @@
         {{ new Date(task.time_entries.start_time).toLocaleString() }}
       </div>
     </div>
-    <div class="size-12">
+    <div class="size-12 flex items-center">
       <StopIcon
         v-if="!loading"
         @click="stopTracking"
