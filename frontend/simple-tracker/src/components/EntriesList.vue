@@ -1,44 +1,45 @@
 <template>
-  <div>
-    <div>
-      <div
-        v-for="entry in entries"
-        :key="entry.id"
-        class="border-wfdark border-1 rounded-sm p-2 my-3 flex flex-row justify-between"
-      >
-        <div class="flex-grow max-w-[65%]">
-          <h3 class="truncate">{{ entry.tasks.name }}</h3>
-          <p>{{ new Date(entry.start_time).toLocaleDateString() }}</p>
-        </div>
-        <div>
-          <div>
-            {{
-              entry.end_time
-                ? toTimeString(
-                    new Date(entry.end_time) - new Date(entry.start_time)
-                  )
-                : "ongoing"
-            }}
-          </div>
-          <button v-if="entry.end_time" @click="onResume(entry.tasks.id)">
-            resume
-          </button>
-        </div>
-      </div>
+  <div
+    v-for="entry in entries"
+    :key="entry.id"
+    class="border-wfdark border-1 rounded-sm p-2 my-3 flex flex-row justify-between"
+  >
+    <div class="flex-grow max-w-[65%]">
+      <h3 class="truncate">{{ entry.tasks.name }}</h3>
+      <p>{{ new Date(entry.start_time).toLocaleDateString() }}</p>
     </div>
 
-    <!-- Scroll Trigger (Empty div at bottom for IntersectionObserver) -->
-    <div id="scroll-trigger" class="h-10"></div>
-
-    <!-- Loading Indicator -->
-    <p v-if="loading" class="text-center mt-4">loading...</p>
+    <!-- right side of the card -->
+    <div
+      v-if="entry.end_time"
+      @click="onResume(entry.tasks.id)"
+      class="flex flex-col items-end"
+    >
+      <div>
+        {{
+          toTimeString(new Date(entry.end_time) - new Date(entry.start_time))
+        }}
+      </div>
+      <div color="flex flex-col items-center">
+        <PlayIcon v-if="!loadingResume" class="size-8 text-primary" />
+        <Spinner v-else class="size-8" />
+      </div>
+    </div>
   </div>
+
+  <!-- Scroll Trigger (Empty div at bottom for IntersectionObserver) -->
+  <div id="scroll-trigger" class="h-4"></div>
+
+  <!-- Loading Indicator -->
+  <Spinner v-if="loading" class="text-center mt-4 size-10" />
 </template>
 
 <script setup>
 import { onMounted, ref } from "vue";
 import { getEntries, track } from "../common/supabaseClient.ts";
 import { toTimeString } from "../common/timeUtils.ts";
+import Spinner from "./Spinner.vue";
+import { PlayIcon } from "@heroicons/vue/24/solid";
 
 const limit = 10;
 const page = ref(0);
