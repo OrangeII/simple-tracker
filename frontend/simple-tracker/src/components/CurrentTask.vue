@@ -3,7 +3,7 @@
     <div class="flex-grow max-w-[60%]">
       <h2 class="truncate">{{ task.tasks.name }}</h2>
       <div>
-        {{ new Date(task.time_entries.start_time).toLocaleString() }}
+        <RunningTime :start="new Date(task.time_entries.start_time)" />
       </div>
     </div>
     <div class="size-12 flex items-center">
@@ -25,6 +25,7 @@ import { ref } from "vue";
 import { stopCurrentTracking } from "../common/supabaseClient.ts";
 import { StopIcon } from "@heroicons/vue/24/solid";
 import Spinner from "./Spinner.vue";
+import RunningTime from "./RunningTime.vue";
 
 const loading = ref(false);
 const props = defineProps({
