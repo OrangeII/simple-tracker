@@ -1,23 +1,33 @@
 <template>
   <div v-if="message">{{ message }}</div>
-  <div class="flex flex-row">
-    <div class="pr-2">
-      <button @click="openQRModal" class="w-full">
-        {{ loading ? "Starting..." : "QR" }}
-      </button>
+  <div class="flex flex-row items-center">
+    <div class="pr-2 size-12">
+      <QrCodeIcon v-if="!loading" @click="openQRModal" class="w-full h-full" />
+      <!--spinner-->
+      <div
+        v-else
+        class="size-10 border-4 border-primary border-solid border-t-transparent rounded-full animate-spin"
+      ></div>
     </div>
     <div class="flex-grow">
       <input
         type="text"
         v-model="taskName"
         placeholder="Task name"
-        class="w-full px-4 py-2 border-1 caret-primary focus:outline-primary mb-2"
+        class="w-full px-4 py-2 border-1 rounded-sm caret-primary focus:outline-primary"
       />
     </div>
-    <div class="pl-2">
-      <button @click="start" class="w-full">
-        {{ loading ? "Starting..." : "Start" }}
-      </button>
+    <div class="pl-2 size-12">
+      <PlayIcon
+        v-if="!loading"
+        @click="start"
+        class="w-full h-full text-primary"
+      />
+      <!--spinner-->
+      <div
+        v-else
+        class="size-10 border-4 border-primary border-solid border-t-transparent rounded-full animate-spin"
+      ></div>
     </div>
   </div>
 
@@ -50,6 +60,7 @@ import { ref } from "vue";
 import { supabase } from "../main.ts";
 import { track } from "../common/supabaseClient.ts";
 import QRScanner from "./QRScanner.vue";
+import { QrCodeIcon, PlayIcon } from "@heroicons/vue/24/solid";
 
 const taskName = ref("");
 const altCode = ref("");
