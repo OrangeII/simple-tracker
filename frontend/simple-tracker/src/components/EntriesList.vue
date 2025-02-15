@@ -49,7 +49,9 @@ const fetchEntries = async () => {
   if (loading.value) return;
   loading.value = true;
 
-  const newEntries = await getEntries(limit, page.value);
+  const newEntries = (await getEntries(limit, page.value)).filter(
+    (e) => e.end_time
+  );
   if (!newEntries || newEntries.length == 0) {
     loading.value = false;
     return;
