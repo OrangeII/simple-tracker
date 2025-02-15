@@ -3,8 +3,13 @@
     <Login v-if="!user" />
     <div v-else class="flex flex-col min-h-screen max-h-screen">
       <header class="p-4 border-wfdark border-b-1">
-        <h1>Welcome, {{ user.email }}</h1>
-        <button @click="signOut">Sign Out</button>
+        <div class="flex flex-row items justify-between items-center">
+          <h1>Hello, {{ user.user_metadata.preferred_username }}</h1>
+          <ArrowLeftStartOnRectangleIcon
+            @click="signOut"
+            class="text-primary size-8"
+          />
+        </div>
       </header>
 
       <main class="flex-1 px-4 overflow-auto">
@@ -31,6 +36,7 @@ import StartTracking from "./components/StartTracking.vue";
 import CurrentTask from "./components/CurrentTask.vue";
 import EntriesList from "./components/EntriesList.vue";
 import { getCurrentTaskAndTimeEntry } from "./common/supabaseClient";
+import { ArrowLeftStartOnRectangleIcon } from "@heroicons/vue/24/solid";
 
 const user = ref(null);
 const currentTask = ref(null);
@@ -41,6 +47,7 @@ onMounted(async () => {
 
   supabase.auth.onAuthStateChange((_event, session) => {
     user.value = session?.user || null;
+    console.log(user.value);
     fetchCurrentTask();
   });
 });
