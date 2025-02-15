@@ -5,6 +5,11 @@
       <header class="p-4 border-wfdark border-b-1">
         <div class="flex flex-row items justify-between items-center">
           <h1>Hello, {{ user.user_metadata.preferred_username }}</h1>
+          <input
+            type="checkbox"
+            class="w-5 h-5 accent-primary"
+            v-model="groupItems"
+          />
           <ArrowLeftStartOnRectangleIcon
             @click="signOut"
             class="text-primary size-8"
@@ -13,7 +18,7 @@
       </header>
 
       <main class="flex-1 px-4 overflow-auto">
-        <EntriesList @taskResumed="onTaskResumed" />
+        <EntriesList @taskResumed="onTaskResumed" :grouped="groupItems" />
       </main>
 
       <footer class="p-4 border-wfdark border-t-1">
@@ -40,6 +45,7 @@ import { ArrowLeftStartOnRectangleIcon } from "@heroicons/vue/24/solid";
 
 const user = ref(null);
 const currentTask = ref(null);
+const groupItems = ref(false);
 
 onMounted(async () => {
   const { data } = await supabase.auth.getSession();

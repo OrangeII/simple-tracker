@@ -5,12 +5,21 @@
       <div>{{ toTimeString(new Date(dateEntries.totalTime)) }}</div>
     </div>
 
-    <EntriesListItem
-      v-for="entry in dateEntries.entries"
-      :entry="entry"
-      @onResumeClicked="onResume(entry)"
-    >
-    </EntriesListItem>
+    <div v-if="!grouped">
+      <EntriesListItem
+        v-for="entry in dateEntries.entries"
+        :entry="entry"
+        @onResumeClicked="onResume"
+      >
+      </EntriesListItem>
+    </div>
+    <div v-else>
+      <EntriesListGroupedItem
+        v-for="group in dateEntries.entiresById"
+        :group="group"
+        @onResumeClicked="onResume"
+      />
+    </div>
   </div>
 
   <!-- Scroll Trigger (Empty div at bottom for IntersectionObserver) -->
@@ -26,14 +35,18 @@ import { getEntries, track } from "../common/supabaseClient.ts";
 import { toTimeString } from "../common/timeUtils.ts";
 import Spinner from "./Spinner.vue";
 import EntriesListItem from "./EntriesListItem.vue";
+import EntriesListGroupedItem from "./EntriesListGroupedItem.vue";
 
-const limit = 10;
+const limit = 30;
 const page = ref(0);
 const loading = ref(false);
 const entries = ref([]);
 const observer = ref(null);
 
 const emit = defineEmits(["taskResumed"]);
+const props = defineProps({
+  grouped: false,
+});
 
 onMounted(async () => {
   fetchEntries();

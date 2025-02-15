@@ -1,24 +1,21 @@
 <template>
   <div
-    :key="entry.id"
+    :key="group.id"
     class="border-wfdark border-1 rounded-sm p-2 my-3 flex flex-row justify-between"
   >
     <div class="flex-grow max-w-[65%]">
-      <h3 class="truncate">{{ entry.tasks.name }}</h3>
+      <h3 class="truncate">{{ group.name }}</h3>
     </div>
 
-    <div
-      v-if="entry.end_time"
-      @click="onResume(entry)"
-      class="flex flex-col items-end"
-    >
+    <div @click="onResume()" class="flex flex-col items-end">
       <div>
-        {{
-          toTimeString(new Date(entry.end_time) - new Date(entry.start_time))
-        }}
+        {{ toTimeString(new Date(group.totalTime)) }}
       </div>
       <div color="flex flex-col items-center">
-        <PlayIcon v-if="!entry.loading" class="size-8 text-primary" />
+        <PlayIcon
+          v-if="!group.entries[0].loading"
+          class="size-8 text-primary"
+        />
         <Spinner v-else class="size-8" />
       </div>
     </div>
@@ -33,10 +30,10 @@ import { PlayIcon } from "@heroicons/vue/24/solid";
 const emit = defineEmits(["onResumeClicked"]);
 
 const props = defineProps({
-  entry: Object,
+  group: Object,
 });
 
 const onResume = () => {
-  emit("onResumeClicked", props.entry);
+  emit("onResumeClicked", props.group.entries[0]);
 };
 </script>
