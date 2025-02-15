@@ -1,11 +1,12 @@
 <template>
   <div v-for="(dateEntries, date) in entriesByDate" :key="date">
-    <div class="pt-4 font-bold uppercase">
-      {{ getEntriesDateString(new Date(date)) }}
+    <div class="pt-4 font-bold uppercase flex flex-row justify-between">
+      <div>{{ getEntriesDateString(new Date(date)) }}</div>
+      <div>{{ toTimeString(new Date(dateEntries.totalTime)) }}</div>
     </div>
 
     <div
-      v-for="entry in dateEntries"
+      v-for="entry in dateEntries.entries"
       :key="entry.id"
       class="border-wfdark border-1 rounded-sm p-2 my-3 flex flex-row justify-between"
     >
@@ -86,15 +87,27 @@ const fetchEntries = async () => {
 const entriesByDate = computed(() => {
   const days = {};
   for (const entry of entries.value) {
+    //group entries by start date
+
     //get entry start date
     const date = new Date(entry.start_time);
     date.setHours(0, 0, 0, 0);
 
-    //group entries by start date
+    //make a new group if necessary
     if (!days[date]) {
-      days[date] = [entry];
-    } else {
-      days[date].push(entry);
+      days[date] = {
+        date,
+        totalTime: 0,
+        entries: [],
+      };
+    }
+
+    //push entry to date group
+    days[date].entries.push(entry);
+    //add tracked time to total
+    if (entry.end_time) {
+      days[date].totalTime +=
+        new Date(entry.end_time) - new Date(entry.start_time);
     }
   }
   return days;
