@@ -84,6 +84,25 @@ const fetchEntries = async () => {
   loading.value = false;
 };
 
+/**
+ * result follows this format:
+ * {
+ *  date: {
+ * 	  date,
+ * 	  total time,
+ * 	  entries: [entries],
+ * 	  entriesById: {
+ * 		  id: {
+ * 			  id
+ * 			  name
+ * 			  totalTime
+ *        entries: [entries]
+ * 			}
+ * 		}
+ * 	}
+ * }
+ *
+ */
 const entriesByDate = computed(() => {
   const days = {};
   for (const entry of entries.value) {
@@ -99,16 +118,32 @@ const entriesByDate = computed(() => {
         date,
         totalTime: 0,
         entries: [],
+        entiresById: {},
       };
     }
-
     //push entry to date group
     days[date].entries.push(entry);
-    //add tracked time to total
-    if (entry.end_time) {
-      days[date].totalTime +=
-        new Date(entry.end_time) - new Date(entry.start_time);
+
+    //also group entries by id within this date group
+    if (!days[date].entiresById[entry.task_id]) {
+      days[date].entiresById[entry.task_id] = {
+        id: entry.task_id,
+        name: entry.tasks.name,
+        totalTime: 0,
+        entries: [],
+      };
     }
+    //push entry in the id group
+    days[date].entiresById[entry.task_id].entries.push(entry);
+
+    //add tracked time to totals
+    if (entry.end_time) {
+      const trackedTime = new Date(entry.end_time) - new Date(entry.start_time);
+      days[date].totalTime += trackedTime;
+      days[date].entiresById[entry.task_id].totalTime += trackedTime;
+    }
+
+    console.log(days[date].entiresById[entry.task_id]);
   }
   return days;
 });
