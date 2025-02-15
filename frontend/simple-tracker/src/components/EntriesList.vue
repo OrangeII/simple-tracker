@@ -12,7 +12,6 @@
     >
       <div class="flex-grow max-w-[65%]">
         <h3 class="truncate">{{ entry.tasks.name }}</h3>
-        <p>{{ new Date(entry.start_time).toLocaleDateString() }}</p>
       </div>
 
       <div
