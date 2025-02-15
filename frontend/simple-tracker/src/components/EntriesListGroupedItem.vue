@@ -1,9 +1,15 @@
 <template>
   <div
     :key="group.id"
-    class="border-wfdark border-1 rounded-sm p-2 my-3 flex flex-row justify-between"
+    class="border-wfdark border-1 rounded-sm p-2 my-3 flex flex-row justify-between items-center"
   >
-    <div class="flex-grow max-w-[65%]">
+    <div class="flex-grow max-w-[75%] flex flex-row items-center">
+      <div
+        v-if="group.entries.length > 1"
+        class="min-w-8 min-h-8 border-1 border-primary rounded-xs mr-3 ml-1 text-primary flex items-center justify-center"
+      >
+        <p>{{ group.entries.length }}</p>
+      </div>
       <h3 class="truncate">{{ group.name }}</h3>
     </div>
 

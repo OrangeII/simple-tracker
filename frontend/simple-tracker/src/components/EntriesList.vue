@@ -137,8 +137,6 @@ const entriesByDate = computed(() => {
       days[date].totalTime += trackedTime;
       days[date].entiresById[entry.task_id].totalTime += trackedTime;
     }
-
-    console.log(days[date].entiresById[entry.task_id]);
   }
   return days;
 });
