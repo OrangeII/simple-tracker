@@ -1,29 +1,24 @@
 <template>
-  <div
-    v-for="entry in entries"
-    :key="entry.id"
-    class="border-wfdark border-1 rounded-sm p-2 my-3 flex flex-row justify-between"
-  >
-    <div class="flex-grow max-w-[65%]">
-      <h3 class="truncate">{{ entry.tasks.name }}</h3>
-      <p>{{ new Date(entry.start_time).toLocaleDateString() }}</p>
+  <div v-for="(dateEntries, date) in entriesByDate" :key="date">
+    <div class="pt-4 font-bold uppercase flex flex-row justify-between">
+      <div>{{ getEntriesDateString(new Date(date)) }}</div>
+      <div>{{ toTimeString(new Date(dateEntries.totalTime)) }}</div>
     </div>
 
-    <!-- right side of the card -->
-    <div
-      v-if="entry.end_time"
-      @click="onResume(entry)"
-      class="flex flex-col items-end"
-    >
-      <div>
-        {{
-          toTimeString(new Date(entry.end_time) - new Date(entry.start_time))
-        }}
-      </div>
-      <div color="flex flex-col items-center">
-        <PlayIcon v-if="!entry.loading" class="size-8 text-primary" />
-        <Spinner v-else class="size-8" />
-      </div>
+    <div v-if="!grouped">
+      <EntriesListItem
+        v-for="entry in dateEntries.entries"
+        :entry="entry"
+        @onResumeClicked="onResume"
+      >
+      </EntriesListItem>
+    </div>
+    <div v-else>
+      <EntriesListGroupedItem
+        v-for="group in dateEntries.entiresById"
+        :group="group"
+        @onResumeClicked="onResume"
+      />
     </div>
   </div>
 
@@ -31,23 +26,29 @@
   <div id="scroll-trigger" class="h-4"></div>
 
   <!-- Loading Indicator -->
-  <Spinner v-if="loading" class="text-center mt-4 size-10" />
+  <div v-if="loading" class="flex flex-row justify-around">
+    <Spinner class="mt-4 size-10" />
+  </div>
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { getEntries, track } from "../common/supabaseClient.ts";
 import { toTimeString } from "../common/timeUtils.ts";
 import Spinner from "./Spinner.vue";
-import { PlayIcon } from "@heroicons/vue/24/solid";
+import EntriesListItem from "./EntriesListItem.vue";
+import EntriesListGroupedItem from "./EntriesListGroupedItem.vue";
 
-const limit = 10;
+const limit = 30;
 const page = ref(0);
 const loading = ref(false);
 const entries = ref([]);
 const observer = ref(null);
 
 const emit = defineEmits(["taskResumed"]);
+const props = defineProps({
+  grouped: false,
+});
 
 onMounted(async () => {
   fetchEntries();
@@ -63,7 +64,9 @@ const fetchEntries = async () => {
   if (loading.value) return;
   loading.value = true;
 
-  const newEntries = await getEntries(limit, page.value);
+  const newEntries = (await getEntries(limit, page.value)).filter(
+    (e) => e.end_time
+  );
   if (!newEntries || newEntries.length == 0) {
     loading.value = false;
     return;
@@ -76,6 +79,86 @@ const fetchEntries = async () => {
   entries.value.push(...newEntries);
   page.value++;
   loading.value = false;
+};
+
+/**
+ * result follows this format:
+ * {
+ *  date: {
+ * 	  date,
+ * 	  total time,
+ * 	  entries: [entries],
+ * 	  entriesById: {
+ * 		  id: {
+ * 			  id
+ * 			  name
+ * 			  totalTime
+ *        entries: [entries]
+ * 			}
+ * 		}
+ * 	}
+ * }
+ *
+ */
+const entriesByDate = computed(() => {
+  const days = {};
+  for (const entry of entries.value) {
+    //group entries by start date
+
+    //get entry start date
+    const date = new Date(entry.start_time);
+    date.setHours(0, 0, 0, 0);
+
+    //make a new group if necessary
+    if (!days[date]) {
+      days[date] = {
+        date,
+        totalTime: 0,
+        entries: [],
+        entiresById: {},
+      };
+    }
+    //push entry to date group
+    days[date].entries.push(entry);
+
+    //also group entries by id within this date group
+    if (!days[date].entiresById[entry.task_id]) {
+      days[date].entiresById[entry.task_id] = {
+        id: entry.task_id,
+        name: entry.tasks.name,
+        totalTime: 0,
+        entries: [],
+      };
+    }
+    //push entry in the id group
+    days[date].entiresById[entry.task_id].entries.push(entry);
+
+    //add tracked time to totals
+    if (entry.end_time) {
+      const trackedTime = new Date(entry.end_time) - new Date(entry.start_time);
+      days[date].totalTime += trackedTime;
+      days[date].entiresById[entry.task_id].totalTime += trackedTime;
+    }
+  }
+  return days;
+});
+
+const getEntriesDateString = (date) => {
+  const entriesDate = new Date(date);
+  entriesDate.setHours(0, 0, 0, 0);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  if (entriesDate.getTime() === today.getTime()) {
+    return "Today";
+  }
+
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
+  if (entriesDate.getTime() === yesterday.getTime()) {
+    return "Yesterday";
+  }
+
+  return entriesDate.toLocaleDateString();
 };
 
 const observerCallBack = (entries) => {
