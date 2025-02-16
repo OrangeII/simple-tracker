@@ -26,7 +26,9 @@
   <div id="scroll-trigger" class="h-4"></div>
 
   <!-- Loading Indicator -->
-  <Spinner v-if="loading" class="text-center mt-4 size-10" />
+  <div v-if="loading" class="flex flex-row justify-around">
+    <Spinner class="mt-4 size-10" />
+  </div>
 </template>
 
 <script setup>
