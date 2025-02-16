@@ -5,15 +5,17 @@
       <header class="p-4 border-wfdark border-b-1">
         <div class="flex flex-row items justify-between items-center">
           <h1>Hello, {{ user.user_metadata.preferred_username }}</h1>
-          <input
-            type="checkbox"
-            class="w-5 h-5 accent-primary"
-            v-model="groupItems"
-          />
-          <ArrowLeftStartOnRectangleIcon
-            @click="signOut"
-            class="text-primary size-8"
-          />
+          <div class="flex flex-row items-center">
+            <Square3Stack3DIcon
+              class="text-primary size-8 mr-4"
+              :class="{ 'border-2 rounded-md p-1 size-9': groupItems }"
+              @click="groupItems = !groupItems"
+            />
+            <ArrowLeftStartOnRectangleIcon
+              @click="signOut"
+              class="text-primary size-8"
+            />
+          </div>
         </div>
       </header>
 
@@ -42,6 +44,7 @@ import CurrentTask from "./components/CurrentTask.vue";
 import EntriesList from "./components/EntriesList.vue";
 import { getCurrentTaskAndTimeEntry } from "./common/supabaseClient";
 import { ArrowLeftStartOnRectangleIcon } from "@heroicons/vue/24/solid";
+import { Square3Stack3DIcon } from "@heroicons/vue/24/solid";
 
 const user = ref(null);
 const currentTask = ref(null);
