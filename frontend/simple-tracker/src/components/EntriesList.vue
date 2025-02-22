@@ -89,10 +89,10 @@ const onResume = async (entry: TimeEntry) => {
       created_at: startTime.toISOString(),
     },
   };
+  entry.loading = false;
 
   const ret = await track({ taskId: entry.tasks.id, startTime });
   if (!ret) {
-    entry.loading = false;
     //reverse the optimistic change
     currentTaskStore.task = null;
     return;
@@ -100,6 +100,5 @@ const onResume = async (entry: TimeEntry) => {
 
   //update store with the actual task
   currentTaskStore.task = ret;
-  entry.loading = false;
 };
 </script>
