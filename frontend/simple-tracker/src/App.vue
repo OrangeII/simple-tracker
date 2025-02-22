@@ -24,10 +24,7 @@
       </main>
 
       <footer class="p-4 border-wfdark border-t-1">
-        <StartTracking
-          v-if="!currentTaskStore.task"
-          @taskStarted="onTaskstarted"
-        />
+        <StartTracking v-if="!currentTaskStore.task" />
         <CurrentTask v-else />
       </footer>
     </div>
@@ -74,10 +71,6 @@ const fetchCurrentTask = async () => {
 const signOut = async () => {
   await supabase.auth.signOut();
   userStore.user = null;
-};
-
-const onTaskstarted = async (task) => {
-  currentTaskStore.task = task;
 };
 
 const onTaskResumed = async (task) => {

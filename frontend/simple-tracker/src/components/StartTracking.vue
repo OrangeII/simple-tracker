@@ -58,14 +58,14 @@ import { track } from "../common/supabaseClient.ts";
 import QRScanner from "./QRScanner.vue";
 import { QrCodeIcon, PlayIcon } from "@heroicons/vue/24/solid";
 import Spinner from "./Spinner.vue";
+import { useCurrentTaskStore } from "../stores/currentTask";
 
 const taskName = ref("");
 const taskAltCode = ref("");
 const loading = ref(false);
 const message = ref("");
 const qrModalIsOpen = ref(false);
-
-const emit = defineEmits(["taskCreated"]);
+const currentTaskStore = useCurrentTaskStore();
 
 const start = async () => {
   if (!taskName.value) {
@@ -87,8 +87,7 @@ const startTrackingTask = async (taskId, name, altCode) => {
     return;
   }
 
-  //emit the task created
-  emit("taskStarted", ret);
+  currentTaskStore.task = ret;
   message.value = "Task started succesfully!";
   taskName.value = "";
   taskAltCode.value = "";
