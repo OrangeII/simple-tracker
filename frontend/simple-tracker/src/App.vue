@@ -43,7 +43,6 @@ import Login from "./components/Login.vue";
 import StartTracking from "./components/StartTracking.vue";
 import CurrentTask from "./components/CurrentTask.vue";
 import EntriesList from "./components/EntriesList.vue";
-import { getCurrentTaskAndTimeEntry } from "./common/supabaseClient";
 import { ArrowLeftStartOnRectangleIcon } from "@heroicons/vue/24/solid";
 import { Square3Stack3DIcon } from "@heroicons/vue/24/solid";
 import { useUserStore } from "./stores/user";
