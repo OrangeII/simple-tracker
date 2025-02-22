@@ -83,7 +83,8 @@ const startTrackingTask = async (params: {
   name?: string;
   altCode?: string;
 }) => {
-  const ret = await track(params);
+  const startTime = new Date();
+  const ret = await track({ ...params, startTime });
   if (!ret) {
     message.value = "Could not start tracking task!";
     loading.value = false;

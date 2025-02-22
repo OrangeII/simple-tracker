@@ -73,7 +73,7 @@ const onResume = async (entry: TimeEntry) => {
   if (!entry.tasks) return;
 
   entry.loading = true;
-  const ret = await track({ taskId: entry.tasks.id });
+  const ret = await track({ taskId: entry.tasks.id, startTime: new Date() });
   if (!ret) {
     entry.loading = false;
     return;
