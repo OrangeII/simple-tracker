@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { toDurationString } from "../common/timeUtils";
 
 const props = defineProps({
@@ -34,4 +34,6 @@ onMounted(() => {
 onUnmounted(() => {
   clearInterval(interval);
 });
+
+watch(() => props.start, updateElapsed);
 </script>
