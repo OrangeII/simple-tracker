@@ -34,23 +34,29 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { getEntries, track } from "../common/supabaseClient.ts";
+import { track } from "../common/supabaseClient.ts";
 import { toDurationString, toEntriesDateString } from "../common/timeUtils.ts";
 import Spinner from "./Spinner.vue";
 import EntriesListItem from "./EntriesListItem.vue";
 import EntriesListGroupedItem from "./EntriesListGroupedItem.vue";
 import { useCurrentTaskStore } from "../stores/currentTask";
 import { useEntriesListStore } from "../stores/entriesList";
+import type { CurrentTask, TimeEntry } from "../common/types.ts";
 
-const observer = ref(null);
+const observer = ref<IntersectionObserver | null>(null);
 const entriesListStore = useEntriesListStore();
 const currentTaskStore = useCurrentTaskStore();
 
-const props = defineProps({
-  grouped: false,
-});
+const props = withDefaults(
+  defineProps<{
+    grouped: boolean;
+  }>(),
+  {
+    grouped: false,
+  }
+);
 
 onMounted(async () => {
   entriesListStore.fetchEntries();
@@ -62,13 +68,15 @@ onMounted(async () => {
   if (sentinel) observer.value.observe(sentinel);
 });
 
-const observerCallBack = (entries) => {
-  if (entries[0].isIntersecting) {
+const observerCallBack = (intersections: IntersectionObserverEntry[]) => {
+  if (intersections[0].isIntersecting) {
     entriesListStore.fetchEntries();
   }
 };
 
-const onResume = async (entry) => {
+const onResume = async (entry: TimeEntry) => {
+  if (!entry.tasks) return;
+
   entry.loading = true;
   const ret = await track({ taskId: entry.tasks.id });
   if (!ret) {

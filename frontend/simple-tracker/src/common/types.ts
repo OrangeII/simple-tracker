@@ -1,11 +1,3 @@
-export interface User {
-  id: string;
-  email: string;
-  user_metadata: {
-    preferred_username: string;
-  };
-}
-
 export interface Task {
   id: string;
   name: string;
@@ -52,9 +44,4 @@ export interface TrackParams {
   taskId?: string;
   altCode?: string;
   name?: string;
-}
-
-export interface TrackResponse {
-  tasks: Task;
-  time_entries: TimeEntry;
 }

@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import type { User } from "../common/types";
+import type { User } from "@supabase/supabase-js";
 
 export const useUserStore = defineStore("user", {
   state: () => ({

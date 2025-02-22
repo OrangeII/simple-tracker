@@ -1,5 +1,5 @@
 import { supabase } from "../main.ts";
-import type { CurrentTask, Task, TimeEntry, TrackResponse } from "./types.ts";
+import type { CurrentTask, Task, TimeEntry } from "./types.ts";
 
 export const getCurrentTaskAndTimeEntry =
   async (): Promise<CurrentTask | null> => {
@@ -228,7 +228,7 @@ export const track = async (params: {
   taskId?: string;
   altCode?: string;
   name?: string;
-}): Promise<TrackResponse | null> => {
+}): Promise<CurrentTask | null> => {
   try {
     let task;
 
@@ -262,7 +262,15 @@ export const track = async (params: {
       return null;
     }
 
-    return { tasks: task, time_entries: timeEntry };
+    const created: CurrentTask = {
+      user_id: timeEntry.user_id,
+      task_id: timeEntry.task_id,
+      time_entry_id: timeEntry.id,
+      time_entries: timeEntry,
+      tasks: task,
+    };
+
+    return created;
   } catch (error) {
     console.error("Error in track:", error);
     return null;

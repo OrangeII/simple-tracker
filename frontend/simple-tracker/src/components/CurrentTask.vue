@@ -19,7 +19,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 /**
  * this component is responsible for displaying an active task and for stopping its tracking
  */

@@ -2,7 +2,7 @@
   {{ formattedElapsed }}
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from "vue";
 import { toDurationString } from "../common/timeUtils";
 
@@ -11,10 +11,15 @@ const props = defineProps({
 });
 
 const elapsed = ref(0);
-let interval;
+let interval: NodeJS.Timeout;
 
 const updateElapsed = () => {
-  elapsed.value = props.start - Date.now();
+  if (!props.start) {
+    elapsed.value = 0;
+    return;
+  }
+
+  elapsed.value = props.start.getTime() - Date.now();
 };
 
 const formattedElapsed = computed(() => {
