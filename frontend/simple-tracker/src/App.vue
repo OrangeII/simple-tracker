@@ -28,7 +28,7 @@
           v-if="!currentTaskStore.task"
           @taskStarted="onTaskstarted"
         />
-        <CurrentTask v-else @trackingStopped="onTrackingStopped" />
+        <CurrentTask v-else />
       </footer>
     </div>
   </div>
@@ -78,10 +78,6 @@ const signOut = async () => {
 
 const onTaskstarted = async (task) => {
   currentTaskStore.task = task;
-};
-
-const onTrackingStopped = async (task) => {
-  currentTaskStore.task = null;
 };
 
 const onTaskResumed = async (task) => {

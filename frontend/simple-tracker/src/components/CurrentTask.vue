@@ -32,7 +32,6 @@ import { useCurrentTaskStore } from "../stores/currentTask";
 
 const loading = ref(false);
 const currentTaskStore = useCurrentTaskStore();
-const emit = defineEmits(["trackingStopped"]);
 
 const stopTracking = async () => {
   loading.value = true;
@@ -41,7 +40,7 @@ const stopTracking = async () => {
     return;
   }
 
-  emit("trackingStopped", currentTaskStore.task);
+  currentTaskStore.task = null;
   loading.value = false;
 };
 </script>
