@@ -3,7 +3,7 @@
     :key="entry.id"
     class="border-wfdark border-1 rounded-sm p-2 my-3 flex flex-row justify-between items-center"
   >
-    <div class="flex-grow max-w-[65%]">
+    <div class="flex-grow max-w-[75%]">
       <h3 class="truncate">{{ entry.tasks.name }}</h3>
     </div>
 
