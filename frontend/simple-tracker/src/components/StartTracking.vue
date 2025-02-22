@@ -72,9 +72,6 @@ const start = async () => {
     return;
   }
 
-  loading.value = true;
-  message.value = "";
-
   await startTrackingTask({ name: taskName.value, altCode: taskAltCode.value });
 };
 
@@ -83,13 +80,40 @@ const startTrackingTask = async (params: {
   name?: string;
   altCode?: string;
 }) => {
-  const ret = await track(params);
+  loading.value = true;
+  message.value = "";
+
+  const startTime = new Date();
+
+  //optimistically change the store
+  currentTaskStore.task = {
+    user_id: "",
+    task_id: params.taskId || "",
+    time_entry_id: "",
+    tasks: {
+      id: params.taskId || "",
+      name: params.name || params.altCode || "",
+      created_at: startTime.toISOString(),
+    },
+    time_entries: {
+      id: "",
+      task_id: params.taskId || "",
+      user_id: "",
+      start_time: startTime.toISOString(),
+      created_at: startTime.toISOString(),
+    },
+  };
+
+  const ret = await track({ ...params, startTime });
   if (!ret) {
     message.value = "Could not start tracking task!";
     loading.value = false;
+    //revert optimistic change
+    currentTaskStore.task = null;
     return;
   }
 
+  //update the store with the actual task
   currentTaskStore.task = ret;
   message.value = "Task started succesfully!";
   taskName.value = "";

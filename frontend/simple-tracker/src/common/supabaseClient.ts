@@ -106,7 +106,8 @@ export const createTask = async (
 };
 
 export const startTracking = async (
-  taskId: string
+  taskId: string,
+  startTime: Date
 ): Promise<TimeEntry | null> => {
   try {
     //set the current task for the user
@@ -120,7 +121,7 @@ export const startTracking = async (
     //start a new time entry for the created task
     const { data: createdTimeEntry, error: entryError } = await supabase
       .from("time_entries")
-      .insert({ task_id: taskId })
+      .insert({ task_id: taskId, start_time: startTime })
       .select()
       .single();
 
@@ -230,6 +231,7 @@ export const track = async (params: {
   taskId?: string;
   altCode?: string;
   name?: string;
+  startTime: Date;
 }): Promise<CurrentTask | null> => {
   try {
     let task;
@@ -259,7 +261,7 @@ export const track = async (params: {
 
     await stopCurrentTracking();
 
-    const timeEntry = await startTracking(task.id);
+    const timeEntry = await startTracking(task.id, params.startTime);
     if (!timeEntry) {
       return null;
     }
