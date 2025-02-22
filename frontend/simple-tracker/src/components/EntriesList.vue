@@ -38,14 +38,15 @@ import { toTimeString } from "../common/timeUtils.ts";
 import Spinner from "./Spinner.vue";
 import EntriesListItem from "./EntriesListItem.vue";
 import EntriesListGroupedItem from "./EntriesListGroupedItem.vue";
+import { useCurrentTaskStore } from "../stores/currentTask";
 
 const limit = 30;
 const page = ref(0);
 const loading = ref(false);
 const entries = ref([]);
 const observer = ref(null);
+const currentTaskStore = useCurrentTaskStore();
 
-const emit = defineEmits(["taskResumed"]);
 const props = defineProps({
   grouped: false,
 });
@@ -175,7 +176,7 @@ const onResume = async (entry) => {
     return;
   }
 
-  emit("taskResumed", ret);
+  currentTaskStore.task = ret;
   entry.loading = false;
 };
 </script>

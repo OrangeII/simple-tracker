@@ -20,7 +20,7 @@
       </header>
 
       <main class="flex-1 px-4 overflow-auto">
-        <EntriesList @taskResumed="onTaskResumed" :grouped="groupItems" />
+        <EntriesList :grouped="groupItems" />
       </main>
 
       <footer class="p-4 border-wfdark border-t-1">
@@ -70,9 +70,5 @@ const fetchCurrentTask = async () => {
 const signOut = async () => {
   await supabase.auth.signOut();
   userStore.user = null;
-};
-
-const onTaskResumed = async (task) => {
-  currentTaskStore.task = task;
 };
 </script>
