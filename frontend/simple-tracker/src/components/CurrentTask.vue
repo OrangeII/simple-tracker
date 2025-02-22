@@ -1,10 +1,12 @@
 <template>
-  <div v-if="task" class="flex flex-row justify-between">
+  <div v-if="currentTaskStore.task" class="flex flex-row justify-between">
     <div class="flex-grow max-w-[60%]">
       <h2>
-        <RunningTime :start="new Date(task.time_entries.start_time)" />
+        <RunningTime
+          :start="new Date(currentTaskStore.task.time_entries.start_time)"
+        />
       </h2>
-      <div class="truncate">{{ task.tasks.name }}</div>
+      <div class="truncate">{{ currentTaskStore.task.tasks.name }}</div>
     </div>
     <div class="size-12 flex items-center">
       <StopIcon
@@ -26,11 +28,10 @@ import { stopCurrentTracking } from "../common/supabaseClient.ts";
 import { StopIcon } from "@heroicons/vue/24/solid";
 import Spinner from "./Spinner.vue";
 import RunningTime from "./RunningTime.vue";
+import { useCurrentTaskStore } from "../stores/currentTask";
 
 const loading = ref(false);
-const props = defineProps({
-  task: Object,
-});
+const currentTaskStore = useCurrentTaskStore();
 const emit = defineEmits(["trackingStopped"]);
 
 const stopTracking = async () => {
@@ -40,7 +41,7 @@ const stopTracking = async () => {
     return;
   }
 
-  emit("trackingStopped", props.task);
+  emit("trackingStopped", currentTaskStore.task);
   loading.value = false;
 };
 </script>

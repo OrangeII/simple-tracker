@@ -24,12 +24,11 @@
       </main>
 
       <footer class="p-4 border-wfdark border-t-1">
-        <StartTracking v-if="!currentTask" @taskStarted="onTaskstarted" />
-        <CurrentTask
-          v-else
-          :task="currentTask"
-          @trackingStopped="onTrackingStopped"
+        <StartTracking
+          v-if="!currentTaskStore.task"
+          @taskStarted="onTaskstarted"
         />
+        <CurrentTask v-else @trackingStopped="onTrackingStopped" />
       </footer>
     </div>
   </div>
@@ -46,9 +45,10 @@ import { getCurrentTaskAndTimeEntry } from "./common/supabaseClient";
 import { ArrowLeftStartOnRectangleIcon } from "@heroicons/vue/24/solid";
 import { Square3Stack3DIcon } from "@heroicons/vue/24/solid";
 import { useUserStore } from "./stores/user";
+import { useCurrentTaskStore } from "./stores/currentTask";
 
 const userStore = useUserStore();
-const currentTask = ref(null);
+const currentTaskStore = useCurrentTaskStore();
 const groupItems = ref(false);
 
 onMounted(async () => {
@@ -64,11 +64,11 @@ onMounted(async () => {
 
 const fetchCurrentTask = async () => {
   if (!userStore.user) {
-    currentTask.value = null;
+    currentTaskStore.task = null;
     return;
   }
   const data = await getCurrentTaskAndTimeEntry();
-  currentTask.value = data;
+  currentTaskStore.task = data;
 };
 
 const signOut = async () => {
@@ -77,14 +77,14 @@ const signOut = async () => {
 };
 
 const onTaskstarted = async (task) => {
-  currentTask.value = task;
+  currentTaskStore.task = task;
 };
 
 const onTrackingStopped = async (task) => {
-  currentTask.value = null;
+  currentTaskStore.task = null;
 };
 
 const onTaskResumed = async (task) => {
-  currentTask.value = task;
+  currentTaskStore.task = task;
 };
 </script>

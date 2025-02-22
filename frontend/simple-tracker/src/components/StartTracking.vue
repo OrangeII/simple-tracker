@@ -60,7 +60,7 @@ import { QrCodeIcon, PlayIcon } from "@heroicons/vue/24/solid";
 import Spinner from "./Spinner.vue";
 
 const taskName = ref("");
-const altCode = ref("");
+const taskAltCode = ref("");
 const loading = ref(false);
 const message = ref("");
 const qrModalIsOpen = ref(false);
@@ -76,7 +76,7 @@ const start = async () => {
   loading.value = true;
   message.value = "";
 
-  await startTrackingTask(null, taskName.value, altCode.value);
+  await startTrackingTask(null, taskName.value, taskAltCode.value);
 };
 
 const startTrackingTask = async (taskId, name, altCode) => {
@@ -91,7 +91,7 @@ const startTrackingTask = async (taskId, name, altCode) => {
   emit("taskStarted", ret);
   message.value = "Task started succesfully!";
   taskName.value = "";
-  altCode.value = "";
+  taskAltCode.value = "";
   loading.value = false;
 };
 
