@@ -158,6 +158,7 @@ export const getEntries = async (
       return null;
     }
 
+    //fetch ended time entries for the user in descending order
     const { data, error } = await supabase
       .from("time_entries")
       .select(
@@ -167,6 +168,7 @@ export const getEntries = async (
       `
       )
       .eq("user_id", user.id)
+      .not("end_time", "is", null)
       .order("created_at", { ascending: false })
       .range(limit * page, limit * (page + 1) - 1);
 

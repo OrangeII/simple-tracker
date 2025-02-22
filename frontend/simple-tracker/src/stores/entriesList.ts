@@ -9,6 +9,44 @@ export const useEntriesListStore = defineStore("entriesList", () => {
   const loading = ref<boolean>(false);
   const entries = ref<TimeEntry[]>([]);
 
+  async function fetchEntries() {
+    if (loading.value) return;
+    loading.value = true;
+
+    const newEntries = await getEntries(limit.value, page.value);
+    if (!newEntries) {
+      loading.value = false;
+      return;
+    }
+
+    pushEntries(newEntries);
+    if (newEntries.length >= limit.value) {
+      page.value++;
+    }
+    loading.value = false;
+  }
+
+  /**
+   * adds entries to the entries list. Skips duplicates (by id). Skips entries that
+   * @param newEntries an array of TimeEntry objects to add to the entries list
+   */
+  function pushEntries(newEntries: TimeEntry[]) {
+    const filteredEntries = newEntries.filter(
+      (newEntry) => !entries.value.some((entry) => entry.id === newEntry.id)
+    );
+    filteredEntries.forEach((entry) => {
+      entry.loading = false;
+    });
+
+    entries.value.push(...filteredEntries);
+    //sort entries by descending start time
+    entries.value.sort((a, b) => {
+      return (
+        new Date(b.start_time).getTime() - new Date(a.start_time).getTime()
+      );
+    });
+  }
+
   const entriesByDate = computed<Record<string, DateGroup>>(() => {
     const days: Record<string, DateGroup> = {};
     for (const entry of entries.value) {
@@ -53,31 +91,6 @@ export const useEntriesListStore = defineStore("entriesList", () => {
     }
     return days;
   });
-
-  async function fetchEntries() {
-    if (loading.value) return;
-    loading.value = true;
-
-    const newEntries = (await getEntries(limit.value, page.value))?.filter(
-      (e) => e.end_time
-    );
-    if (!newEntries || newEntries.length == 0) {
-      loading.value = false;
-      return;
-    }
-
-    pushEntries(newEntries);
-    page.value++;
-    loading.value = false;
-  }
-
-  function pushEntries(newEntries: TimeEntry[]) {
-    newEntries.forEach((entry) => {
-      entry.loading = false;
-    });
-
-    entries.value.push(...newEntries);
-  }
 
   return {
     limit,

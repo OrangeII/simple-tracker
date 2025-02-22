@@ -29,17 +29,27 @@ import { StopIcon } from "@heroicons/vue/24/solid";
 import Spinner from "./Spinner.vue";
 import RunningTime from "./RunningTime.vue";
 import { useCurrentTaskStore } from "../stores/currentTask";
+import { useEntriesListStore } from "../stores/entriesList";
 
 const loading = ref(false);
 const currentTaskStore = useCurrentTaskStore();
+const entriesListStore = useEntriesListStore();
 
 const stopTracking = async () => {
+  if (!currentTaskStore.task) return;
+
   loading.value = true;
   if (!(await stopCurrentTracking())) {
     loading.value = false;
     return;
   }
 
+  //push the current task to the entries list
+  currentTaskStore.task.time_entries.end_time = new Date().toISOString();
+  currentTaskStore.task.time_entries.tasks = currentTaskStore.task.tasks;
+  entriesListStore.pushEntries([currentTaskStore.task.time_entries]);
+
+  //since the task is stopped, remove it from the current task store
   currentTaskStore.task = null;
   loading.value = false;
 };
