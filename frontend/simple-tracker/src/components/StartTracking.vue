@@ -45,7 +45,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 /**this component is responsible for starting the tracking on a new task
  * stop current time entry
  * make new task
@@ -53,19 +53,18 @@
  */
 
 import { ref } from "vue";
-import { supabase } from "../main.ts";
 import { track } from "../common/supabaseClient.ts";
 import QRScanner from "./QRScanner.vue";
 import { QrCodeIcon, PlayIcon } from "@heroicons/vue/24/solid";
 import Spinner from "./Spinner.vue";
+import { useCurrentTaskStore } from "../stores/currentTask";
 
 const taskName = ref("");
-const altCode = ref("");
+const taskAltCode = ref("");
 const loading = ref(false);
 const message = ref("");
 const qrModalIsOpen = ref(false);
-
-const emit = defineEmits(["taskCreated"]);
+const currentTaskStore = useCurrentTaskStore();
 
 const start = async () => {
   if (!taskName.value) {
@@ -76,22 +75,25 @@ const start = async () => {
   loading.value = true;
   message.value = "";
 
-  await startTrackingTask(null, taskName.value, altCode.value);
+  await startTrackingTask({ name: taskName.value, altCode: taskAltCode.value });
 };
 
-const startTrackingTask = async (taskId, name, altCode) => {
-  const ret = await track({ name, altCode });
+const startTrackingTask = async (params: {
+  taskId?: string;
+  name?: string;
+  altCode?: string;
+}) => {
+  const ret = await track(params);
   if (!ret) {
     message.value = "Could not start tracking task!";
     loading.value = false;
     return;
   }
 
-  //emit the task created
-  emit("taskStarted", ret);
+  currentTaskStore.task = ret;
   message.value = "Task started succesfully!";
   taskName.value = "";
-  altCode.value = "";
+  taskAltCode.value = "";
   loading.value = false;
 };
 
@@ -103,7 +105,7 @@ const closeQRModal = () => {
   qrModalIsOpen.value = false;
 };
 
-const onQRCodeCaptured = async (rawCode) => {
+const onQRCodeCaptured = async (rawCode: string) => {
   qrModalIsOpen.value = false;
 
   //validate raw code
@@ -123,6 +125,10 @@ const onQRCodeCaptured = async (rawCode) => {
   }
 
   //start tracking the task
-  await startTrackingTask(code.taskId, code.name, code.altCode);
+  await startTrackingTask({
+    taskId: code.taskId,
+    name: code.name,
+    altCode: code.altCode,
+  });
 };
 </script>

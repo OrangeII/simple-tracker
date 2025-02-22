@@ -7,7 +7,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { supabase } from "../main.js";
 
 const signInWithGitHub = async () => {

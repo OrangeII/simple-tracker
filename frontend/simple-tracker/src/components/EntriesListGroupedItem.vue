@@ -16,7 +16,7 @@
 
       <div @click="onResume()" class="flex flex-col items-end">
         <div>
-          {{ toTimeString(new Date(group.totalTime)) }}
+          {{ toDurationString(new Date(group.totalTime)) }}
         </div>
         <div color="flex flex-col items-center">
           <PlayIcon
@@ -37,16 +37,19 @@
   </div>
 </template>
 
-<script setup>
-import { toTimeString } from "../common/timeUtils";
+<script setup lang="ts">
+import { toDurationString } from "../common/timeUtils";
+import type { TaskGroup, TimeEntry } from "../common/types";
 import Spinner from "./Spinner.vue";
 import { PlayIcon } from "@heroicons/vue/24/solid";
 
-const emit = defineEmits(["onResumeClicked"]);
+const emit = defineEmits<{
+  onResumeClicked: [entry: TimeEntry];
+}>();
 
-const props = defineProps({
-  group: Object,
-});
+const props = defineProps<{
+  group: TaskGroup;
+}>();
 
 const onResume = () => {
   emit("onResumeClicked", props.group.entries[0]);
