@@ -14,3 +14,21 @@ export const toTimeString = (time: Date) => {
 
   return `${padZero(hours)}:${padZero(minutes)}:${padZero(seconds)}`;
 };
+
+export const toEntriesDateString = (date) => {
+  const entriesDate = new Date(date);
+  entriesDate.setHours(0, 0, 0, 0);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  if (entriesDate.getTime() === today.getTime()) {
+    return "Today";
+  }
+
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
+  if (entriesDate.getTime() === yesterday.getTime()) {
+    return "Yesterday";
+  }
+
+  return entriesDate.toLocaleDateString();
+};

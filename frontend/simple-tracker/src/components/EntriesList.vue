@@ -4,7 +4,7 @@
     :key="date"
   >
     <div class="pt-4 font-bold uppercase flex flex-row justify-between">
-      <div>{{ getEntriesDateString(new Date(date)) }}</div>
+      <div>{{ toEntriesDateString(new Date(date)) }}</div>
       <div>{{ toTimeString(new Date(dateEntries.totalTime)) }}</div>
     </div>
 
@@ -37,7 +37,7 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { getEntries, track } from "../common/supabaseClient.ts";
-import { toTimeString } from "../common/timeUtils.ts";
+import { toTimeString, toEntriesDateString } from "../common/timeUtils.ts";
 import Spinner from "./Spinner.vue";
 import EntriesListItem from "./EntriesListItem.vue";
 import EntriesListGroupedItem from "./EntriesListGroupedItem.vue";
@@ -61,24 +61,6 @@ onMounted(async () => {
   const sentinel = document.getElementById("scroll-trigger");
   if (sentinel) observer.value.observe(sentinel);
 });
-
-const getEntriesDateString = (date) => {
-  const entriesDate = new Date(date);
-  entriesDate.setHours(0, 0, 0, 0);
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  if (entriesDate.getTime() === today.getTime()) {
-    return "Today";
-  }
-
-  const yesterday = new Date(today);
-  yesterday.setDate(yesterday.getDate() - 1);
-  if (entriesDate.getTime() === yesterday.getTime()) {
-    return "Yesterday";
-  }
-
-  return entriesDate.toLocaleDateString();
-};
 
 const observerCallBack = (entries) => {
   if (entries[0].isIntersecting) {
