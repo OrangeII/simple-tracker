@@ -43,20 +43,15 @@ import EntriesListItem from "./EntriesListItem.vue";
 import EntriesListGroupedItem from "./EntriesListGroupedItem.vue";
 import { useCurrentTaskStore } from "../stores/currentTask";
 import { useEntriesListStore } from "../stores/entriesList";
-import type { CurrentTask, TimeEntry } from "../common/types.ts";
+import type { TimeEntry } from "../common/types.ts";
 
 const observer = ref<IntersectionObserver | null>(null);
 const entriesListStore = useEntriesListStore();
 const currentTaskStore = useCurrentTaskStore();
 
-const props = withDefaults(
-  defineProps<{
-    grouped: boolean;
-  }>(),
-  {
-    grouped: false,
-  }
-);
+const { grouped = false } = defineProps<{
+  grouped: boolean;
+}>();
 
 onMounted(async () => {
   entriesListStore.fetchEntries();
