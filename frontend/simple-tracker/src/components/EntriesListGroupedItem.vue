@@ -27,13 +27,6 @@
         </div>
       </div>
     </div>
-
-    <div
-      v-if="group.entries.length > 1"
-      class="w-full transform scale-98 -translate-y-18.5 border-wfdark border-1 rounded-sm absolute -z-10 bg-bg"
-    >
-      <div class="h-16"></div>
-    </div>
   </div>
 </template>
 
