@@ -1,10 +1,10 @@
 <template>
   <div>
-    <Login v-if="!user" />
+    <Login v-if="!userStore.user" />
     <div v-else class="flex flex-col min-h-screen max-h-screen">
       <header class="p-4 border-wfdark border-b-1">
         <div class="flex flex-row items justify-between items-center">
-          <h1>Hello, {{ user.user_metadata.preferred_username }}</h1>
+          <h1>Hello, {{ userStore.user.user_metadata.preferred_username }}</h1>
           <div class="flex flex-row items-center">
             <Square3Stack3DIcon
               class="text-primary size-8 mr-4"
@@ -45,24 +45,25 @@ import EntriesList from "./components/EntriesList.vue";
 import { getCurrentTaskAndTimeEntry } from "./common/supabaseClient";
 import { ArrowLeftStartOnRectangleIcon } from "@heroicons/vue/24/solid";
 import { Square3Stack3DIcon } from "@heroicons/vue/24/solid";
+import { useUserStore } from "./stores/user";
 
-const user = ref(null);
+const userStore = useUserStore();
 const currentTask = ref(null);
 const groupItems = ref(false);
 
 onMounted(async () => {
   const { data } = await supabase.auth.getSession();
-  user.value = data?.session?.user || null;
+  userStore.user = data?.session?.user || null;
 
   supabase.auth.onAuthStateChange((_event, session) => {
-    user.value = session?.user || null;
-    console.log(user.value);
+    userStore.user = session?.user || null;
+    console.log(userStore.user);
     fetchCurrentTask();
   });
 });
 
 const fetchCurrentTask = async () => {
-  if (!user.value) {
+  if (!userStore.user) {
     currentTask.value = null;
     return;
   }
@@ -72,7 +73,7 @@ const fetchCurrentTask = async () => {
 
 const signOut = async () => {
   await supabase.auth.signOut();
-  user.value = null;
+  userStore.user = null;
 };
 
 const onTaskstarted = async (task) => {
