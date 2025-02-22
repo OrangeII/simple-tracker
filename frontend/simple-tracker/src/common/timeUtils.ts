@@ -1,4 +1,9 @@
-export const toTimeString = (time: Date) => {
+/**
+ *
+ * @param time a date object representing a duration
+ * @returns the duration in the format "HH:MM:SS"
+ */
+export const toDurationString = (time: Date) => {
   if (!time) {
     return "00:00:00";
   }
@@ -15,6 +20,11 @@ export const toTimeString = (time: Date) => {
   return `${padZero(hours)}:${padZero(minutes)}:${padZero(seconds)}`;
 };
 
+/**
+ * returns a string representation of the given date
+ * @param date a date object
+ * @returns "today" if the date is today, "yesterday" if the date is yesterday, toLocaleDateString() otherwise
+ */
 export const toEntriesDateString = (date) => {
   const entriesDate = new Date(date);
   entriesDate.setHours(0, 0, 0, 0);

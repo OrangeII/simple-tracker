@@ -4,7 +4,7 @@
 
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from "vue";
-import { toTimeString } from "../common/timeUtils";
+import { toDurationString } from "../common/timeUtils";
 
 const props = defineProps({
   start: Date,
@@ -18,7 +18,7 @@ const updateElapsed = () => {
 };
 
 const formattedElapsed = computed(() => {
-  return toTimeString(new Date(elapsed.value));
+  return toDurationString(new Date(elapsed.value));
 });
 
 onMounted(() => {

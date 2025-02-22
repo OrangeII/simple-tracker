@@ -16,7 +16,7 @@
 
       <div @click="onResume()" class="flex flex-col items-end">
         <div>
-          {{ toTimeString(new Date(group.totalTime)) }}
+          {{ toDurationString(new Date(group.totalTime)) }}
         </div>
         <div color="flex flex-col items-center">
           <PlayIcon
@@ -38,7 +38,7 @@
 </template>
 
 <script setup>
-import { toTimeString } from "../common/timeUtils";
+import { toDurationString } from "../common/timeUtils";
 import Spinner from "./Spinner.vue";
 import { PlayIcon } from "@heroicons/vue/24/solid";
 

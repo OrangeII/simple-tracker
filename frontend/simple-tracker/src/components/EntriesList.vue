@@ -5,7 +5,7 @@
   >
     <div class="pt-4 font-bold uppercase flex flex-row justify-between">
       <div>{{ toEntriesDateString(new Date(date)) }}</div>
-      <div>{{ toTimeString(new Date(dateEntries.totalTime)) }}</div>
+      <div>{{ toDurationString(new Date(dateEntries.totalTime)) }}</div>
     </div>
 
     <div v-if="!grouped">
@@ -37,7 +37,7 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { getEntries, track } from "../common/supabaseClient.ts";
-import { toTimeString, toEntriesDateString } from "../common/timeUtils.ts";
+import { toDurationString, toEntriesDateString } from "../common/timeUtils.ts";
 import Spinner from "./Spinner.vue";
 import EntriesListItem from "./EntriesListItem.vue";
 import EntriesListGroupedItem from "./EntriesListGroupedItem.vue";

@@ -14,7 +14,9 @@
     >
       <div>
         {{
-          toTimeString(new Date(entry.end_time) - new Date(entry.start_time))
+          toDurationString(
+            new Date(entry.end_time) - new Date(entry.start_time)
+          )
         }}
       </div>
       <div color="flex flex-col items-center">
@@ -26,7 +28,7 @@
 </template>
 
 <script setup>
-import { toTimeString } from "../common/timeUtils";
+import { toDurationString } from "../common/timeUtils";
 import Spinner from "./Spinner.vue";
 import { PlayIcon } from "@heroicons/vue/24/solid";
 
