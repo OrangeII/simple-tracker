@@ -84,7 +84,8 @@ export const useEntriesListStore = defineStore("entriesList", () => {
     page,
     loading,
     entries,
-    fetchEntries,
     entriesByDate,
+    fetchEntries,
+    pushEntries,
   };
 });

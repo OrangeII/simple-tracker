@@ -60,18 +60,9 @@ onMounted(async () => {
 
   supabase.auth.onAuthStateChange((_event, session) => {
     userStore.user = session?.user || null;
-    fetchCurrentTask();
+    currentTaskStore.fetchCurrentTask();
   });
 });
-
-const fetchCurrentTask = async () => {
-  if (!userStore.user) {
-    currentTaskStore.task = null;
-    return;
-  }
-  const data = await getCurrentTaskAndTimeEntry();
-  currentTaskStore.task = data;
-};
 
 const signOut = async () => {
   await supabase.auth.signOut();
