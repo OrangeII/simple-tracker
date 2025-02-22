@@ -39,18 +39,18 @@ const stopTracking = async () => {
   if (!currentTaskStore.task) return;
 
   loading.value = true;
+
+  //optimistically push the current task to the entries list and reset the current task
+  currentTaskStore.task.time_entries.end_time = new Date().toISOString();
+  currentTaskStore.task.time_entries.tasks = currentTaskStore.task.tasks;
+  entriesListStore.pushEntries([currentTaskStore.task.time_entries]);
+  currentTaskStore.task = null;
+
   if (!(await stopCurrentTracking())) {
     loading.value = false;
     return;
   }
 
-  //push the current task to the entries list
-  currentTaskStore.task.time_entries.end_time = new Date().toISOString();
-  currentTaskStore.task.time_entries.tasks = currentTaskStore.task.tasks;
-  entriesListStore.pushEntries([currentTaskStore.task.time_entries]);
-
-  //since the task is stopped, remove it from the current task store
-  currentTaskStore.task = null;
   loading.value = false;
 };
 </script>
