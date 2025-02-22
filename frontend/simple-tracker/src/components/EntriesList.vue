@@ -73,12 +73,32 @@ const onResume = async (entry: TimeEntry) => {
   if (!entry.tasks) return;
 
   entry.loading = true;
-  const ret = await track({ taskId: entry.tasks.id, startTime: new Date() });
+  const startTime = new Date();
+
+  //optimistically change the store
+  currentTaskStore.task = {
+    user_id: entry.user_id,
+    task_id: entry.task_id,
+    time_entry_id: "",
+    tasks: entry.tasks,
+    time_entries: {
+      id: "",
+      task_id: entry.task_id,
+      user_id: entry.user_id,
+      start_time: startTime.toISOString(),
+      created_at: startTime.toISOString(),
+    },
+  };
+
+  const ret = await track({ taskId: entry.tasks.id, startTime });
   if (!ret) {
     entry.loading = false;
+    //reverse the optimistic change
+    currentTaskStore.task = null;
     return;
   }
 
+  //update store with the actual task
   currentTaskStore.task = ret;
   entry.loading = false;
 };
