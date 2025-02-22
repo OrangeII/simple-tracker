@@ -1,39 +1,41 @@
 import { supabase } from "../main.ts";
+import type { CurrentTask, Task, TimeEntry, TrackResponse } from "./types.ts";
 
-export const getCurrentTaskAndTimeEntry = async () => {
-  try {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    if (!user) {
-      return null;
-    }
+export const getCurrentTaskAndTimeEntry =
+  async (): Promise<CurrentTask | null> => {
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) {
+        return null;
+      }
 
-    const { data, error } = await supabase
-      .from("current_tasks")
-      .select(
-        `
+      const { data, error } = await supabase
+        .from("current_tasks")
+        .select(
+          `
         *,
         tasks (*),
         time_entries (*)
       `
-      )
-      .eq("user_id", user.id)
-      .maybeSingle();
+        )
+        .eq("user_id", user.id)
+        .maybeSingle();
 
-    if (error) {
-      console.error("Error fetching current task and time entry:", error);
+      if (error) {
+        console.error("Error fetching current task and time entry:", error);
+        return null;
+      }
+
+      return data;
+    } catch (error) {
+      console.error("Error in getCurrentTaskAndTimeEntry:", error);
       return null;
     }
+  };
 
-    return data;
-  } catch (error) {
-    console.error("Error in getCurrentTaskAndTimeEntry:", error);
-    return null;
-  }
-};
-
-export const stopCurrentTracking = async () => {
+export const stopCurrentTracking = async (): Promise<boolean> => {
   try {
     const currentTracking = await getCurrentTaskAndTimeEntry();
     if (!currentTracking) return false;
@@ -62,10 +64,14 @@ export const stopCurrentTracking = async () => {
     return true;
   } catch (error) {
     console.error("Error in stopCurrentTracking:", error);
+    return false;
   }
 };
 
-export const createTask = async (name: string, altCode?: string) => {
+export const createTask = async (
+  name: string,
+  altCode?: string
+): Promise<Task | null> => {
   try {
     let { data: createdTask, error } = await supabase
       .from("tasks")
@@ -95,10 +101,13 @@ export const createTask = async (name: string, altCode?: string) => {
     return createdTask;
   } catch (error) {
     console.error("Error in createTask:", error);
+    return null;
   }
 };
 
-export const startTracking = async (taskId: string) => {
+export const startTracking = async (
+  taskId: string
+): Promise<TimeEntry | null> => {
   try {
     //set the current task for the user
     const {
@@ -133,10 +142,14 @@ export const startTracking = async (taskId: string) => {
     return createdTimeEntry;
   } catch (error) {
     console.error("Error in startTracking:", error);
+    return null;
   }
 };
 
-export const getEntries = async (limit: number, page: number) => {
+export const getEntries = async (
+  limit: number,
+  page: number
+): Promise<TimeEntry[] | null> => {
   try {
     const {
       data: { user },
@@ -165,10 +178,13 @@ export const getEntries = async (limit: number, page: number) => {
     return data;
   } catch (error) {
     console.error("Error in getEntries:", error);
+    return null;
   }
 };
 
-export const getTaskByAltCode = async (altCode: string) => {
+export const getTaskByAltCode = async (
+  altCode: string
+): Promise<Task | null> => {
   try {
     const { data, error } = await supabase
       .from("tasks")
@@ -184,10 +200,11 @@ export const getTaskByAltCode = async (altCode: string) => {
     return data;
   } catch (error) {
     console.error("Error in getTaskByAltCode:", error);
+    return null;
   }
 };
 
-export const getTaskById = async (id: string) => {
+export const getTaskById = async (id: string): Promise<Task | null> => {
   try {
     const { data, error } = await supabase
       .from("tasks")
@@ -203,6 +220,7 @@ export const getTaskById = async (id: string) => {
     return data;
   } catch (error) {
     console.error("Error in getTaskById:", error);
+    return null;
   }
 };
 
@@ -210,7 +228,7 @@ export const track = async (params: {
   taskId?: string;
   altCode?: string;
   name?: string;
-}): Promise<{ tasks: Object; time_entries: Object } | undefined | null> => {
+}): Promise<TrackResponse | null> => {
   try {
     let task;
 
@@ -247,5 +265,6 @@ export const track = async (params: {
     return { tasks: task, time_entries: timeEntry };
   } catch (error) {
     console.error("Error in track:", error);
+    return null;
   }
 };

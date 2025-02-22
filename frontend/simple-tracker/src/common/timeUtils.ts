@@ -25,7 +25,7 @@ export const toDurationString = (time: Date) => {
  * @param date a date object
  * @returns "today" if the date is today, "yesterday" if the date is yesterday, toLocaleDateString() otherwise
  */
-export const toEntriesDateString = (date) => {
+export const toEntriesDateString = (date: Date) => {
   const entriesDate = new Date(date);
   entriesDate.setHours(0, 0, 0, 0);
   const today = new Date();

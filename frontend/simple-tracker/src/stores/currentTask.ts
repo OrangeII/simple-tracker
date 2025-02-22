@@ -1,7 +1,8 @@
 import { defineStore } from "pinia";
+import type { CurrentTask } from "../common/types";
 
 export const useCurrentTaskStore = defineStore("currentTask", {
   state: () => ({
-    currentTask: null,
+    task: null as CurrentTask | null,
   }),
 });
