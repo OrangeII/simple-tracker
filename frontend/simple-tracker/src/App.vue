@@ -54,7 +54,6 @@ onMounted(async () => {
 
   supabase.auth.onAuthStateChange((_event, session) => {
     userStore.user = session?.user || null;
-    console.log(userStore.user);
     fetchCurrentTask();
   });
 });
