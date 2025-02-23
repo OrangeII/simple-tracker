@@ -75,6 +75,14 @@ const onResume = async (entry: TimeEntry) => {
   entry.loading = true;
   const startTime = new Date();
 
+  //push the current task to the entries list
+  if (currentTaskStore.task) {
+    currentTaskStore.task.time_entries.end_time = new Date().toISOString();
+    currentTaskStore.task.time_entries.tasks = currentTaskStore.task.tasks;
+    entriesListStore.pushEntries([currentTaskStore.task.time_entries]);
+    currentTaskStore.task = null;
+  }
+
   //optimistically change the store
   currentTaskStore.task = {
     user_id: entry.user_id,
