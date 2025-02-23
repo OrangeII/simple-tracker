@@ -22,7 +22,7 @@
 import Spinner from "./Spinner.vue";
 import { PlayIcon } from "@heroicons/vue/24/solid";
 
-const props = defineProps<{
+defineProps<{
   loading?: boolean;
 }>();
 
