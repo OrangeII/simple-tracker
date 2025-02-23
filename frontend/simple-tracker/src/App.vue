@@ -2,7 +2,7 @@
   <div>
     <Login v-if="!userStore.user" />
     <div v-else class="flex flex-col min-h-screen max-h-screen">
-      <header class="p-4 border-wfdark border-b-1">
+      <header class="p-4">
         <div class="flex flex-row items justify-between items-center">
           <h1>Hello, {{ userStore.user.user_metadata.preferred_username }}</h1>
           <div class="flex flex-row items-center">
@@ -28,7 +28,7 @@
         />
       </main>
 
-      <footer class="p-4 border-wfdark border-t-1">
+      <footer class="p-4">
         <StartTracking v-if="!currentTaskStore.task" />
         <CurrentTask v-else />
       </footer>

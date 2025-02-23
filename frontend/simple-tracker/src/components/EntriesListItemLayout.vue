@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative border-wfdark border-1 rounded-sm p-2 my-3 flex flex-row justify-between items-center bg-bg grainy"
+    class="relative rounded-sm p-2 my-3 flex flex-row justify-between items-center bg-bg grainy"
   >
     <div class="flex-grow max-w-[75%]">
       <slot name="left"></slot>
