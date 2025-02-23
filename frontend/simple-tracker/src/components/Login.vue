@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen min-w-screen flex flex-row justify-center">
-    <div class="flex flex-col items-center absolute top-32 gap-6">
-      <div class="grainy bg-bg w-fit rounded">
+    <div class="flex flex-col items-center absolute top-32 gap-2">
+      <div class="grainy bg-bg w-fit rounded mb-6">
         <img
           src="../assets/logo-no-bg.svg"
           alt="simple-tracker logo"
@@ -21,6 +21,13 @@
         </svg>
         Sign in with GitHub
       </button>
+      <button
+        @click="signInAsGuest"
+        class="w-full flex items-center justify-center gap-2 grainy bg-blend-overlay"
+      >
+        <p>👽</p>
+        <p>Sign in as guest</p>
+      </button>
     </div>
   </div>
 </template>
@@ -32,6 +39,12 @@ const signInWithGitHub = async () => {
   const { error } = await supabase.auth.signInWithOAuth({
     provider: "github",
   });
+
+  if (error) console.error("Error signing in:", error.message);
+};
+
+const signInAsGuest = async () => {
+  const { error } = await supabase.auth.signInAnonymously();
 
   if (error) console.error("Error signing in:", error.message);
 };
