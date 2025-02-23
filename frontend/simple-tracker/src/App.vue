@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted, onUnmounted } from "vue";
 import { supabase } from "./main.ts";
 import Login from "./components/Login.vue";
 import StartTracking from "./components/StartTracking.vue";
@@ -60,7 +60,12 @@ onMounted(async () => {
   supabase.auth.onAuthStateChange((_event, session) => {
     userStore.user = session?.user || null;
     currentTaskStore.fetchCurrentTask();
+    currentTaskStore.initializeSubscriptionToCurrentTask();
   });
+});
+
+onUnmounted(() => {
+  currentTaskStore.cleanup();
 });
 
 const signOut = async () => {
