@@ -2,7 +2,7 @@
   <div class="relative">
     <div
       :key="group.id"
-      class="border-wfdark border-1 rounded-sm p-2 my-3 flex flex-row justify-between items-center bg-bg"
+      class="border-wfdark border-1 rounded-sm p-2 my-3 flex flex-row justify-between items-center bg-bg grainy"
     >
       <div class="flex-grow max-w-[75%] flex flex-row items-center">
         <div

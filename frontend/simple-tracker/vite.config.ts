@@ -20,7 +20,7 @@ export default defineConfig({
         name: "simple time tracker",
         short_name: "stt",
         description: "a simple time tracker",
-        theme_color: "#0E1E2E",
+        theme_color: "#e7e4c1",
         icons: [
           {
             src: "pwa-192x192.png",
