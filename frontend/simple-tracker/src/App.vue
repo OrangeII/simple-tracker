@@ -2,11 +2,14 @@
   <div>
     <Login v-if="!userStore.user" />
     <div v-else class="flex flex-col min-h-screen max-h-screen">
-      <header class="p-4">
+      <header
+        class="p-4 transition-[margin] ease-linear duration-300"
+        :class="[isScrollingDown ? 'md:mt-0 -mt-18' : 'mt-0']"
+      >
         <Toolbar />
       </header>
 
-      <main class="flex-1 px-4 overflow-auto">
+      <main class="flex-1 px-4 overflow-auto" @scroll="handleScroll">
         <EntriesList
           :grouped="preferencesStore.preferences.displayEntriesGroupedById"
         />
@@ -21,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 import { supabase } from "./main.ts";
 import Login from "./components/Login.vue";
 import StartTracking from "./components/StartTracking.vue";
@@ -50,4 +53,22 @@ onMounted(async () => {
 onUnmounted(() => {
   currentTaskStore.cleanup();
 });
+
+/**
+ * Handle the scroll event to conditionally hide the toolbar
+ */
+const isScrollingDown = ref(false);
+let lastScrollTop = 0;
+const handleScroll = (event: Event) => {
+  const target = event.target as HTMLElement;
+  const scrollTop = target.scrollTop;
+
+  if (scrollTop > lastScrollTop && scrollTop > 0) {
+    isScrollingDown.value = true;
+  } else {
+    isScrollingDown.value = false;
+  }
+
+  lastScrollTop = scrollTop;
+};
 </script>
