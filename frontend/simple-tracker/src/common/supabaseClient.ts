@@ -1,6 +1,11 @@
 import type { RealtimeChannel } from "@supabase/supabase-js";
 import { supabase } from "../main.ts";
-import type { CurrentTask, Task, TimeEntry } from "./types.ts";
+import type {
+  CurrentTask,
+  CurrentTasksRecord,
+  Task,
+  TimeEntry,
+} from "./types.ts";
 
 export const getCurrentTaskAndTimeEntry =
   async (): Promise<CurrentTask | null> => {
@@ -290,8 +295,8 @@ export const track = async (params: {
 export const subscribeToCurrentTasks = async (
   callback: (payload: {
     eventType: "INSERT" | "UPDATE" | "DELETE";
-    newRecord: Object;
-    oldRecord: Object;
+    newRecord: CurrentTasksRecord;
+    oldRecord: CurrentTasksRecord;
   }) => void
 ): Promise<RealtimeChannel | null> => {
   try {
@@ -316,8 +321,8 @@ export const subscribeToCurrentTasks = async (
         (payload) => {
           callback({
             eventType: payload.eventType,
-            newRecord: payload.new as Object,
-            oldRecord: payload.old as Object,
+            newRecord: payload.new as CurrentTasksRecord,
+            oldRecord: payload.old as CurrentTasksRecord,
           });
         }
       )

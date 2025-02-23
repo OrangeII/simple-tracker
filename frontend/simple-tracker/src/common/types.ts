@@ -24,6 +24,13 @@ export interface CurrentTask {
   time_entries: TimeEntry;
 }
 
+export interface CurrentTasksRecord {
+  user_id: string;
+  task_id: string;
+  time_entry_id: string;
+  created_at: string;
+}
+
 export interface DateGroup {
   date: Date;
   totalTime: number;

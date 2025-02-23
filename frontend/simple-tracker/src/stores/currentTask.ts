@@ -18,8 +18,7 @@ export const useCurrentTaskStore = defineStore("currentTask", () => {
 
   async function initializeSubscriptionToCurrentTask() {
     //i don't know why, if taskSubscription is declared <RealtimeChannel | null> then i cant use unsubscribeFromCurrentTasks
-    const sub = await subscribeToCurrentTasks(async (payload) => {
-      console.log("subscription payload", payload);
+    const sub = await subscribeToCurrentTasks(async (_payload) => {
       await fetchCurrentTask();
     });
     if (sub) {
