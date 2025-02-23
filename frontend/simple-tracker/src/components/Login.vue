@@ -1,7 +1,7 @@
 <template>
-  <div class="min-h-screen min-w-screen flex items-center justify-center">
-    <div class="flex flex-col items-center">
-      <div class="grainy bg-bg w-fit rounded mb-12">
+  <div class="min-h-screen min-w-screen flex flex-row justify-center">
+    <div class="flex flex-col items-center absolute top-32 gap-6">
+      <div class="grainy bg-bg w-fit rounded">
         <img
           src="../assets/logo-no-bg.svg"
           alt="simple-tracker logo"
@@ -11,7 +11,7 @@
 
       <button
         @click="signInWithGitHub"
-        class="w-full flex items-center justify-center gap-2"
+        class="w-full flex items-center justify-center gap-2 grainy bg-blend-overlay"
       >
         <!-- github logo -->
         <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
