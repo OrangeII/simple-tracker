@@ -24,6 +24,10 @@
 import { supabase } from "../main";
 import { usePreferencesStore } from "../stores/preferences";
 import { useUserStore } from "../stores/user";
+import {
+  Square3Stack3DIcon,
+  ArrowLeftStartOnRectangleIcon,
+} from "@heroicons/vue/24/solid";
 
 const userStore = useUserStore();
 const preferencesStore = usePreferencesStore();
