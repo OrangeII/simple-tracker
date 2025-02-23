@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted, onUnmounted } from "vue";
 import { supabase } from "./main.ts";
 import Login from "./components/Login.vue";
 import StartTracking from "./components/StartTracking.vue";
@@ -62,6 +62,10 @@ onMounted(async () => {
     currentTaskStore.fetchCurrentTask();
     currentTaskStore.initializeSubscriptionToCurrentTask();
   });
+});
+
+onUnmounted(() => {
+  currentTaskStore.cleanup();
 });
 
 const signOut = async () => {
