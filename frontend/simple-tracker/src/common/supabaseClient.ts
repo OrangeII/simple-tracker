@@ -1,3 +1,4 @@
+import type { RealtimeChannel } from "@supabase/supabase-js";
 import { supabase } from "../main.ts";
 import type { CurrentTask, Task, TimeEntry } from "./types.ts";
 
@@ -278,5 +279,63 @@ export const track = async (params: {
   } catch (error) {
     console.error("Error in track:", error);
     return null;
+  }
+};
+
+/**
+ * create a subscription to events on the current_tasks table
+ * @param callback a function that will be called each time a change occurs
+ * @returns a subscription object that can be used to unsubscribe
+ */
+export const subscribeToCurrentTasks = async (
+  callback: (payload: {
+    eventType: "INSERT" | "UPDATE" | "DELETE";
+    newRecord: Object;
+    oldRecord: Object;
+  }) => void
+): Promise<RealtimeChannel | null> => {
+  try {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+      return null;
+    }
+
+    //create subscription to supabase realtime
+    const subscription = supabase
+      .channel("current_tasks_changes")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "current_tasks",
+          filter: "user_id=eq." + user.id,
+        },
+        (payload) => {
+          callback({
+            eventType: payload.eventType,
+            newRecord: payload.new as Object,
+            oldRecord: payload.old as Object,
+          });
+        }
+      )
+      .subscribe();
+
+    return subscription;
+  } catch (error) {
+    console.error("Error in subscribeToCurrentTasks:", error);
+    return null;
+  }
+};
+
+export const unsubscribeFromCurrentTasks = async (
+  subscription: RealtimeChannel
+) => {
+  try {
+    supabase.removeChannel(subscription);
+  } catch (error) {
+    console.error("Error in unsubscribeFromCurrentTasks:", error);
   }
 };

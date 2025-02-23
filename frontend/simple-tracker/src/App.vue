@@ -60,6 +60,7 @@ onMounted(async () => {
   supabase.auth.onAuthStateChange((_event, session) => {
     userStore.user = session?.user || null;
     currentTaskStore.fetchCurrentTask();
+    currentTaskStore.initializeSubscriptionToCurrentTask();
   });
 });
 
