@@ -1,36 +1,32 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
-const STORAGE_KEY = "preferences-store";
-
-interface PreferencesState {
-  displayEntriesGroupedById: boolean;
-}
+const KEY_DISPLAY_ENTRIES_GROUPED = "displayEntriesGroupedById";
 
 export const usePreferencesStore = defineStore("preferences", () => {
-  const preferences = ref({
-    displayEntriesGroupedById: false,
-  } as PreferencesState);
+  const displayEntriesGroupedById = ref(false);
   loadFromLocalStorage();
 
   function toggleDisplayEntriesGroupedById() {
-    preferences.value.displayEntriesGroupedById =
-      !preferences.value.displayEntriesGroupedById;
+    displayEntriesGroupedById.value = !displayEntriesGroupedById.value;
     saveToLocalStorage();
   }
 
   function saveToLocalStorage() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(preferences.value));
+    localStorage.setItem(
+      KEY_DISPLAY_ENTRIES_GROUPED,
+      JSON.stringify(displayEntriesGroupedById.value)
+    );
   }
 
   function loadFromLocalStorage() {
-    const data = localStorage.getItem(STORAGE_KEY);
-    if (data) {
-      preferences.value = JSON.parse(data);
+    const data = localStorage.getItem(KEY_DISPLAY_ENTRIES_GROUPED);
+    if (data !== null) {
+      displayEntriesGroupedById.value = JSON.parse(data);
     }
   }
   return {
-    preferences,
+    displayEntriesGroupedById,
     loadFromLocalStorage,
     saveToLocalStorage,
     toggleDisplayEntriesGroupedById,

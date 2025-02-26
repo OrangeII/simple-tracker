@@ -6,6 +6,21 @@
       "Segoe UI", Arial, sans-serif;
   }
 
+  :root {
+    --text: #2a2a2a;
+    --background: #e7e4c1;
+    --primary: #004f6b;
+    --secondary: #c7a060;
+    --accent: #e47a62;
+  }
+  .dark {
+    --text: #e7e4c1;
+    --background: #121c21;
+    --primary: #4db9d1;
+    --secondary: #a67b3a;
+    --accent: #ff8566;
+  }
+
   body {
     background-color: var(--color-bg);
   }

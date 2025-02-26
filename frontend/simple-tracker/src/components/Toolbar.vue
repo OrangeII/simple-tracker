@@ -8,7 +8,7 @@
         class="text-primary size-8 mr-4"
         :class="{
           'border-2 rounded-md p-1 size-9':
-            preferencesStore.preferences.displayEntriesGroupedById,
+            preferencesStore.displayEntriesGroupedById,
         }"
         @click="preferencesStore.toggleDisplayEntriesGroupedById"
       />

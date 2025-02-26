@@ -10,9 +10,7 @@
       </header>
 
       <main class="flex-1 px-4 overflow-auto" @scroll="handleScroll">
-        <EntriesList
-          :grouped="preferencesStore.preferences.displayEntriesGroupedById"
-        />
+        <EntriesList :grouped="preferencesStore.displayEntriesGroupedById" />
       </main>
 
       <footer class="p-4">
