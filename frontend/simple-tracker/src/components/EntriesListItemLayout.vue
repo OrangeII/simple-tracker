@@ -1,7 +1,14 @@
 <template>
   <div class="relative overflow-hidden px-4">
-    <div class="absolute right-0 top-0 h-full flex items-center px-4">
-      <slot name="actions"></slot>
+    <div class="absolute right-0 top-0 h-full flex items-center px-4 gap-6">
+      <slot name="actions">
+        <div class="flex items-center">
+          <div class="h-full flex flex-col items-center">
+            <TrashIcon @click="" class="size-8 text-accent"></TrashIcon>
+            <h3>Delete</h3>
+          </div>
+        </div>
+      </slot>
     </div>
     <div
       class="rounded-sm p-2 my-1.5 flex flex-row justify-between items-center bg-background grainy dark:bg-blend-overlay"
@@ -31,7 +38,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import Spinner from "./Spinner.vue";
-import { PlayIcon } from "@heroicons/vue/24/solid";
+import { PlayIcon, TrashIcon } from "@heroicons/vue/24/solid";
 
 defineProps<{
   loading?: boolean;
@@ -39,6 +46,7 @@ defineProps<{
 
 defineEmits<{
   onResume: void;
+  onDelete: void;
 }>();
 
 const isSwipeOpen = ref(false);
