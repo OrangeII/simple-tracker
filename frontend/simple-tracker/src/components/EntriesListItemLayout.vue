@@ -1,7 +1,14 @@
 <template>
   <div
-    class="relative rounded-sm p-2 my-3 flex flex-row justify-between items-center bg-background grainy dark:bg-blend-overlay"
+    class="relative overflow-hidden rounded-sm p-2 my-3 flex flex-row justify-between items-center bg-background grainy dark:bg-blend-overlay"
+    @touchstart="onTouchStart"
+    @touchmove="onTouchMove"
+    @touchend="onTouchEnd"
   >
+    <div class="absolute right-0 top-0 h-full flex items-center">
+      <div>ACTIONS</div>
+    </div>
+
     <div class="flex-grow max-w-[75%]">
       <slot name="left"></slot>
     </div>
@@ -19,6 +26,7 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from "vue";
 import Spinner from "./Spinner.vue";
 import { PlayIcon } from "@heroicons/vue/24/solid";
 
@@ -29,4 +37,21 @@ defineProps<{
 defineEmits<{
   onResume: void;
 }>();
+
+const startX = ref(0);
+const currentX = ref(0);
+
+const onTouchStart = (e: TouchEvent) => {
+  startX.value = e.touches[0].clientX;
+};
+
+const onTouchMove = (e: TouchEvent) => {
+  currentX.value = e.touches[0].clientX;
+  const diff = startX.value - currentX.value;
+  console.log("touchMove", diff);
+};
+
+const onTouchEnd = (e: TouchEvent) => {
+  //console.log("touchEnd", e);
+};
 </script>
