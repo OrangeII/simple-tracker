@@ -1,5 +1,8 @@
 <template>
-  <div>
+  <div
+    :class="[preferencesStore.darkMode ? 'dark' : '']"
+    class="bg-background text-text"
+  >
     <Login v-if="!userStore.user" />
     <div v-else class="flex flex-col min-h-screen max-h-screen">
       <header

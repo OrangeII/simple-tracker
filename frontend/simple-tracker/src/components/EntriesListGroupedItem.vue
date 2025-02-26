@@ -7,7 +7,7 @@
       <div class="flex-grow flex flex-row items-center">
         <div
           v-if="group.entries.length > 1"
-          class="min-w-8 min-h-8 border-1 border-primary rounded-xs mr-3 ml-1 text-primary flex items-center justify-center"
+          class="min-w-8 min-h-8 border-2 border-primary rounded-md mr-3 ml-1 text-primary flex items-center justify-center"
         >
           <p>{{ group.entries.length }}</p>
         </div>

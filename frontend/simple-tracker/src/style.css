@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer base {
   * {
     font-family: Helvetica, "Helvetica Neue", -apple-system, BlinkMacSystemFont,
@@ -12,19 +14,30 @@
     --primary: #004f6b;
     --secondary: #c7a060;
     --accent: #e47a62;
-  }
-  .dark {
-    --text: #e7e4c1;
-    --background: #121c21;
-    --primary: #4db9d1;
-    --secondary: #a67b3a;
-    --accent: #ff8566;
+
+    :where(.dark) {
+      --text: #e7e4c1;
+      --background: #121c21;
+      --primary: #4db9d1;
+      --secondary: #a67b3a;
+      --accent: #ff8566;
+    }
   }
 
-  body {
-    background-color: var(--color-bg);
+  .theme {
+    background-color: var(--color-background);
+    color: var(--color-text);
   }
 
+  .grainy {
+    background-image: url("./assets/grain.svg");
+    background-repeat: repeat;
+    background-size: 180px;
+    background-blend-mode: luminosity;
+  }
+}
+
+@layer components {
   h1 {
     font-size: var(--text-2xl);
     font-weight: 700;
@@ -40,49 +53,17 @@
 
   button {
     text-transform: uppercase;
-    background-color: var(--color-primary);
-    color: var(--color-white);
     font-weight: 500;
     border-radius: 2px;
     padding-inline: calc(var(--spacing) * 4);
     padding-block: calc(var(--spacing) * 2);
   }
-
-  div {
-    border-color: var(--color-wfdark);
-  }
-
-  .grainy {
-    background-image: url("./assets/grain.svg");
-    background-repeat: repeat;
-    background-size: 180px;
-    background-blend-mode: luminosity;
-  }
 }
 
-@theme {
-  --white-pure: #fff;
-  --yellow-very-pale: #fffcf1;
-  --yellow-pale: #e7e4c1;
-
-  --blue-pale: #c6e5d6;
-  --blue-light: #008e9c;
-  --blue: #004d69;
-  --blue-dark: #0e1e2e;
-  --blue-very-dark: #08090e;
-
-  --orange: #c64c0d;
-  --red-dark: #721c0f;
-  --red-very-dark: #3f2320;
-
-  --green-light: #5eba67;
-  --green: #00734c;
-  --green-dark: #003e33;
-
-  --woods: #494a00;
-
-  --color-bg: var(--yellow-pale);
-  --color-primary: var(--blue);
-  --color-error: var(--orange);
-  --color-wfdark: var(--blue-dark);
+@theme inline {
+  --color-background: var(--background);
+  --color-text: var(--text);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
 }

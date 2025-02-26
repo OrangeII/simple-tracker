@@ -1,9 +1,18 @@
 <template>
   <div class="min-h-screen min-w-screen flex flex-row justify-center">
     <div class="flex flex-col items-center absolute top-32 gap-2">
-      <div class="grainy bg-bg w-fit rounded mb-6">
+      <div
+        class="grainy bg-background dark:bg-blend-overlay w-fit rounded mb-6"
+      >
         <img
+          v-if="!preferencesStore.darkMode"
           src="../assets/logo-no-bg.svg"
+          alt="simple-tracker logo"
+          class="w-24"
+        />
+        <img
+          v-else
+          src="../assets/dark-logo-no-bg.svg"
           alt="simple-tracker logo"
           class="w-24"
         />
@@ -11,7 +20,7 @@
 
       <button
         @click="signInWithGitHub"
-        class="w-full flex items-center justify-center gap-2 grainy bg-blend-overlay"
+        class="w-full flex items-center justify-center gap-2 bg-primary text-background grainy bg-blend-overlay"
       >
         <!-- github logo -->
         <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
@@ -23,7 +32,7 @@
       </button>
       <button
         @click="signInAsGuest"
-        class="w-full flex items-center justify-center gap-2 grainy bg-blend-overlay"
+        class="w-full flex items-center justify-center gap-2 bg-primary text-background grainy bg-blend-overlay"
       >
         <p>👽</p>
         <p>Sign in as guest</p>
@@ -34,6 +43,9 @@
 
 <script setup lang="ts">
 import { supabase } from "../main.js";
+import { usePreferencesStore } from "../stores/preferences.js";
+
+const preferencesStore = usePreferencesStore();
 
 const signInWithGitHub = async () => {
   const { error } = await supabase.auth.signInWithOAuth({

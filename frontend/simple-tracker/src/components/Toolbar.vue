@@ -4,6 +4,19 @@
       Hello, {{ userStore.user?.user_metadata.preferred_username || "👽" }}
     </h1>
     <div class="flex flex-row items-center">
+      <div id="themeToggle" class="mr-4">
+        <MoonIcon
+          class="text-primary size-8"
+          v-if="preferencesStore.darkMode"
+          @click="preferencesStore.toggleDarkMode"
+        />
+        <SunIcon
+          class="text-primary size-8"
+          v-else
+          @click="preferencesStore.toggleDarkMode"
+        />
+      </div>
+
       <Square3Stack3DIcon
         class="text-primary size-8 mr-4"
         :class="{
@@ -27,6 +40,8 @@ import { useUserStore } from "../stores/user";
 import {
   Square3Stack3DIcon,
   ArrowLeftStartOnRectangleIcon,
+  MoonIcon,
+  SunIcon,
 } from "@heroicons/vue/24/solid";
 
 const userStore = useUserStore();

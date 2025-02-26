@@ -33,7 +33,7 @@
     @click.self="closeQRModal"
     class="fixed inset-0 flex items-center justify-center bg-black"
   >
-    <div class="bg-bg rounded-lg shadow-lg max-w-lg w-full p-6">
+    <div class="bg-background rounded-lg shadow-lg max-w-lg w-full p-6">
       <div class="flex justify-between items-center border-b pb-2">
         <h2 class="text-xl font-semibold">Scan a QR</h2>
       </div>
