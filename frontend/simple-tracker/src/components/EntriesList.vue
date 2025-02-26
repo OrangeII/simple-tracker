@@ -1,40 +1,49 @@
 <template>
   <div
-    v-for="(dateEntries, date) in entriesListStore.entriesByDate"
-    :key="date"
+    v-if="entriesListStore.entries.length === 0"
+    class="flex flex-col items-center justify-center h-full mt-[40%]"
   >
-    <div class="pt-4 px-4 font-bold uppercase flex flex-row justify-between">
-      <div>{{ toEntriesDateString(new Date(date)) }}</div>
-      <div>{{ toDurationString(new Date(dateEntries.totalTime)) }}</div>
-    </div>
-
-    <div v-if="!grouped">
-      <EntriesListItem
-        v-for="entry in dateEntries.entries"
-        :key="entry.id"
-        :entry="entry"
-        @onResumeClicked="onResume"
-        @onDeleteClicked="onDeleteEntry"
-      >
-      </EntriesListItem>
-    </div>
-    <div v-else>
-      <EntriesListGroupedItem
-        v-for="group in dateEntries.entiresById"
-        :key="group.id"
-        :group="group"
-        @onResumeClicked="onResume"
-        @onDeleteClicked="onDeleteGroup"
-      />
-    </div>
+    <div class="text-2xl font-bold">No entries yet</div>
+    <div class="text-text/70">Start tracking to see your entries</div>
   </div>
+  <div v-else>
+    <div
+      v-for="(dateEntries, date) in entriesListStore.entriesByDate"
+      :key="date"
+    >
+      <div class="pt-4 px-4 font-bold uppercase flex flex-row justify-between">
+        <div>{{ toEntriesDateString(new Date(date)) }}</div>
+        <div>{{ toDurationString(new Date(dateEntries.totalTime)) }}</div>
+      </div>
 
-  <!-- Scroll Trigger (Empty div at bottom for IntersectionObserver) -->
-  <div id="scroll-trigger" class="h-4"></div>
+      <div v-if="!grouped">
+        <EntriesListItem
+          v-for="entry in dateEntries.entries"
+          :key="entry.id"
+          :entry="entry"
+          @onResumeClicked="onResume"
+          @onDeleteClicked="onDeleteEntry"
+        >
+        </EntriesListItem>
+      </div>
+      <div v-else>
+        <EntriesListGroupedItem
+          v-for="group in dateEntries.entiresById"
+          :key="group.id"
+          :group="group"
+          @onResumeClicked="onResume"
+          @onDeleteClicked="onDeleteGroup"
+        />
+      </div>
+    </div>
 
-  <!-- Loading Indicator -->
-  <div v-if="entriesListStore.loading" class="flex flex-row justify-around">
-    <Spinner class="mt-4 size-10" />
+    <!-- Scroll Trigger (Empty div at bottom for IntersectionObserver) -->
+    <div id="scroll-trigger" class="h-4"></div>
+
+    <!-- Loading Indicator -->
+    <div v-if="entriesListStore.loading" class="flex flex-row justify-around">
+      <Spinner class="mt-4 size-10" />
+    </div>
   </div>
 </template>
 
