@@ -6,11 +6,11 @@
     >
       <slot name="actions">
         <div class="flex items-center">
-          <div class="h-full flex flex-col items-center">
-            <TrashIcon
-              @click="$emit('onDelete')"
-              class="size-8 text-accent"
-            ></TrashIcon>
+          <div
+            @click="$emit('onDelete')"
+            class="h-full flex flex-col items-center"
+          >
+            <TrashIcon class="size-8 text-accent"></TrashIcon>
             <h4>Delete</h4>
           </div>
         </div>
