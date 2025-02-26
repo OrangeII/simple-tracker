@@ -1,5 +1,9 @@
 <template>
-  <EntriesListItemLayout :loading="entry.loading" @onResume="onResume">
+  <EntriesListItemLayout
+    :loading="entry.loading"
+    @onResume="onResume"
+    @onDelete="onDelete"
+  >
     <template #left>
       <h3 class="truncate">{{ entry.tasks?.name }}</h3>
     </template>
@@ -24,6 +28,7 @@ import EntriesListItemLayout from "./EntriesListItemLayout.vue";
 
 const emit = defineEmits<{
   onResumeClicked: [entry: TimeEntry];
+  onDeleteClicked: [entry: TimeEntry];
 }>();
 
 const props = defineProps<{
@@ -32,5 +37,9 @@ const props = defineProps<{
 
 const onResume = () => {
   emit("onResumeClicked", props.entry);
+};
+
+const onDelete = () => {
+  emit("onDeleteClicked", props.entry);
 };
 </script>

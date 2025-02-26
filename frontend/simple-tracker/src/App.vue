@@ -12,7 +12,7 @@
         <Toolbar />
       </header>
 
-      <main class="flex-1 px-4 overflow-auto" @scroll="handleScroll">
+      <main class="flex-1 overflow-auto" @scroll="handleScroll">
         <EntriesList :grouped="preferencesStore.displayEntriesGroupedById" />
       </main>
 

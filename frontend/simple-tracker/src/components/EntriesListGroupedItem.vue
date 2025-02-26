@@ -2,6 +2,7 @@
   <EntriesListItemLayout
     :loading="group.entries[0].loading"
     @onResume="onResume"
+    @onDelete="onDelete"
   >
     <template #left>
       <div class="flex-grow flex flex-row items-center">
@@ -28,6 +29,7 @@ import EntriesListItemLayout from "./EntriesListItemLayout.vue";
 
 const emit = defineEmits<{
   onResumeClicked: [entry: TimeEntry];
+  onDeleteClicked: [entry: TaskGroup];
 }>();
 
 const props = defineProps<{
@@ -36,5 +38,9 @@ const props = defineProps<{
 
 const onResume = () => {
   emit("onResumeClicked", props.group.entries[0]);
+};
+
+const onDelete = () => {
+  emit("onDeleteClicked", props.group);
 };
 </script>
