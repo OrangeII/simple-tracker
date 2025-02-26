@@ -34,11 +34,13 @@ import EntriesList from "./components/EntriesList.vue";
 import { useUserStore } from "./stores/user";
 import { useCurrentTaskStore } from "./stores/currentTask";
 import { usePreferencesStore } from "./stores/preferences";
+import { useEntriesListStore } from "./stores/entriesList.ts";
 import Toolbar from "./components/Toolbar.vue";
 
 const userStore = useUserStore();
 const currentTaskStore = useCurrentTaskStore();
 const preferencesStore = usePreferencesStore();
+const entriesListStore = useEntriesListStore();
 
 onMounted(async () => {
   const { data } = await supabase.auth.getSession();
@@ -46,6 +48,7 @@ onMounted(async () => {
 
   supabase.auth.onAuthStateChange((_event, session) => {
     userStore.user = session?.user || null;
+    entriesListStore.entries = [];
     currentTaskStore.fetchCurrentTask();
     currentTaskStore.initializeSubscriptionToCurrentTask();
   });
