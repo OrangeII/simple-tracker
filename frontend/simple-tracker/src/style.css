@@ -24,11 +24,6 @@
     }
   }
 
-  .theme {
-    background-color: var(--color-background);
-    color: var(--color-text);
-  }
-
   .grainy {
     background-image: url("./assets/grain.svg");
     background-repeat: repeat;
@@ -49,6 +44,10 @@
   h3 {
     font-weight: 500;
     font-size: var(--text-lg);
+  }
+  h4 {
+    font-weight: 500;
+    font-size: var(--text-base);
   }
 
   button {

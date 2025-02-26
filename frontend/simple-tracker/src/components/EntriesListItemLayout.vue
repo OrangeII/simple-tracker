@@ -1,11 +1,17 @@
 <template>
   <div class="relative overflow-hidden px-4">
-    <div class="absolute right-0 top-0 h-full flex items-center px-4 gap-6">
+    <div
+      ref="actionsContainer"
+      class="absolute right-0 top-0 h-full flex items-center px-4 gap-6"
+    >
       <slot name="actions">
         <div class="flex items-center">
           <div class="h-full flex flex-col items-center">
-            <TrashIcon @click="" class="size-8 text-accent"></TrashIcon>
-            <h3>Delete</h3>
+            <TrashIcon
+              @click="$emit('onDelete')"
+              class="size-8 text-accent"
+            ></TrashIcon>
+            <h4>Delete</h4>
           </div>
         </div>
       </slot>
@@ -36,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, useTemplateRef } from "vue";
 import Spinner from "./Spinner.vue";
 import { PlayIcon, TrashIcon } from "@heroicons/vue/24/solid";
 
@@ -49,6 +55,8 @@ defineEmits<{
   onDelete: void;
 }>();
 
+const actionsContainer = useTemplateRef("actionsContainer");
+
 const isSwipeOpen = ref(false);
 const isSwiping = ref(false);
 const isScrolling = ref(false);
@@ -60,7 +68,6 @@ const touchEndX = ref(0);
 //theese are negative numbers because we are translating to the left
 const offset = ref(0);
 const SWIPE_THRESHOLD = -60;
-const MAX_SWIPE = -200;
 
 const onTouchStart = (e: TouchEvent) => {
   isSwiping.value = false;
@@ -112,7 +119,8 @@ const closeSwipe = () => {
 };
 
 const openSwipe = () => {
-  offset.value = MAX_SWIPE;
+  const maxSwipe = -(actionsContainer?.value?.clientWidth || 100);
+  offset.value = maxSwipe;
   isSwipeOpen.value = true;
 };
 </script>

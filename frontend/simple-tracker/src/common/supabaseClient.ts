@@ -344,3 +344,20 @@ export const unsubscribeFromCurrentTasks = async (
     console.error("Error in unsubscribeFromCurrentTasks:", error);
   }
 };
+
+export const deleteEntry = async (entryId: string): Promise<boolean> => {
+  try {
+    const { error } = await supabase
+      .from("time_entries")
+      .delete()
+      .eq("id", entryId);
+    if (error) {
+      console.error("Error deleting entry:", error);
+      return false;
+    }
+    return true;
+  } catch (error) {
+    console.error("Error in deleteEntry:", error);
+    return false;
+  }
+};

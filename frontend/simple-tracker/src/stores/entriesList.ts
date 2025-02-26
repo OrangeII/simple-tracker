@@ -92,6 +92,15 @@ export const useEntriesListStore = defineStore("entriesList", () => {
     return days;
   });
 
+  function removeEntries(entriesToDelete: TimeEntry[]) {
+    entriesToDelete.forEach((entry) => {
+      const index = entries.value.findIndex((e) => e.id === entry.id);
+      if (index !== -1) {
+        entries.value.splice(index, 1);
+      }
+    });
+  }
+
   return {
     limit,
     page,
@@ -100,5 +109,6 @@ export const useEntriesListStore = defineStore("entriesList", () => {
     entriesByDate,
     fetchEntries,
     pushEntries,
+    removeEntries,
   };
 });

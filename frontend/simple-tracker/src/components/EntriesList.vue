@@ -11,14 +11,17 @@
     <div v-if="!grouped">
       <EntriesListItem
         v-for="entry in dateEntries.entries"
+        :key="entry.id"
         :entry="entry"
         @onResumeClicked="onResume"
+        @onDeleteClicked="onDeleteEntry"
       >
       </EntriesListItem>
     </div>
     <div v-else>
       <EntriesListGroupedItem
         v-for="group in dateEntries.entiresById"
+        :key="group.id"
         :group="group"
         @onResumeClicked="onResume"
       />
@@ -36,7 +39,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { track } from "../common/supabaseClient.ts";
+import { deleteEntry, track } from "../common/supabaseClient.ts";
 import { toDurationString, toEntriesDateString } from "../common/timeUtils.ts";
 import Spinner from "./Spinner.vue";
 import EntriesListItem from "./EntriesListItem.vue";
@@ -108,5 +111,18 @@ const onResume = async (entry: TimeEntry) => {
 
   //update store with the actual task
   currentTaskStore.task = ret;
+};
+
+const onDeleteEntry = async (entry: TimeEntry) => {
+  if (!entry.tasks) return;
+
+  //optimistically remove the entry
+  entriesListStore.removeEntries([entry]);
+
+  //delete the entry form the database
+  if (!(await deleteEntry(entry.id))) {
+    //revert the optimistic change if deletion fails
+    entriesListStore.pushEntries([entry]);
+  }
 };
 </script>
