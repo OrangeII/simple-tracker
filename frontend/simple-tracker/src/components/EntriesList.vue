@@ -24,6 +24,7 @@
         :key="group.id"
         :group="group"
         @onResumeClicked="onResume"
+        @onDeleteClicked="onDeleteGroup"
       />
     </div>
   </div>
@@ -46,7 +47,7 @@ import EntriesListItem from "./EntriesListItem.vue";
 import EntriesListGroupedItem from "./EntriesListGroupedItem.vue";
 import { useCurrentTaskStore } from "../stores/currentTask";
 import { useEntriesListStore } from "../stores/entriesList";
-import type { TimeEntry } from "../common/types.ts";
+import type { TaskGroup, TimeEntry } from "../common/types.ts";
 
 const observer = ref<IntersectionObserver | null>(null);
 const entriesListStore = useEntriesListStore();
@@ -123,6 +124,21 @@ const onDeleteEntry = async (entry: TimeEntry) => {
   if (!(await deleteEntry(entry.id))) {
     //revert the optimistic change if deletion fails
     entriesListStore.pushEntries([entry]);
+  }
+};
+
+const onDeleteGroup = async (group: TaskGroup) => {
+  if (!group.entries[0].tasks) return;
+
+  //optimistically remove the group
+  entriesListStore.removeEntries(group.entries);
+
+  //delete the group from the database
+  for (const entry of group.entries) {
+    if (!(await deleteEntry(entry.id))) {
+      //revert the optimistic change if deletion fails
+      entriesListStore.pushEntries([entry]);
+    }
   }
 };
 </script>
