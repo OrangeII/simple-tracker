@@ -3,7 +3,7 @@
     v-for="(dateEntries, date) in entriesListStore.entriesByDate"
     :key="date"
   >
-    <div class="pt-4 font-bold uppercase flex flex-row justify-between">
+    <div class="pt-4 px-4 font-bold uppercase flex flex-row justify-between">
       <div>{{ toEntriesDateString(new Date(date)) }}</div>
       <div>{{ toDurationString(new Date(dateEntries.totalTime)) }}</div>
     </div>
