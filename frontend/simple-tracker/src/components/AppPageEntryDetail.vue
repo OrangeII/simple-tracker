@@ -24,16 +24,16 @@
             <div
               class="p-2 rounded-md grainy bg-background dark:bg-blend-overlay grow"
             >
-              <h2>
+              <h3>
                 {{ start.toLocaleDateString() }}
-              </h2>
+              </h3>
             </div>
             <div
               class="p-2 rounded-md grainy bg-background dark:bg-blend-overlay grow"
             >
-              <h2>
+              <h3>
                 {{ start.toLocaleTimeString() }}
-              </h2>
+              </h3>
             </div>
           </div>
         </div>
@@ -46,23 +46,23 @@
             <div
               class="p-2 rounded-md grainy bg-background dark:bg-blend-overlay grow"
             >
-              <h2>
+              <h3>
                 {{ stop?.toLocaleDateString() }}
-              </h2>
+              </h3>
             </div>
             <div
               class="p-2 rounded-md grainy bg-background dark:bg-blend-overlay grow"
             >
-              <h2>
+              <h3>
                 {{ stop?.toLocaleTimeString() }}
-              </h2>
+              </h3>
             </div>
           </div>
         </div>
       </div>
       <div>
         <h3 class="text-text/70">Alt. code</h3>
-        <h2>{{ entry.tasks?.alt_code }}</h2>
+        <h3>{{ entry.tasks?.alt_code }}</h3>
       </div>
     </template>
   </AppPage>
