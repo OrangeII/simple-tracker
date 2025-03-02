@@ -21,30 +21,22 @@
             <h3 class="text-text/70">Start</h3>
           </div>
           <div class="flex justify-between items-center gap-4">
-            <div
-              class="p-2 rounded-md grainy bg-background dark:bg-blend-overlay grow"
-            >
-              <input
-                type="date"
-                name="start-date"
-                id="start-date"
-                :value="formatDate(start)"
-                @change="onStartDateChange"
-                class="font-medium text-lg focus:outline-none focus:border-none"
-              />
-            </div>
-            <div
-              class="p-2 rounded-md grainy bg-background dark:bg-blend-overlay grow"
-            >
-              <input
-                type="time"
-                name="start-time"
-                id="start-time"
-                :value="formatTime(start)"
-                @change="onStartTimeChange"
-                class="font-medium text-lg focus:outline-none focus:border-none"
-              />
-            </div>
+            <input
+              type="date"
+              name="start-date"
+              id="start-date"
+              :value="formatDate(start)"
+              @change="onStartDateChange"
+              class="p-2 rounded-md grainy bg-background dark:bg-blend-overlay grow font-medium text-lg focus:outline-none focus:border-none"
+            />
+            <input
+              type="time"
+              name="start-time"
+              id="start-time"
+              :value="formatTime(start)"
+              @change="onStartTimeChange"
+              class="p-2 rounded-md grainy bg-background dark:bg-blend-overlay grow font-medium text-lg focus:outline-none focus:border-none"
+            />
           </div>
         </div>
         <div v-if="stop !== null">
@@ -53,25 +45,20 @@
             <h3 class="text-text/70">Stop</h3>
           </div>
           <div class="flex justify-between items-center gap-4">
-            <div
+            <input
+              type="date"
+              name="stop-date"
+              id="stop-date"
+              :value="formatDate(stop)"
+              @change="onStopDateChange"
+              class="p-2 rounded-md grainy bg-background dark:bg-blend-overlay grow font-medium text-lg focus:outline-none focus:border-none"
+            />
+
+            <h3
               class="p-2 rounded-md grainy bg-background dark:bg-blend-overlay grow"
             >
-              <input
-                type="date"
-                name="stop-date"
-                id="stop-date"
-                :value="formatDate(stop)"
-                @change="onStopDateChange"
-                class="font-medium text-lg focus:outline-none focus:border-none"
-              />
-            </div>
-            <div
-              class="p-2 rounded-md grainy bg-background dark:bg-blend-overlay grow"
-            >
-              <h3>
-                {{ stop?.toLocaleTimeString() }}
-              </h3>
-            </div>
+              {{ stop?.toLocaleTimeString() }}
+            </h3>
           </div>
         </div>
       </div>
