@@ -30,7 +30,7 @@
                 id="start-date"
                 :value="formatDate(start)"
                 @change="onStartDateChange"
-                class="font-medium text-lg"
+                class="font-medium text-lg focus:outline-none focus:border-none"
               />
             </div>
             <div
@@ -51,9 +51,14 @@
             <div
               class="p-2 rounded-md grainy bg-background dark:bg-blend-overlay grow"
             >
-              <h3>
-                {{ stop?.toLocaleDateString() }}
-              </h3>
+              <input
+                type="date"
+                name="start-date"
+                id="start-date"
+                :value="formatDate(stop)"
+                @change="onStopDateChange"
+                class="font-medium text-lg focus:outline-none focus:border-none"
+              />
             </div>
             <div
               class="p-2 rounded-md grainy bg-background dark:bg-blend-overlay grow"
@@ -118,6 +123,16 @@ const onStartDateChange = (event: Event) => {
   const newDate = new Date(start.value);
   newDate.setFullYear(parseInt(year), parseInt(month) - 1, parseInt(day));
   start.value = newDate;
+};
+const onStopDateChange = (event: Event) => {
+  if (!stop.value) return;
+  const [year, month, day] = (event.target as HTMLInputElement).value.split(
+    "-"
+  );
+  //I have to make a new Date to make computed values update
+  const newDate = new Date(stop.value);
+  newDate.setFullYear(parseInt(year), parseInt(month) - 1, parseInt(day));
+  stop.value = newDate;
 };
 
 const onSaveClick = async () => {
