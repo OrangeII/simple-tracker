@@ -39,12 +39,14 @@
       </div>
     </div>
 
-    <AppPageEntryDetail
-      v-if="detailPageEntry !== null"
-      @close="detailPageEntry = null"
-      :entry="detailPageEntry"
-      >test</AppPageEntryDetail
-    >
+    <Transition name="slide">
+      <AppPageEntryDetail
+        v-if="detailPageEntry !== null"
+        @close="detailPageEntry = null"
+        :entry="detailPageEntry"
+        >test</AppPageEntryDetail
+      >
+    </Transition>
 
     <!-- Loading Indicator -->
     <div v-if="entriesListStore.loading" class="flex flex-row justify-around">
@@ -54,6 +56,23 @@
   <!-- Scroll Trigger (Empty div at bottom for IntersectionObserver) -->
   <div id="scroll-trigger" class="h-4"></div>
 </template>
+
+<style scoped>
+.slide-enter-active,
+.slide-leave-active {
+  transition: transform 0.3s ease-in-out;
+}
+
+.slide-enter-from,
+.slide-leave-to {
+  transform: translateY(+100%);
+}
+
+.slide-enter-to,
+.slide-leave-from {
+  transform: translateY(0);
+}
+</style>
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
