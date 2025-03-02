@@ -101,6 +101,35 @@ export const useEntriesListStore = defineStore("entriesList", () => {
     });
   }
 
+  /**
+   * replaces existing entry in the entry list with another entry with the same id.
+   * If such entry does not exist, the entry is simply pushed to the entries list.
+   * If the entry has an attached task,
+   * the task name and task altcode of the attached task will be updated for all entries whoes
+   * attached task id matches that of the new entry.
+   *
+   * @param entry entry to be updated
+   */
+  function updateEntry(entry: TimeEntry) {
+    const index = entries.value.findIndex((e) => e.id === entry.id);
+    if (index !== -1) {
+      entries.value[index] = entry;
+    } else {
+      entries.value.push(entry);
+    }
+
+    if (entry.tasks) {
+      entries.value
+        .filter((e) => e.task_id === entry.task_id)
+        .forEach((e) => {
+          if (e.tasks && entry.tasks) {
+            e.tasks.name = entry.tasks.name;
+            e.tasks.alt_code = entry.tasks.alt_code;
+          }
+        });
+    }
+  }
+
   return {
     limit,
     page,
@@ -110,5 +139,6 @@ export const useEntriesListStore = defineStore("entriesList", () => {
     fetchEntries,
     pushEntries,
     removeEntries,
+    updateEntry,
   };
 });
