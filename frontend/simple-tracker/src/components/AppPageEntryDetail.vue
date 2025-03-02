@@ -132,6 +132,13 @@ const setDateFromEvent = (
   //I have to make a new Date to make computed values update
   const newDate = new Date(dateToBeSet.value);
   newDate.setFullYear(parseInt(year), parseInt(month) - 1, parseInt(day));
+
+  if (!newDate || isNaN(newDate.getTime())) {
+    //revert changes if new date is invalid
+    dateToBeSet.value = new Date(dateToBeSet.value);
+    return;
+  }
+
   dateToBeSet.value = newDate;
 };
 
@@ -151,12 +158,18 @@ const setTimeFromEvent = (
     event.target as HTMLInputElement
   ).value.split(":");
   const newDate = new Date(timeToBeSet.value);
-  console.log([hours, minutes, seconds]);
   //Secons might be undefined on mobile
   if (seconds == undefined) {
     seconds = "0";
   }
   newDate.setHours(parseInt(hours), parseInt(minutes), parseInt(seconds));
+
+  if (!newDate || isNaN(newDate.getTime())) {
+    //revert changes if new date is invalid
+    timeToBeSet.value = new Date(timeToBeSet.value);
+    return;
+  }
+
   timeToBeSet.value = newDate;
 };
 
