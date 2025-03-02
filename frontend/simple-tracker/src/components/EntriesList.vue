@@ -39,8 +39,11 @@
       </div>
     </div>
 
-    <AppPage v-if="detailPageEntry !== null" @close="detailPageEntry = null"
-      >test</AppPage
+    <AppPageEntryDetail
+      v-if="detailPageEntry !== null"
+      @close="detailPageEntry = null"
+      :entry="detailPageEntry"
+      >test</AppPageEntryDetail
     >
 
     <!-- Loading Indicator -->
@@ -62,7 +65,7 @@ import EntriesListGroupedItem from "./EntriesListGroupedItem.vue";
 import { useCurrentTaskStore } from "../stores/currentTask";
 import { useEntriesListStore } from "../stores/entriesList";
 import type { TaskGroup, TimeEntry } from "../common/types.ts";
-import AppPage from "./AppPage.vue";
+import AppPageEntryDetail from "./AppPageEntryDetail.vue";
 
 const observer = ref<IntersectionObserver | null>(null);
 const entriesListStore = useEntriesListStore();
