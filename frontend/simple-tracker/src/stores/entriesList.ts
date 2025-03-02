@@ -125,6 +125,7 @@ export const useEntriesListStore = defineStore("entriesList", () => {
           if (e.tasks && entry.tasks) {
             e.tasks.name = entry.tasks.name;
             e.tasks.alt_code = entry.tasks.alt_code;
+            e.tasks.is_favorite = entry.tasks.is_favorite;
           }
         });
     }

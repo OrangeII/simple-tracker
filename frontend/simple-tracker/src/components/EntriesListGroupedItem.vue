@@ -3,6 +3,8 @@
     :loading="group.entries[0].loading"
     @onResume="onResume"
     @onDelete="onDelete"
+    @onFavoriteClick="onFavoriteClicked"
+    :isFavorite="group.entries[0].tasks?.is_favorite"
   >
     <template #left>
       <div class="flex-grow flex flex-row items-center">
@@ -30,6 +32,7 @@ import EntriesListItemLayout from "./EntriesListItemLayout.vue";
 const emit = defineEmits<{
   onResumeClicked: [entry: TimeEntry];
   onDeleteClicked: [entry: TaskGroup];
+  onFavoriteClicked: [entry: TimeEntry];
 }>();
 
 const props = defineProps<{
@@ -42,5 +45,9 @@ const onResume = () => {
 
 const onDelete = () => {
   emit("onDeleteClicked", props.group);
+};
+
+const onFavoriteClicked = () => {
+  emit("onFavoriteClicked", props.group.entries[0]);
 };
 </script>

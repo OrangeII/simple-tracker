@@ -3,6 +3,8 @@
     :loading="entry.loading"
     @onResume="onResume"
     @onDelete="onDelete"
+    @onFavoriteClick="onFavoriteClicked"
+    :isFavorite="entry.tasks?.is_favorite"
   >
     <template #left>
       <h3 class="truncate">{{ entry.tasks?.name }}</h3>
@@ -29,6 +31,7 @@ import EntriesListItemLayout from "./EntriesListItemLayout.vue";
 const emit = defineEmits<{
   onResumeClicked: [entry: TimeEntry];
   onDeleteClicked: [entry: TimeEntry];
+  onFavoriteClicked: [entry: TimeEntry];
 }>();
 
 const props = defineProps<{
@@ -41,5 +44,9 @@ const onResume = () => {
 
 const onDelete = () => {
   emit("onDeleteClicked", props.entry);
+};
+
+const onFavoriteClicked = () => {
+  emit("onFavoriteClicked", props.entry);
 };
 </script>

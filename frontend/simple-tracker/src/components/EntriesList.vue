@@ -24,6 +24,7 @@
           @onResumeClicked="onResume"
           @onDeleteClicked="onDeleteEntry"
           @onClick="onEntryClick(entry)"
+          @onFavoriteClicked="onFavoriteClicked"
         >
         </EntriesListItem>
       </div>
@@ -35,6 +36,7 @@
           @onResumeClicked="onResume"
           @onDeleteClicked="onDeleteGroup"
           @onClick="onGroupClick(group)"
+          @onFavoriteClicked="onFavoriteClicked"
         />
       </div>
     </div>
@@ -188,5 +190,11 @@ const onGroupClick = (group: TaskGroup) => {
 };
 const onEntryClick = (entry: TimeEntry) => {
   detailPageEntry.value = entry;
+};
+
+const onFavoriteClicked = (entry: TimeEntry) => {
+  if (!entry.tasks) return;
+  entry.tasks.is_favorite = !entry.tasks?.is_favorite;
+  entriesListStore.updateEntry(entry);
 };
 </script>

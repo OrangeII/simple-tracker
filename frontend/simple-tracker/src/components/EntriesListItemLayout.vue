@@ -7,6 +7,19 @@
       <slot name="actions">
         <div class="flex items-center pr-1">
           <div
+            @click="$emit('onFavoriteClick')"
+            class="h-full flex flex-col items-center"
+          >
+            <StarIcon v-if="isFavorite" class="size-8 text-primary"></StarIcon>
+            <StarIconOutline
+              v-else="isFavorite"
+              class="size-8 text-primary"
+            ></StarIconOutline>
+            <h4>Favorite</h4>
+          </div>
+        </div>
+        <div class="flex items-center pr-1">
+          <div
             @click="$emit('onDelete')"
             class="h-full flex flex-col items-center"
           >
@@ -44,16 +57,19 @@
 <script setup lang="ts">
 import { ref, useTemplateRef } from "vue";
 import Spinner from "./Spinner.vue";
-import { PlayIcon, TrashIcon } from "@heroicons/vue/24/solid";
+import { PlayIcon, TrashIcon, StarIcon } from "@heroicons/vue/24/solid";
+import { StarIcon as StarIconOutline } from "@heroicons/vue/24/outline";
 
 defineProps<{
   loading?: boolean;
+  isFavorite?: boolean;
 }>();
 
 defineEmits<{
   onResume: void;
   onDelete: void;
   onClick: void;
+  onFavoriteClick: void;
 }>();
 
 const actionsContainer = useTemplateRef("actionsContainer");
