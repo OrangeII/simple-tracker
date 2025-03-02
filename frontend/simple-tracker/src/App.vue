@@ -24,6 +24,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from "vue";
 import { supabase } from "./main.ts";
+import type { Subscription } from "@supabase/supabase-js";
 import Login from "./components/Login.vue";
 import StartTracking from "./components/StartTracking.vue";
 import CurrentTask from "./components/CurrentTask.vue";
@@ -36,20 +37,25 @@ import Toolbar from "./components/Toolbar.vue";
 const userStore = useUserStore();
 const currentTaskStore = useCurrentTaskStore();
 const preferencesStore = usePreferencesStore();
+let authStateChangeSub: Subscription | null = null;
 
 onMounted(async () => {
   const { data } = await supabase.auth.getSession();
   userStore.user = data?.session?.user || null;
 
-  supabase.auth.onAuthStateChange((_event, session) => {
+  const {
+    data: { subscription },
+  } = supabase.auth.onAuthStateChange((_event, session) => {
     userStore.user = session?.user || null;
     currentTaskStore.fetchCurrentTask();
     currentTaskStore.initializeSubscriptionToCurrentTask();
   });
+  authStateChangeSub = subscription;
 });
 
 onUnmounted(() => {
   currentTaskStore.cleanup();
+  authStateChangeSub?.unsubscribe();
 });
 
 /**
