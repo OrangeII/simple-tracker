@@ -123,9 +123,13 @@ export const useEntriesListStore = defineStore("entriesList", () => {
         .filter((e) => e.task_id === entry.task_id)
         .forEach((e) => {
           if (e.tasks && entry.tasks) {
-            e.tasks.name = entry.tasks.name;
-            e.tasks.alt_code = entry.tasks.alt_code;
-            e.tasks.is_favorite = entry.tasks.is_favorite;
+            //copy all matching properties from entry.tasks to e.tasks
+            Object.keys(e.tasks).forEach((key) => {
+              if (entry.tasks === undefined) return;
+              if (key in entry.tasks) {
+                (e.tasks as any)[key] = (entry.tasks as any)[key];
+              }
+            });
           }
         });
     }
