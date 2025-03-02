@@ -78,7 +78,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { deleteEntry, track } from "../common/supabaseClient.ts";
+import { deleteEntry, track, updateTask } from "../common/supabaseClient.ts";
 import { toDurationString, toEntriesDateString } from "../common/timeUtils.ts";
 import Spinner from "./Spinner.vue";
 import EntriesListItem from "./EntriesListItem.vue";
@@ -192,9 +192,17 @@ const onEntryClick = (entry: TimeEntry) => {
   detailPageEntry.value = entry;
 };
 
-const onFavoriteClicked = (entry: TimeEntry) => {
+const onFavoriteClicked = async (entry: TimeEntry) => {
   if (!entry.tasks) return;
+
+  //optimistically update
   entry.tasks.is_favorite = !entry.tasks?.is_favorite;
   entriesListStore.updateEntry(entry);
+
+  if (!(await updateTask(entry.tasks))) {
+    //revert if unable to update the backend
+    entry.tasks.is_favorite = !entry.tasks?.is_favorite;
+    entriesListStore.updateEntry(entry);
+  }
 };
 </script>

@@ -404,6 +404,7 @@ export const updateTask = async (task: Task): Promise<boolean> => {
       .update({
         name: task.name.trim(),
         alt_code: task.alt_code?.trim(),
+        is_favorite: task.is_favorite,
       })
       .eq("id", task.id);
     if (error) {
