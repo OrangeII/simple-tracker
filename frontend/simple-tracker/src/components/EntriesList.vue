@@ -23,6 +23,7 @@
           :entry="entry"
           @onResumeClicked="onResume"
           @onDeleteClicked="onDeleteEntry"
+          @onClick="onEntryClick(entry)"
         >
         </EntriesListItem>
       </div>
@@ -33,9 +34,14 @@
           :group="group"
           @onResumeClicked="onResume"
           @onDeleteClicked="onDeleteGroup"
+          @onClick="onGroupClick(group)"
         />
       </div>
     </div>
+
+    <AppPage v-if="detailPageEntry !== null" @close="detailPageEntry = null"
+      >test</AppPage
+    >
 
     <!-- Loading Indicator -->
     <div v-if="entriesListStore.loading" class="flex flex-row justify-around">
@@ -56,10 +62,13 @@ import EntriesListGroupedItem from "./EntriesListGroupedItem.vue";
 import { useCurrentTaskStore } from "../stores/currentTask";
 import { useEntriesListStore } from "../stores/entriesList";
 import type { TaskGroup, TimeEntry } from "../common/types.ts";
+import AppPage from "./AppPage.vue";
 
 const observer = ref<IntersectionObserver | null>(null);
 const entriesListStore = useEntriesListStore();
 const currentTaskStore = useCurrentTaskStore();
+
+const detailPageEntry = ref<TimeEntry | null>(null);
 
 const { grouped = false } = defineProps<{
   grouped: boolean;
@@ -149,5 +158,16 @@ const onDeleteGroup = async (group: TaskGroup) => {
       entriesListStore.pushEntries([entry]);
     }
   }
+};
+
+const onGroupClick = (group: TaskGroup) => {
+  console.log("click group", group);
+  if (group.entries.length == 1) {
+    detailPageEntry.value = group.entries[0];
+  }
+};
+const onEntryClick = (entry: TimeEntry) => {
+  console.log("click entry", entry);
+  detailPageEntry.value = entry;
 };
 </script>

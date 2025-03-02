@@ -24,7 +24,7 @@
       @touchmove="onTouchMove"
       @touchend="onTouchEnd"
     >
-      <div class="flex-grow max-w-[75%]">
+      <div class="flex-grow max-w-[75%]" @click="$emit('onClick')">
         <slot name="left"></slot>
       </div>
 
@@ -53,6 +53,7 @@ defineProps<{
 defineEmits<{
   onResume: void;
   onDelete: void;
+  onClick: void;
 }>();
 
 const actionsContainer = useTemplateRef("actionsContainer");
