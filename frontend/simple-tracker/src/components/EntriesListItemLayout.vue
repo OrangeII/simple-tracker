@@ -5,7 +5,7 @@
       class="absolute right-0 top-0 h-full flex items-center px-4 gap-6"
     >
       <slot name="actions">
-        <div class="flex items-center">
+        <div class="flex items-center pr-1">
           <div
             @click="$emit('onDelete')"
             class="h-full flex flex-col items-center"
