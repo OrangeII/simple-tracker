@@ -23,6 +23,7 @@
           :entry="entry"
           @onResumeClicked="onResume"
           @onDeleteClicked="onDeleteEntry"
+          @onClick="onEntryClick(entry)"
         >
         </EntriesListItem>
       </div>
@@ -33,9 +34,19 @@
           :group="group"
           @onResumeClicked="onResume"
           @onDeleteClicked="onDeleteGroup"
+          @onClick="onGroupClick(group)"
         />
       </div>
     </div>
+
+    <Transition name="slide">
+      <AppPageEntryDetail
+        v-if="detailPageEntry !== null"
+        @close="detailPageEntry = null"
+        :entry="detailPageEntry"
+        >test</AppPageEntryDetail
+      >
+    </Transition>
 
     <!-- Loading Indicator -->
     <div v-if="entriesListStore.loading" class="flex flex-row justify-around">
@@ -45,6 +56,23 @@
   <!-- Scroll Trigger (Empty div at bottom for IntersectionObserver) -->
   <div id="scroll-trigger" class="h-4"></div>
 </template>
+
+<style scoped>
+.slide-enter-active,
+.slide-leave-active {
+  transition: transform 0.3s ease-in-out;
+}
+
+.slide-enter-from,
+.slide-leave-to {
+  transform: translateY(+100%);
+}
+
+.slide-enter-to,
+.slide-leave-from {
+  transform: translateY(0);
+}
+</style>
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
@@ -56,10 +84,13 @@ import EntriesListGroupedItem from "./EntriesListGroupedItem.vue";
 import { useCurrentTaskStore } from "../stores/currentTask";
 import { useEntriesListStore } from "../stores/entriesList";
 import type { TaskGroup, TimeEntry } from "../common/types.ts";
+import AppPageEntryDetail from "./AppPageEntryDetail.vue";
 
 const observer = ref<IntersectionObserver | null>(null);
 const entriesListStore = useEntriesListStore();
 const currentTaskStore = useCurrentTaskStore();
+
+const detailPageEntry = ref<TimeEntry | null>(null);
 
 const { grouped = false } = defineProps<{
   grouped: boolean;
@@ -76,7 +107,6 @@ onMounted(async () => {
 });
 
 const observerCallBack = (intersections: IntersectionObserverEntry[]) => {
-  console.log("intersections", intersections);
   if (intersections[0].isIntersecting) {
     entriesListStore.fetchEntries();
   }
@@ -149,5 +179,14 @@ const onDeleteGroup = async (group: TaskGroup) => {
       entriesListStore.pushEntries([entry]);
     }
   }
+};
+
+const onGroupClick = (group: TaskGroup) => {
+  if (group.entries.length == 1) {
+    detailPageEntry.value = group.entries[0];
+  }
+};
+const onEntryClick = (entry: TimeEntry) => {
+  detailPageEntry.value = entry;
 };
 </script>

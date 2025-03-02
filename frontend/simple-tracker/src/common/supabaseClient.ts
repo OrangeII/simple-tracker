@@ -361,3 +361,59 @@ export const deleteEntry = async (entryId: string): Promise<boolean> => {
     return false;
   }
 };
+
+/**
+ * update the time entry on the database
+ * @param entry entry to be updated
+ * @returns
+ */
+export const updateEntry = async (entry: TimeEntry): Promise<boolean> => {
+  try {
+    const { error } = await supabase
+      .from("time_entries")
+      .update({
+        start_time: entry.start_time,
+        end_time: entry.end_time,
+      })
+      .eq("id", entry.id);
+    if (error) {
+      console.error("Error updating entry:", error);
+      return false;
+    }
+
+    if (entry.tasks) {
+      await updateTask(entry.tasks);
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Error in updateEntry:", error);
+    return false;
+  }
+};
+
+/**
+ * update the task on the database
+ * @param task task to be updated
+ * @returns
+ */
+export const updateTask = async (task: Task): Promise<boolean> => {
+  try {
+    const { error } = await supabase
+      .from("tasks")
+      .update({
+        name: task.name.trim(),
+        alt_code: task.alt_code?.trim(),
+      })
+      .eq("id", task.id);
+    if (error) {
+      console.error("Error updating task:", error);
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Error in updateTask:", error);
+    return false;
+  }
+};
