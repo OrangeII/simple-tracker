@@ -24,9 +24,14 @@
             <div
               class="p-2 rounded-md grainy bg-background dark:bg-blend-overlay grow"
             >
-              <h3>
-                {{ start.toLocaleDateString() }}
-              </h3>
+              <input
+                type="date"
+                name="start-date"
+                id="start-date"
+                :value="formatDate(start)"
+                @change="onStartDateChange"
+                class="font-medium text-lg"
+              />
             </div>
             <div
               class="p-2 rounded-md grainy bg-background dark:bg-blend-overlay grow"
@@ -84,6 +89,12 @@ import { updateEntry } from "../common/supabaseClient";
 const props = defineProps<{ entry: TimeEntry }>();
 
 const taskName = ref(props.entry.tasks?.name || "");
+const start = ref(new Date(props.entry.start_time));
+const stop = ref(props.entry.end_time ? new Date(props.entry.end_time) : null);
+const duration = computed(() => {
+  if (!stop.value) return new Date(0);
+  return new Date(stop.value.getTime() - start.value.getTime());
+});
 
 const entriesListStore = useEntriesListStore();
 
@@ -91,22 +102,23 @@ const emit = defineEmits<{
   close: [];
 }>();
 
-const duration = computed(() => {
-  if (!props.entry.end_time) return new Date(0);
-  return new Date(
-    new Date(props.entry.end_time).getTime() -
-      new Date(props.entry.start_time).getTime()
+const formatDate = (date: Date) => {
+  return date.toISOString().split("T")[0];
+};
+
+const formatTime = (date: Date) => {
+  return date.toTimeString().split(" ")[0];
+};
+
+const onStartDateChange = (event: Event) => {
+  const [year, month, day] = (event.target as HTMLInputElement).value.split(
+    "-"
   );
-});
-
-const start = computed(() => {
-  return new Date(props.entry.start_time);
-});
-
-const stop = computed(() => {
-  if (!props.entry.end_time) return null;
-  return new Date(props.entry.end_time);
-});
+  //I have to make a new Date to make computed values update
+  const newDate = new Date(start.value);
+  newDate.setFullYear(parseInt(year), parseInt(month) - 1, parseInt(day));
+  start.value = newDate;
+};
 
 const onSaveClick = async () => {
   if (!props.entry.tasks) return;
@@ -114,11 +126,21 @@ const onSaveClick = async () => {
   //task must have a name
   if (!taskName.value) return;
 
+  //start date must be less that or equal to stop date
+  if (stop.value) {
+    if (start.value > stop.value) return;
+  }
+
   //make a clone of the entry
   const oldEntry = { ...props.entry };
   const newEntry = { ...props.entry };
+
   //update values on the clone
   newEntry.tasks = { ...props.entry.tasks, name: taskName.value };
+  newEntry.start_time = start.value.toISOString();
+  if (stop.value) {
+    newEntry.end_time = stop.value.toISOString();
+  }
 
   entriesListStore.updateEntry(newEntry);
   emit("close");
