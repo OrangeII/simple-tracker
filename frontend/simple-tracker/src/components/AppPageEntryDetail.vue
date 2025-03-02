@@ -77,7 +77,7 @@
 import { type TimeEntry } from "../common/types";
 import AppPage from "./AppPage.vue";
 import { toDurationString } from "../common/timeUtils";
-import { computed, ref } from "vue";
+import { computed, ref, type Ref } from "vue";
 import {
   PlayCircleIcon,
   StopCircleIcon,
@@ -111,51 +111,49 @@ const formatTime = (date: Date) => {
 };
 
 const onStartDateChange = (event: Event) => {
-  const [year, month, day] = (event.target as HTMLInputElement).value.split(
-    "-"
-  );
-  //I have to make a new Date to make computed values update
-  const newDate = new Date(start.value);
-  newDate.setFullYear(parseInt(year), parseInt(month) - 1, parseInt(day));
-  start.value = newDate;
+  setDateFromEvent(event, start);
 };
 const onStopDateChange = (event: Event) => {
-  if (!stop.value) return;
+  setDateFromEvent(event, stop);
+};
+
+const setDateFromEvent = (
+  event: Event,
+  dateToBeSet: Ref<Date | null, Date | null>
+) => {
+  if (!dateToBeSet.value) return;
   const [year, month, day] = (event.target as HTMLInputElement).value.split(
     "-"
   );
   //I have to make a new Date to make computed values update
-  const newDate = new Date(stop.value);
+  const newDate = new Date(dateToBeSet.value);
   newDate.setFullYear(parseInt(year), parseInt(month) - 1, parseInt(day));
-  stop.value = newDate;
+  dateToBeSet.value = newDate;
 };
 
 const onStartTimeChange = (event: Event) => {
-  let [hours, minutes, seconds] = (
-    event.target as HTMLInputElement
-  ).value.split(":");
-  const newDate = new Date(start.value);
-  console.log([hours, minutes, seconds]);
-  //Secons might be undefined on mobile
-  if (seconds == undefined) {
-    seconds = "0";
-  }
-  newDate.setHours(parseInt(hours), parseInt(minutes), parseInt(seconds));
-  start.value = newDate;
+  setTimeFromEvent(event, start);
 };
 const onEndTimeChange = (event: Event) => {
-  if (!stop.value) return;
+  setTimeFromEvent(event, stop);
+};
+
+const setTimeFromEvent = (
+  event: Event,
+  timeToBeSet: Ref<Date | null, Date | null>
+) => {
+  if (!timeToBeSet.value) return;
   let [hours, minutes, seconds] = (
     event.target as HTMLInputElement
   ).value.split(":");
-  const newDate = new Date(stop.value);
+  const newDate = new Date(timeToBeSet.value);
   console.log([hours, minutes, seconds]);
   //Secons might be undefined on mobile
   if (seconds == undefined) {
     seconds = "0";
   }
   newDate.setHours(parseInt(hours), parseInt(minutes), parseInt(seconds));
-  stop.value = newDate;
+  timeToBeSet.value = newDate;
 };
 
 const onSaveClick = async () => {
