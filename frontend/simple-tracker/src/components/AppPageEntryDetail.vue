@@ -36,9 +36,14 @@
             <div
               class="p-2 rounded-md grainy bg-background dark:bg-blend-overlay grow"
             >
-              <h3>
-                {{ start.toLocaleTimeString() }}
-              </h3>
+              <input
+                type="time"
+                name="start-time"
+                id="start-time"
+                :value="formatTime(start)"
+                @change="onStartTimeChange"
+                class="font-medium text-lg focus:outline-none focus:border-none"
+              />
             </div>
           </div>
         </div>
@@ -53,8 +58,8 @@
             >
               <input
                 type="date"
-                name="start-date"
-                id="start-date"
+                name="stop-date"
+                id="stop-date"
                 :value="formatDate(stop)"
                 @change="onStopDateChange"
                 class="font-medium text-lg focus:outline-none focus:border-none"
@@ -133,6 +138,20 @@ const onStopDateChange = (event: Event) => {
   const newDate = new Date(stop.value);
   newDate.setFullYear(parseInt(year), parseInt(month) - 1, parseInt(day));
   stop.value = newDate;
+};
+
+const onStartTimeChange = (event: Event) => {
+  let [hours, minutes, seconds] = (
+    event.target as HTMLInputElement
+  ).value.split(":");
+  const newDate = new Date(start.value);
+  console.log([hours, minutes, seconds]);
+  //Secons might be undefined on mobile
+  if (seconds == undefined) {
+    seconds = "0";
+  }
+  newDate.setHours(parseInt(hours), parseInt(minutes), parseInt(seconds));
+  start.value = newDate;
 };
 
 const onSaveClick = async () => {
