@@ -9,6 +9,7 @@
     <template #main>
       <div class="pb-4">
         <input
+          required="true"
           type="text"
           v-model="taskName"
           class="w-full focus:outline-none focus:border-none text-2xl font-bold caret-primary"
@@ -22,6 +23,7 @@
           </div>
           <div class="flex justify-between items-center gap-4">
             <input
+              required="true"
               type="date"
               name="start-date"
               id="start-date"
@@ -30,6 +32,7 @@
               class="p-2 rounded-md grainy bg-background dark:bg-blend-overlay grow font-medium text-lg focus:outline-none focus:border-none"
             />
             <input
+              required="true"
               type="time"
               name="start-time"
               id="start-time"
@@ -46,6 +49,7 @@
           </div>
           <div class="flex justify-between items-center gap-4">
             <input
+              required="true"
               type="date"
               name="stop-date"
               id="stop-date"
@@ -53,8 +57,8 @@
               @change="onStopDateChange"
               class="p-2 rounded-md grainy bg-background dark:bg-blend-overlay grow font-medium text-lg focus:outline-none focus:border-none"
             />
-
             <input
+              required="true"
               type="time"
               name="end-time"
               id="end-time"
@@ -165,6 +169,13 @@ const onSaveClick = async () => {
   //start date must be less that or equal to stop date
   if (stop.value) {
     if (start.value > stop.value) return;
+  }
+  //check if dates are valid
+  if (
+    isNaN(start.value.getTime()) ||
+    (stop.value && isNaN(stop.value.getTime()))
+  ) {
+    return;
   }
 
   //make a clone of the entry

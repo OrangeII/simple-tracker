@@ -107,7 +107,6 @@ onMounted(async () => {
 });
 
 const observerCallBack = (intersections: IntersectionObserverEntry[]) => {
-  console.log("intersections", intersections);
   if (intersections[0].isIntersecting) {
     entriesListStore.fetchEntries();
   }
@@ -183,13 +182,11 @@ const onDeleteGroup = async (group: TaskGroup) => {
 };
 
 const onGroupClick = (group: TaskGroup) => {
-  console.log("click group", group);
   if (group.entries.length == 1) {
     detailPageEntry.value = group.entries[0];
   }
 };
 const onEntryClick = (entry: TimeEntry) => {
-  console.log("click entry", entry);
   detailPageEntry.value = entry;
 };
 </script>
