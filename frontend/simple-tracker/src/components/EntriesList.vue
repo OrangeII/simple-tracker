@@ -37,14 +37,13 @@
       </div>
     </div>
 
-    <!-- Scroll Trigger (Empty div at bottom for IntersectionObserver) -->
-    <div id="scroll-trigger" class="h-4"></div>
-
     <!-- Loading Indicator -->
     <div v-if="entriesListStore.loading" class="flex flex-row justify-around">
       <Spinner class="mt-4 size-10" />
     </div>
   </div>
+  <!-- Scroll Trigger (Empty div at bottom for IntersectionObserver) -->
+  <div id="scroll-trigger" class="h-4"></div>
 </template>
 
 <script setup lang="ts">
@@ -77,6 +76,7 @@ onMounted(async () => {
 });
 
 const observerCallBack = (intersections: IntersectionObserverEntry[]) => {
+  console.log("intersections", intersections);
   if (intersections[0].isIntersecting) {
     entriesListStore.fetchEntries();
   }
