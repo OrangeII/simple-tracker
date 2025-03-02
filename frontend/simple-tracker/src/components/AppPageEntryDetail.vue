@@ -54,11 +54,14 @@
               class="p-2 rounded-md grainy bg-background dark:bg-blend-overlay grow font-medium text-lg focus:outline-none focus:border-none"
             />
 
-            <h3
-              class="p-2 rounded-md grainy bg-background dark:bg-blend-overlay grow"
-            >
-              {{ stop?.toLocaleTimeString() }}
-            </h3>
+            <input
+              type="time"
+              name="end-time"
+              id="end-time"
+              :value="formatTime(stop)"
+              @change="onEndTimeChange"
+              class="p-2 rounded-md grainy bg-background dark:bg-blend-overlay grow font-medium text-lg focus:outline-none focus:border-none"
+            />
           </div>
         </div>
       </div>
@@ -139,6 +142,20 @@ const onStartTimeChange = (event: Event) => {
   }
   newDate.setHours(parseInt(hours), parseInt(minutes), parseInt(seconds));
   start.value = newDate;
+};
+const onEndTimeChange = (event: Event) => {
+  if (!stop.value) return;
+  let [hours, minutes, seconds] = (
+    event.target as HTMLInputElement
+  ).value.split(":");
+  const newDate = new Date(stop.value);
+  console.log([hours, minutes, seconds]);
+  //Secons might be undefined on mobile
+  if (seconds == undefined) {
+    seconds = "0";
+  }
+  newDate.setHours(parseInt(hours), parseInt(minutes), parseInt(seconds));
+  stop.value = newDate;
 };
 
 const onSaveClick = async () => {
