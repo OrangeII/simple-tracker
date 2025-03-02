@@ -25,14 +25,14 @@
               class="p-2 rounded-md grainy bg-background dark:bg-blend-overlay grow"
             >
               <h2>
-                {{ start.toLocaleTimeString() }}
+                {{ start.toLocaleDateString() }}
               </h2>
             </div>
             <div
               class="p-2 rounded-md grainy bg-background dark:bg-blend-overlay grow"
             >
               <h2>
-                {{ start.toLocaleDateString() }}
+                {{ start.toLocaleTimeString() }}
               </h2>
             </div>
           </div>
@@ -47,14 +47,14 @@
               class="p-2 rounded-md grainy bg-background dark:bg-blend-overlay grow"
             >
               <h2>
-                {{ stop?.toLocaleTimeString() }}
+                {{ stop?.toLocaleDateString() }}
               </h2>
             </div>
             <div
               class="p-2 rounded-md grainy bg-background dark:bg-blend-overlay grow"
             >
               <h2>
-                {{ stop?.toLocaleDateString() }}
+                {{ stop?.toLocaleTimeString() }}
               </h2>
             </div>
           </div>
