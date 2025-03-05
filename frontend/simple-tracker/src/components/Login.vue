@@ -5,7 +5,7 @@
         class="grainy bg-background dark:bg-blend-overlay w-fit rounded mb-6"
       >
         <img
-          v-if="!preferencesStore.darkMode"
+          v-if="!preferencesStore.preferences.darkMode"
           src="../assets/logo-no-bg.svg"
           alt="simple-tracker logo"
           class="w-24"
