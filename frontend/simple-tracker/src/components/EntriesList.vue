@@ -63,7 +63,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { deleteEntry, track } from "../common/supabaseClient.ts";
+import { deleteEntry } from "../common/supabaseClient.ts";
 import { toDurationString, toEntriesDateString } from "../common/timeUtils.ts";
 import Spinner from "./Spinner.vue";
 import EntriesListItem from "./EntriesListItem.vue";
@@ -103,43 +103,7 @@ const observerCallBack = (intersections: IntersectionObserverEntry[]) => {
 
 const onResume = async (entry: TimeEntry) => {
   if (!entry.tasks) return;
-
-  entry.loading = true;
-  const startTime = new Date();
-
-  //push the current task to the entries list
-  if (currentTaskStore.task) {
-    currentTaskStore.task.time_entries.end_time = new Date().toISOString();
-    currentTaskStore.task.time_entries.tasks = currentTaskStore.task.tasks;
-    entriesListStore.pushEntries([currentTaskStore.task.time_entries]);
-    currentTaskStore.task = null;
-  }
-
-  //optimistically change the store
-  currentTaskStore.task = {
-    user_id: entry.user_id,
-    task_id: entry.task_id,
-    time_entry_id: "",
-    tasks: entry.tasks,
-    time_entries: {
-      id: "",
-      task_id: entry.task_id,
-      user_id: entry.user_id,
-      start_time: startTime.toISOString(),
-      created_at: startTime.toISOString(),
-    },
-  };
-  entry.loading = false;
-
-  const ret = await track({ taskId: entry.tasks.id, startTime });
-  if (!ret) {
-    //reverse the optimistic change
-    currentTaskStore.task = null;
-    return;
-  }
-
-  //update store with the actual task
-  currentTaskStore.task = ret;
+  await currentTaskStore.track(entry.tasks);
 };
 
 const onDeleteEntry = async (entry: TimeEntry) => {
