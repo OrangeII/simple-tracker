@@ -63,7 +63,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { deleteEntry, track, updateTask } from "../common/supabaseClient.ts";
+import { deleteEntry, track } from "../common/supabaseClient.ts";
 import { toDurationString, toEntriesDateString } from "../common/timeUtils.ts";
 import Spinner from "./Spinner.vue";
 import EntriesListItem from "./EntriesListItem.vue";
