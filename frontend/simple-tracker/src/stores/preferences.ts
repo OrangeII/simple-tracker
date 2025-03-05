@@ -1,83 +1,68 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
-const KEY_DISPLAY_ENTRIES_GROUPED = "displayEntriesGroupedById";
-const KEY_DISPLAY_ENTRIES_GROUPED_TOOLBAR = "displayEntriesGroupedByIdToolbar";
-const KEY_DARK_MODE = "darkMode";
-const KEY_DARK_MODE_TOOLBAR = "darkModeToolbar";
+interface PreferenceConfig {
+  key: string;
+  defaultValue: boolean;
+}
+
+export const PREFERENCES_CONFIG: Record<string, PreferenceConfig> = {
+  displayEntriesGroupedById: {
+    key: "displayEntriesGroupedById",
+    defaultValue: false,
+  },
+  displayEntriesGroupedByIdToolbar: {
+    key: "displayEntriesGroupedByIdToolbar",
+    defaultValue: false,
+  },
+  darkMode: {
+    key: "darkMode",
+    defaultValue: false,
+  },
+  darkModeToolbar: {
+    key: "darkModeToolbar",
+    defaultValue: false,
+  },
+};
 
 export const usePreferencesStore = defineStore("preferences", () => {
-  const displayEntriesGroupedById = ref(false);
-  const displayEntriesGroupedByIdToolbar = ref(false);
-  const darkMode = ref(false);
-  const darkModeToolbar = ref(false);
+  const preferences = ref(
+    Object.fromEntries(
+      Object.entries(PREFERENCES_CONFIG).map(([_name, config]) => [
+        config.key,
+        config.defaultValue,
+      ])
+    )
+  );
+
   loadFromLocalStorage();
 
-  function toggleDisplayEntriesGroupedById() {
-    displayEntriesGroupedById.value = !displayEntriesGroupedById.value;
-    saveToLocalStorage();
-  }
-  function toggleDisplayEntriesGroupedByIdToolbar() {
-    displayEntriesGroupedByIdToolbar.value =
-      !displayEntriesGroupedByIdToolbar.value;
-    saveToLocalStorage();
-  }
-  function toggleDarkMode() {
-    darkMode.value = !darkMode.value;
-    saveToLocalStorage();
-  }
-  function toggleDarkModeToolbar() {
-    darkModeToolbar.value = !darkModeToolbar.value;
-    saveToLocalStorage();
+  function toggle(preferenceName: keyof typeof PREFERENCES_CONFIG) {
+    if (preferenceName in preferences.value) {
+      preferences.value[preferenceName] = !preferences.value[preferenceName];
+      saveToLocalStorage();
+    }
   }
 
   function saveToLocalStorage() {
-    localStorage.setItem(
-      KEY_DISPLAY_ENTRIES_GROUPED,
-      JSON.stringify(displayEntriesGroupedById.value)
-    );
-    localStorage.setItem(
-      KEY_DISPLAY_ENTRIES_GROUPED_TOOLBAR,
-      JSON.stringify(displayEntriesGroupedByIdToolbar.value)
-    );
-    localStorage.setItem(KEY_DARK_MODE, JSON.stringify(darkMode.value));
-    localStorage.setItem(
-      KEY_DARK_MODE_TOOLBAR,
-      JSON.stringify(darkModeToolbar.value)
-    );
+    Object.entries(preferences.value).forEach(([name, value]) => {
+      localStorage.setItem(PREFERENCES_CONFIG[name].key, JSON.stringify(value));
+    });
   }
 
   function loadFromLocalStorage() {
-    let data = localStorage.getItem(KEY_DISPLAY_ENTRIES_GROUPED);
-    if (data !== null) {
-      displayEntriesGroupedById.value = JSON.parse(data);
-    }
-
-    data = localStorage.getItem(KEY_DISPLAY_ENTRIES_GROUPED_TOOLBAR);
-    if (data !== null) {
-      displayEntriesGroupedByIdToolbar.value = JSON.parse(data);
-    }
-
-    data = localStorage.getItem(KEY_DARK_MODE);
-    if (data !== null) {
-      darkMode.value = JSON.parse(data);
-    }
-    data = localStorage.getItem(KEY_DARK_MODE_TOOLBAR);
-    if (data !== null) {
-      darkModeToolbar.value = JSON.parse(data);
-    }
+    Object.keys(PREFERENCES_CONFIG).forEach((name) => {
+      const data = localStorage.getItem(PREFERENCES_CONFIG[name].key);
+      if (data !== null && data !== undefined) {
+        preferences.value[name] = JSON.parse(data);
+      }
+    });
   }
 
   return {
-    displayEntriesGroupedById,
-    displayEntriesGroupedByIdToolbar,
-    darkMode,
-    darkModeToolbar,
+    preferences,
+    toggle,
     loadFromLocalStorage,
     saveToLocalStorage,
-    toggleDisplayEntriesGroupedById,
-    toggleDisplayEntriesGroupedByIdToolbar,
-    toggleDarkMode,
-    toggleDarkModeToolbar,
   };
 });

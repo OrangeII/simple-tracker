@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="[preferencesStore.darkMode ? 'dark' : '']"
+    :class="[preferencesStore.preferences.darkMode ? 'dark' : '']"
     class="bg-background text-text"
   >
     <Login v-if="!userStore.user" />
@@ -10,7 +10,9 @@
       </header>
 
       <main class="flex-1 overflow-auto" @scroll="handleScroll">
-        <EntriesList :grouped="preferencesStore.displayEntriesGroupedById" />
+        <EntriesList
+          :grouped="preferencesStore.preferences.displayEntriesGroupedById"
+        />
       </main>
 
       <footer class="p-4">

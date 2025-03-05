@@ -4,26 +4,27 @@
       Hello, {{ userStore.user?.user_metadata.preferred_username || "👽" }}
     </h1>
     <div class="flex flex-row items-center gap-4">
-      <div v-if="preferencesStore.darkModeToolbar" id="themeToggle">
+      <div v-if="preferencesStore.preferences.darkModeToolbar" id="themeToggle">
         <MoonIcon
           class="text-primary size-8"
-          v-if="preferencesStore.darkMode"
-          @click="preferencesStore.toggleDarkMode"
+          v-if="preferencesStore.preferences.darkMode"
+          @click="preferencesStore.toggle('darkMode')"
         />
         <SunIcon
           class="text-primary size-8"
           v-else
-          @click="preferencesStore.toggleDarkMode"
+          @click="preferencesStore.toggle('darkMode')"
         />
       </div>
 
       <Square3Stack3DIcon
-        v-if="preferencesStore.displayEntriesGroupedByIdToolbar"
+        v-if="preferencesStore.preferences.displayEntriesGroupedByIdToolbar"
         class="text-primary size-8"
         :class="{
-          'border-2 rounded-md p-1': preferencesStore.displayEntriesGroupedById,
+          'border-2 rounded-md p-1':
+            preferencesStore.preferences.displayEntriesGroupedById,
         }"
-        @click="preferencesStore.toggleDisplayEntriesGroupedById"
+        @click="preferencesStore.toggle('displayEntriesGroupedById')"
       />
 
       <Cog8ToothIcon

@@ -4,34 +4,38 @@
       <div class="flex flex-col gap-4">
         <div
           class="flex gap-4 items-center"
-          @click="preferencesStore.toggleDarkMode"
+          @click="preferencesStore.toggle('darkMode')"
         >
           <div>
             <MoonIcon
-              v-if="preferencesStore.darkMode"
+              v-if="preferencesStore.preferences.darkMode"
               class="text-primary size-8"
             />
             <SunIcon v-else class="text-primary size-8" />
           </div>
           <h3>
-            {{ preferencesStore.darkMode ? "Dark theme" : "Light theme" }}
+            {{
+              preferencesStore.preferences.darkMode
+                ? "Dark theme"
+                : "Light theme"
+            }}
           </h3>
         </div>
 
         <div
           class="flex gap-4 items-center"
-          @click="preferencesStore.toggleDisplayEntriesGroupedById"
+          @click="preferencesStore.toggle('displayEntriesGroupedById')"
         >
           <Square3Stack3DIcon
             class="text-primary size-8"
             :class="{
               'border-2 rounded-md p-1':
-                preferencesStore.displayEntriesGroupedById,
+                preferencesStore.preferences.displayEntriesGroupedById,
             }"
           />
           <h3>
             {{
-              preferencesStore.displayEntriesGroupedById
+              preferencesStore.preferences.displayEntriesGroupedById
                 ? "Show grouped entries"
                 : "Show ungrouped entries"
             }}
