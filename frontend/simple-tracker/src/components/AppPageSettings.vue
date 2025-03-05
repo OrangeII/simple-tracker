@@ -18,6 +18,26 @@
           </h3>
         </div>
 
+        <div
+          class="flex gap-4 items-center"
+          @click="preferencesStore.toggleDisplayEntriesGroupedById"
+        >
+          <Square3Stack3DIcon
+            class="text-primary size-8"
+            :class="{
+              'border-2 rounded-md p-1':
+                preferencesStore.displayEntriesGroupedById,
+            }"
+          />
+          <h3>
+            {{
+              preferencesStore.displayEntriesGroupedById
+                ? "Show grouped entries"
+                : "Show ungrouped entries"
+            }}
+          </h3>
+        </div>
+
         <div class="flex gap-4 items-center" @click="signOut">
           <ArrowLeftStartOnRectangleIcon class="text-primary size-8" />
           <h3>Sign out</h3>

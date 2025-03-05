@@ -24,8 +24,7 @@
       <Square3Stack3DIcon
         class="text-primary size-8 mr-4"
         :class="{
-          'border-2 rounded-md p-1 size-9':
-            preferencesStore.displayEntriesGroupedById,
+          'border-2 rounded-md p-1': preferencesStore.displayEntriesGroupedById,
         }"
         @click="preferencesStore.toggleDisplayEntriesGroupedById"
       />
