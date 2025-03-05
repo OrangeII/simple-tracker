@@ -27,6 +27,7 @@ describe("favoriteTasks Store", () => {
         name: "Task 1",
         alt_code: "T1",
         created_at: "2023-01-01T00:00:00.000Z",
+        user_id: "",
         is_favorite: true,
       },
       {
@@ -34,6 +35,7 @@ describe("favoriteTasks Store", () => {
         name: "Task 2",
         alt_code: "T2",
         created_at: "2023-01-01T00:00:00.000Z",
+        user_id: "",
         is_favorite: true,
       },
     ];
@@ -64,6 +66,7 @@ describe("favoriteTasks Store", () => {
       name: "Task 1",
       alt_code: "T1",
       created_at: "2023-01-01T00:00:00.000Z",
+      user_id: "",
       is_favorite: false,
     };
     vi.mocked(updateTask).mockResolvedValue(true);
@@ -82,6 +85,7 @@ describe("favoriteTasks Store", () => {
       name: "Task 1",
       alt_code: "T1",
       created_at: "2023-01-01T00:00:00.000Z",
+      user_id: "",
       is_favorite: true,
     };
     vi.mocked(updateTask).mockResolvedValue(true);
@@ -100,6 +104,7 @@ describe("favoriteTasks Store", () => {
       name: "Task 1",
       alt_code: "T1",
       created_at: "2023-01-01T00:00:00.000Z",
+      user_id: "",
       is_favorite: false,
     };
 
@@ -121,6 +126,7 @@ describe("favoriteTasks Store", () => {
         name: "Task 1",
         alt_code: "T1",
         created_at: "2023-01-01T00:00:00.000Z",
+        user_id: "",
         is_favorite: true,
       },
       {
@@ -128,6 +134,7 @@ describe("favoriteTasks Store", () => {
         name: "Task 2",
         alt_code: "T1",
         created_at: "2023-01-01T00:00:00.000Z",
+        user_id: "",
         is_favorite: true,
       },
       {
@@ -135,6 +142,7 @@ describe("favoriteTasks Store", () => {
         name: "Task 3",
         alt_code: "T3",
         created_at: "2023-01-01T00:00:00.000Z",
+        user_id: "",
         is_favorite: true,
       },
     ];
@@ -158,6 +166,7 @@ describe("favoriteTasks Store", () => {
       name: "Task 1",
       alt_code: "T1",
       created_at: "2023-01-01T00:00:00.000Z",
+      user_id: "",
       is_favorite: true,
     };
     vi.mocked(updateTask).mockResolvedValue(true);
@@ -178,6 +187,7 @@ describe("favoriteTasks Store", () => {
         name: "Task 1",
         alt_code: "T1",
         created_at: "2023-01-01T00:00:00.000Z",
+        user_id: "",
         is_favorite: true,
       },
       {
@@ -185,6 +195,7 @@ describe("favoriteTasks Store", () => {
         name: "Task 2",
         alt_code: "T1",
         created_at: "2023-01-01T00:00:00.000Z",
+        user_id: "",
         is_favorite: true,
       },
       {
@@ -192,6 +203,7 @@ describe("favoriteTasks Store", () => {
         name: "Task 3",
         alt_code: "T3",
         created_at: "2023-01-01T00:00:00.000Z",
+        user_id: "",
         is_favorite: true,
       },
     ];
@@ -210,6 +222,7 @@ describe("favoriteTasks Store", () => {
       name: "Task 1",
       alt_code: "T1",
       created_at: "2023-01-01T00:00:00.000Z",
+      user_id: "",
       is_favorite: true,
     };
     vi.mocked(updateTask).mockResolvedValue(true);
@@ -228,6 +241,7 @@ describe("favoriteTasks Store", () => {
       name: "Task 1",
       alt_code: "T1",
       created_at: "2023-01-01T00:00:00.000Z",
+      user_id: "",
       is_favorite: true,
     };
     vi.mocked(updateTask).mockResolvedValue(true);

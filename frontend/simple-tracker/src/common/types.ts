@@ -3,6 +3,7 @@ export interface Task {
   name: string;
   alt_code?: string;
   created_at: string;
+  user_id: string;
   is_favorite: boolean;
 }
 
