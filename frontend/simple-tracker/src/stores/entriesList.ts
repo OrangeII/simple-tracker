@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
 import { getEntries } from "../common/supabaseClient";
-import type { TimeEntry, DateGroup } from "../common/types";
+import type { TimeEntry, DateGroup, Task } from "../common/types";
 
 export const useEntriesListStore = defineStore("entriesList", () => {
   const limit = ref<number>(30);
@@ -105,7 +105,7 @@ export const useEntriesListStore = defineStore("entriesList", () => {
    * replaces existing entry in the entry list with another entry with the same id.
    * If such entry does not exist, the entry is simply pushed to the entries list.
    * If the entry has an attached task,
-   * the task name and task altcode of the attached task will be updated for all entries whoes
+   * the task name and task altcode of the attached task will be updated for all entries whose
    * attached task id matches that of the new entry.
    *
    * @param entry entry to be updated
@@ -119,20 +119,30 @@ export const useEntriesListStore = defineStore("entriesList", () => {
     }
 
     if (entry.tasks) {
-      entries.value
-        .filter((e) => e.task_id === entry.task_id)
-        .forEach((e) => {
-          if (e.tasks && entry.tasks) {
-            //copy all matching properties from entry.tasks to e.tasks
-            Object.keys(e.tasks).forEach((key) => {
-              if (entry.tasks === undefined) return;
-              if (key in entry.tasks) {
-                (e.tasks as any)[key] = (entry.tasks as any)[key];
-              }
-            });
-          }
-        });
+      updateTask(entry.tasks);
     }
+  }
+
+  /**
+   * copies properties to all the tasks matching ids with the provided tasks
+   * @param task to be updated
+   */
+  function updateTask(task: Task) {
+    if (task == null) return;
+
+    entries.value
+      .filter((e) => e.task_id === task.id)
+      .forEach((e) => {
+        if (e.tasks && task) {
+          //copy all matching properties from entry.tasks to e.tasks
+          Object.keys(e.tasks).forEach((key) => {
+            if (task === undefined) return;
+            if (key in task) {
+              (e.tasks as any)[key] = (task as any)[key];
+            }
+          });
+        }
+      });
   }
 
   return {
@@ -145,5 +155,6 @@ export const useEntriesListStore = defineStore("entriesList", () => {
     pushEntries,
     removeEntries,
     updateEntry,
+    updateTask,
   };
 });

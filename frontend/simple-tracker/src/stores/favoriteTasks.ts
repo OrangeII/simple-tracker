@@ -16,14 +16,15 @@ export const useFavoriteTasksStore = defineStore("favoriteTasks", () => {
   function addFavorite(newFavorite: Task) {
     //skip duplicates
     if (favorites.value.some((t) => t.id === newFavorite.id)) return;
-
+    newFavorite.is_favorite = true;
     favorites.value.push(newFavorite);
   }
 
   function removeFavorite(favorite: Task) {
     const index = favorites.value.findIndex((t) => t.id === favorite.id);
     if (index !== -1) {
-      favorites.value.splice(index, 1);
+      const del = favorites.value.splice(index, 1);
+      del[0].is_favorite = false;
     }
   }
 

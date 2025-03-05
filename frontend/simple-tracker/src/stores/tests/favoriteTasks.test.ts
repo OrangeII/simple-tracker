@@ -63,7 +63,7 @@ describe("favoriteTasks Store", () => {
       name: "Task 1",
       alt_code: "T1",
       created_at: "2023-01-01T00:00:00.000Z",
-      is_favorite: true,
+      is_favorite: false,
     };
 
     const store = useFavoriteTasksStore();
@@ -71,6 +71,7 @@ describe("favoriteTasks Store", () => {
 
     expect(store.favorites).toContainEqual(mockTask);
     expect(store.favorites).toHaveLength(1);
+    expect(mockTask.is_favorite).toBe(true);
   });
 
   it("should not add duplicates to the list", () => {
@@ -124,6 +125,7 @@ describe("favoriteTasks Store", () => {
     store.removeFavorite(mockTasks[1]);
     expect(store.favorites).toHaveLength(2);
     expect(store.favorites).not.toContainEqual(mockTasks[1]);
+    expect(mockTasks[1].is_favorite).toBe(false);
   });
 
   it("should do nothing on remove from empty list", () => {
