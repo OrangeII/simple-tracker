@@ -41,7 +41,7 @@
       </div>
     </div>
 
-    <Transition name="slide">
+    <Transition name="page-slide">
       <AppPageEntryDetail
         v-if="detailPageEntry !== null"
         @close="detailPageEntry = null"
@@ -59,22 +59,7 @@
   <div id="scroll-trigger" class="h-4"></div>
 </template>
 
-<style scoped>
-.slide-enter-active,
-.slide-leave-active {
-  transition: transform 0.3s ease-in-out;
-}
-
-.slide-enter-from,
-.slide-leave-to {
-  transform: translateY(+100%);
-}
-
-.slide-enter-to,
-.slide-leave-from {
-  transform: translateY(0);
-}
-</style>
+<style scoped></style>
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue";

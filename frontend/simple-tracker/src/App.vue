@@ -6,7 +6,7 @@
     <Login v-if="!userStore.user" />
     <div v-else class="flex flex-col min-h-screen max-h-screen">
       <header class="p-4 transition-[margin] ease-linear duration-300">
-        <Toolbar />
+        <Toolbar @settings-click="showSettingsPage = true" />
       </header>
 
       <main class="flex-1 overflow-auto" @scroll="handleScroll">
@@ -18,6 +18,13 @@
         <CurrentTask v-else />
       </footer>
     </div>
+
+    <Transition name="page-slide">
+      <AppPageSettings
+        v-if="showSettingsPage"
+        @close="showSettingsPage = false"
+      ></AppPageSettings>
+    </Transition>
   </div>
 </template>
 
@@ -33,10 +40,12 @@ import { useUserStore } from "./stores/user";
 import { useCurrentTaskStore } from "./stores/currentTask";
 import { usePreferencesStore } from "./stores/preferences";
 import Toolbar from "./components/Toolbar.vue";
+import AppPageSettings from "./components/AppPageSettings.vue";
 
 const userStore = useUserStore();
 const currentTaskStore = useCurrentTaskStore();
 const preferencesStore = usePreferencesStore();
+const showSettingsPage = ref(false);
 let authStateChangeSub: Subscription | null = null;
 
 onMounted(async () => {

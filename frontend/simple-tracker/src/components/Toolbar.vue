@@ -4,6 +4,10 @@
       Hello, {{ userStore.user?.user_metadata.preferred_username || "👽" }}
     </h1>
     <div class="flex flex-row items-center">
+      <Cog8ToothIcon
+        class="text-primary size-8 mr-4"
+        @click="$emit('settingsClick')"
+      ></Cog8ToothIcon>
       <div id="themeToggle" class="mr-4">
         <MoonIcon
           class="text-primary size-8"
@@ -42,8 +46,12 @@ import {
   ArrowLeftStartOnRectangleIcon,
   MoonIcon,
   SunIcon,
+  Cog8ToothIcon,
 } from "@heroicons/vue/24/solid";
 
+defineEmits<{
+  settingsClick: [];
+}>();
 const userStore = useUserStore();
 const preferencesStore = usePreferencesStore();
 

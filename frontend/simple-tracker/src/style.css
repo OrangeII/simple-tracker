@@ -30,6 +30,21 @@
     background-size: 180px;
     background-blend-mode: luminosity;
   }
+
+  .page-slide-enter-active,
+  .page-slide-leave-active {
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .page-slide-enter-from,
+  .page-slide-leave-to {
+    transform: translateY(+100%);
+  }
+
+  .page-slide-enter-to,
+  .page-slide-leave-from {
+    transform: translateY(0);
+  }
 }
 
 @layer components {
