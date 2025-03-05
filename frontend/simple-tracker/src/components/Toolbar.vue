@@ -50,9 +50,4 @@ defineEmits<{
 }>();
 const userStore = useUserStore();
 const preferencesStore = usePreferencesStore();
-
-const signOut = async () => {
-  await supabase.auth.signOut();
-  userStore.user = null;
-};
 </script>
