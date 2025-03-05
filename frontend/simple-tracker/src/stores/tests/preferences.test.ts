@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { setActivePinia, createPinia } from "pinia";
-import { PREFERENCES_CONFIG, usePreferencesStore } from "../stores/preferences";
+import { PREFERENCES_CONFIG, usePreferencesStore } from "../preferences";
 
 describe("Preferences Store", () => {
   beforeEach(() => {
