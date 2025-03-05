@@ -182,15 +182,6 @@ const onEntryClick = (entry: TimeEntry) => {
 const onFavoriteClicked = async (entry: TimeEntry) => {
   if (!entry.tasks) return;
 
-  //optimistically update
-  entry.tasks.is_favorite = !entry.tasks?.is_favorite;
   favoriteTasksStore.toggle(entry.tasks);
-  entriesListStore.updateEntry(entry);
-
-  if (!(await updateTask(entry.tasks))) {
-    //revert if unable to update the backend
-    entry.tasks.is_favorite = !entry.tasks?.is_favorite;
-    entriesListStore.updateEntry(entry);
-  }
 };
 </script>
