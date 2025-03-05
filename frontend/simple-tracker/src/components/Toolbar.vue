@@ -3,12 +3,8 @@
     <h1>
       Hello, {{ userStore.user?.user_metadata.preferred_username || "👽" }}
     </h1>
-    <div class="flex flex-row items-center">
-      <Cog8ToothIcon
-        class="text-primary size-8 mr-4"
-        @click="$emit('settingsClick')"
-      ></Cog8ToothIcon>
-      <div id="themeToggle" class="mr-4">
+    <div class="flex flex-row items-center gap-4">
+      <div v-if="preferencesStore.darkModeToolbar" id="themeToggle">
         <MoonIcon
           class="text-primary size-8"
           v-if="preferencesStore.darkMode"
@@ -22,16 +18,18 @@
       </div>
 
       <Square3Stack3DIcon
-        class="text-primary size-8 mr-4"
+        v-if="preferencesStore.displayEntriesGroupedByIdToolbar"
+        class="text-primary size-8"
         :class="{
           'border-2 rounded-md p-1': preferencesStore.displayEntriesGroupedById,
         }"
         @click="preferencesStore.toggleDisplayEntriesGroupedById"
       />
-      <ArrowLeftStartOnRectangleIcon
-        @click="signOut"
+
+      <Cog8ToothIcon
         class="text-primary size-8"
-      />
+        @click="$emit('settingsClick')"
+      ></Cog8ToothIcon>
     </div>
   </div>
 </template>
@@ -42,7 +40,6 @@ import { usePreferencesStore } from "../stores/preferences";
 import { useUserStore } from "../stores/user";
 import {
   Square3Stack3DIcon,
-  ArrowLeftStartOnRectangleIcon,
   MoonIcon,
   SunIcon,
   Cog8ToothIcon,
