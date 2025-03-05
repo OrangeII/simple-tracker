@@ -35,7 +35,6 @@
 </template>
 
 <script setup lang="ts">
-import { supabase } from "../main";
 import { usePreferencesStore } from "../stores/preferences";
 import { useUserStore } from "../stores/user";
 import {
