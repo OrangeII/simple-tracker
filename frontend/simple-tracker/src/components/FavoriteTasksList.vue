@@ -3,8 +3,11 @@
     <StarIcon class="size-5"></StarIcon>
     <h3 class="truncate">favorites</h3>
   </div>
-  <div v-for="task in favoriteTasksStore.favorites" :key="task.id">
-    <EntriesListItemLayout>
+  <TransitionGroup name="list-slide-left">
+    <EntriesListItemLayout
+      v-for="task in favoriteTasksStore.favorites"
+      :key="task.id"
+    >
       <template #left>
         <h3 class="truncate">{{ task.name }}</h3>
       </template>
@@ -20,7 +23,7 @@
         </div>
       </template>
     </EntriesListItemLayout>
-  </div>
+  </TransitionGroup>
 </template>
 
 <script setup lang="ts">
