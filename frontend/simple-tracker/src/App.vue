@@ -43,9 +43,11 @@ import { useCurrentTaskStore } from "./stores/currentTask";
 import { usePreferencesStore } from "./stores/preferences";
 import Toolbar from "./components/Toolbar.vue";
 import AppPageSettings from "./components/AppPageSettings.vue";
+import { useFavoriteTasksStore } from "./stores/favoriteTasks.ts";
 
 const userStore = useUserStore();
 const currentTaskStore = useCurrentTaskStore();
+const favoriteTasksStore = useFavoriteTasksStore();
 const preferencesStore = usePreferencesStore();
 const showSettingsPage = ref(false);
 let authStateChangeSub: Subscription | null = null;
@@ -60,6 +62,8 @@ onMounted(async () => {
     userStore.user = session?.user || null;
     currentTaskStore.fetchCurrentTask();
     currentTaskStore.initializeSubscriptionToCurrentTask();
+
+    favoriteTasksStore.fetchFavorites();
   });
   authStateChangeSub = subscription;
 });
