@@ -72,10 +72,12 @@ import { useCurrentTaskStore } from "../stores/currentTask";
 import { useEntriesListStore } from "../stores/entriesList";
 import type { TaskGroup, TimeEntry } from "../common/types.ts";
 import AppPageEntryDetail from "./AppPageEntryDetail.vue";
+import { useFavoriteTasksStore } from "../stores/favoriteTasks.ts";
 
 const observer = ref<IntersectionObserver | null>(null);
 const entriesListStore = useEntriesListStore();
 const currentTaskStore = useCurrentTaskStore();
+const favoriteTasksStore = useFavoriteTasksStore();
 
 const detailPageEntry = ref<TimeEntry | null>(null);
 
@@ -182,6 +184,7 @@ const onFavoriteClicked = async (entry: TimeEntry) => {
 
   //optimistically update
   entry.tasks.is_favorite = !entry.tasks?.is_favorite;
+  favoriteTasksStore.toggle(entry.tasks);
   entriesListStore.updateEntry(entry);
 
   if (!(await updateTask(entry.tasks))) {

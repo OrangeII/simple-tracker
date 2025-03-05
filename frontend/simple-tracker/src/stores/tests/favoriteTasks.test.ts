@@ -158,4 +158,39 @@ describe("favoriteTasks Store", () => {
     expect(store.favorites).toHaveLength(0);
     expect(store.favorites).not.toContainEqual(mockTasks[1]);
   });
+
+  it("should toggle a task in favorites list - adding when not present", () => {
+    const mockTask = {
+      id: "1",
+      name: "Task 1",
+      alt_code: "T1",
+      created_at: "2023-01-01T00:00:00.000Z",
+      is_favorite: true,
+    };
+
+    const store = useFavoriteTasksStore();
+    expect(store.favorites).toHaveLength(0);
+
+    store.toggle(mockTask);
+    expect(store.favorites).toContainEqual(mockTask);
+    expect(store.favorites).toHaveLength(1);
+  });
+
+  it("should toggle a task in favorites list - removing when present", () => {
+    const mockTask = {
+      id: "1",
+      name: "Task 1",
+      alt_code: "T1",
+      created_at: "2023-01-01T00:00:00.000Z",
+      is_favorite: true,
+    };
+
+    const store = useFavoriteTasksStore();
+    store.addFavorite(mockTask);
+    expect(store.favorites).toHaveLength(1);
+
+    store.toggle(mockTask);
+    expect(store.favorites).not.toContainEqual(mockTask);
+    expect(store.favorites).toHaveLength(0);
+  });
 });
