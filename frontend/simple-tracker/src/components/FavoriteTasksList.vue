@@ -1,5 +1,8 @@
 <template>
-  <div class="pt-4 px-4 font-bold uppercase">favorites</div>
+  <div class="pt-4 px-4 font-bold uppercase flex gap-1 items-center pb-1">
+    <StarIcon class="size-5"></StarIcon>
+    <h3 class="truncate">favorites</h3>
+  </div>
   <div v-for="task in favoriteTasksStore.favorites" :key="task.id">
     <EntriesListItemLayout>
       <template #left>
@@ -11,7 +14,7 @@
             class="h-full flex flex-col items-center"
             @click="onFavorite(task)"
           >
-            <StarIcon class="size-8 text-primary"></StarIcon>
+            <StartIconOutline class="size-8 text-primary"></StartIconOutline>
             <h4>Remove</h4>
           </div>
         </div>
@@ -24,7 +27,8 @@
 import type { Task } from "../common/types";
 import { useFavoriteTasksStore } from "../stores/favoriteTasks";
 import EntriesListItemLayout from "./EntriesListItemLayout.vue";
-import { StarIcon } from "@heroicons/vue/24/outline";
+import { StarIcon as StartIconOutline } from "@heroicons/vue/24/outline";
+import { StarIcon } from "@heroicons/vue/24/solid";
 
 const favoriteTasksStore = useFavoriteTasksStore();
 
