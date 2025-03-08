@@ -79,19 +79,7 @@
             <TagIcon class="text-text/70 size-5"></TagIcon>
             <h3 class="text-text/70">Tags</h3>
           </div>
-          <AppTextSelect
-            :items="[
-              { name: 'test' },
-              { name: 'japanese' },
-              { name: 't-japanese' },
-              { name: 't-japan' },
-              { name: 'japan' },
-              { name: 'tart' },
-            ]"
-            itemKey="name"
-            searchBy="name"
-            placeholder="Add tags..."
-          ></AppTextSelect>
+          <TaskTags />
         </div>
       </div>
     </template>
@@ -111,7 +99,7 @@ import {
 } from "@heroicons/vue/24/solid";
 import { useEntriesListStore } from "../stores/entriesList";
 import { updateEntry } from "../common/supabaseClient";
-import AppTextSelect from "./AppTextSelect.vue";
+import TaskTags from "./TaskTags.vue";
 
 const props = defineProps<{ entry: TimeEntry }>();
 

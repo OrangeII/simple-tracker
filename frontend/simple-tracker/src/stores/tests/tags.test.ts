@@ -76,4 +76,25 @@ describe("tags store", () => {
     await store.removeTag("1");
     expect(store.tags).toEqual(mockTags);
   });
+
+  it("should do nothing on remove of a tag that its not present", async () => {
+    const store = useTagsStore();
+    vi.mocked(deleteTag).mockResolvedValue(true);
+    await store.removeTag("test");
+    expect(store.tags).toEqual([]);
+  });
+
+  it("should not add duplicate tags", async () => {
+    const mockTag = {
+      id: "2",
+      name: "New Tag",
+      user_id: "",
+      created_at: "",
+    };
+    vi.mocked(createTag).mockResolvedValue(mockTag);
+    const store = useTagsStore();
+    store.tags = [mockTag];
+    await store.addTag(mockTag);
+    expect(store.tags).toHaveLength(1);
+  });
 });

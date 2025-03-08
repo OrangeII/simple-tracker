@@ -14,6 +14,10 @@ export const useTagsStore = defineStore("tags", () => {
   }
 
   async function addTag(tag: Tag) {
+    if (tags.value.find((t) => (t.id = tag.id))) {
+      return;
+    }
+
     const data = await createTag(tag);
     if (data) {
       tags.value = [...(tags.value || []), data];
@@ -21,6 +25,10 @@ export const useTagsStore = defineStore("tags", () => {
   }
 
   async function removeTag(id: string) {
+    if (!tags.value.find((t) => (t.id = id))) {
+      return;
+    }
+
     const success = await deleteTag(id);
     if (success) {
       tags.value = tags.value?.filter((tag) => tag.id !== id);
