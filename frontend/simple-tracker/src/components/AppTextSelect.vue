@@ -19,7 +19,7 @@
       >
         <div
           v-if="!hasExactMatch"
-          class="mx-1 py-1 px-2 rounded-md border-1 border-text/30 flex gap-1 items-center justify-between"
+          class="bg-background mx-1 py-1 px-2 rounded-md border-1 border-text/30 flex gap-1 items-center justify-between"
           @click="emit('submit', { value: inputValue, matchCount: 0 })"
         >
           <PlusCircleIcon class="size-6 text-primary"></PlusCircleIcon>
@@ -28,7 +28,7 @@
         <div
           v-for="item in filteredItems"
           :key="getItemKey(item)"
-          class="mx-1 py-1 px-2 rounded-md border-1 border-text/30"
+          class="bg-background mx-1 py-1 px-2 rounded-md border-1 border-text/30"
           @click="handleSelect(item)"
         >
           {{ item[searchBy] }}

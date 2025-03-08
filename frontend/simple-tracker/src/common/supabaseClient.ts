@@ -492,3 +492,54 @@ export const deleteTag = async (id: string): Promise<boolean> => {
     return false;
   }
 };
+
+export const getTaskTags = async (taskId: string): Promise<Tag[] | null> => {
+  try {
+    const { data, error } = await supabase
+      .from("tasks_tags")
+      .select("tag_id")
+      .eq("task_id", taskId);
+
+    if (error) {
+      console.error("Error fetching task tags:", error);
+      return null;
+    }
+
+    const tagIds = data.map((t) => t.tag_id);
+    const { data: tagsData, error: error2 } = await supabase
+      .from("tags")
+      .select()
+      .in("id", tagIds);
+
+    if (error2) {
+      console.error("Error fetching tags:", error);
+      return null;
+    }
+
+    return tagsData;
+  } catch (error) {
+    console.error("Error in getTaskTags:", error);
+    return null;
+  }
+};
+
+export const addTagToTask = async (
+  taskId: string,
+  tagId: string
+): Promise<boolean> => {
+  try {
+    const { error } = await supabase
+      .from("tasks_tags")
+      .insert({ task_id: taskId, tag_id: tagId });
+
+    if (error) {
+      console.error("Error adding tag to task:", error);
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Error in addTagToTask:", error);
+    return false;
+  }
+};

@@ -13,16 +13,16 @@ export const useTagsStore = defineStore("tags", () => {
     }
   }
 
-  async function addTag(name: string) {
+  async function addTag(name: string): Promise<Tag | null> {
     if (tags.value.find((t) => t.name == name)) {
-      return;
+      return null;
     }
 
-    console.log(name);
     const data = await createTag(name);
     if (data) {
       tags.value = [...(tags.value || []), data];
     }
+    return data;
   }
 
   async function removeTag(id: string) {

@@ -79,7 +79,7 @@
             <TagIcon class="text-text/70 size-5"></TagIcon>
             <h3 class="text-text/70">Tags</h3>
           </div>
-          <TaskTags />
+          <TaskTags v-if="entry.tasks" :task="entry.tasks" />
         </div>
       </div>
     </template>
