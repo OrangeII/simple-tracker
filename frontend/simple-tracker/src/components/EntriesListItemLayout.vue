@@ -7,19 +7,20 @@
       <slot name="actions">
         <div class="flex items-center pr-1">
           <div
+            v-if="!hideFavorite"
             @click="$emit('onFavoriteClick')"
             class="h-full flex flex-col items-center"
           >
-            <StarIcon v-if="isFavorite" class="size-8 text-primary"></StarIcon>
-            <StarIconOutline
-              v-else="isFavorite"
-              class="size-8 text-primary"
-            ></StarIconOutline>
+            <div class="size-8 text-primary">
+              <StarIcon v-if="isFavorite"></StarIcon>
+              <StarIconOutline v-else="isFavorite"></StarIconOutline>
+            </div>
             <h4>Favorite</h4>
           </div>
         </div>
         <div class="flex items-center pr-1">
           <div
+            v-if="!hideDelete"
             @click="$emit('onDelete')"
             class="h-full flex flex-col items-center"
           >
@@ -65,11 +66,15 @@ withDefaults(
     loading?: boolean;
     isFavorite?: boolean;
     hidePlay?: boolean;
+    hideFavorite?: boolean;
+    hideDelete?: boolean;
   }>(),
   {
     loading: false,
     isFavorite: false,
     hidePlay: false,
+    hideFavorite: false,
+    hideDelete: false,
   }
 );
 

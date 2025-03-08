@@ -20,8 +20,10 @@
         :key="'group-page-item-' + entry.id"
         :entry="entry"
         :hide-play="true"
+        :hide-favorite="true"
         class="px-4"
         @onClick="onEntryClick(entry)"
+        @onDelete="onDeleteClick(entry)"
       >
         <template #left>
           <h3 class="truncate">{{ entry.tasks?.name }}</h3>
@@ -58,6 +60,7 @@ import { toDurationString } from "../common/timeUtils";
 import type { TaskGroup, TimeEntry } from "../common/types";
 import { ref, watch } from "vue";
 import { useEntriesListStore } from "../stores/entriesList";
+import { deleteEntry } from "../common/supabaseClient";
 
 const entriesListStore = useEntriesListStore();
 const props = defineProps<{ group: TaskGroup }>();
@@ -97,5 +100,20 @@ watch(
 
 const onEntryClick = (entry: TimeEntry) => {
   detailPageEntry.value = entry;
+};
+
+const onDeleteClick = async (entry: TimeEntry) => {
+  console.log(entry);
+
+  if (!entry.tasks) return;
+
+  //optimistically remove the entry
+  entriesListStore.removeEntries([entry]);
+
+  //delete the entry form the database
+  if (!(await deleteEntry(entry.id))) {
+    //revert the optimistic change if deletion fails
+    entriesListStore.pushEntries([entry]);
+  }
 };
 </script>
