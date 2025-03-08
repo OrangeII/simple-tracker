@@ -10,7 +10,7 @@
       </div>
       <slot name="actions"></slot>
     </header>
-    <main class="p-4">
+    <main>
       <slot name="main"></slot>
     </main>
   </div>

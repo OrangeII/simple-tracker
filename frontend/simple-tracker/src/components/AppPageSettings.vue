@@ -1,7 +1,7 @@
 <template>
   <AppPage title="Settings" @close="emit('close')">
     <template #main>
-      <div class="flex flex-col gap-4">
+      <div class="p-4 flex flex-col gap-4">
         <div
           class="flex gap-4 items-center"
           @click="preferencesStore.toggle('darkMode')"

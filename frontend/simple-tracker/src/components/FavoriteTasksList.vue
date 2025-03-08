@@ -7,6 +7,7 @@
     <EntriesListItemLayout
       v-for="task in favoriteTasksStore.favorites"
       :key="task.id"
+      class="px-4"
       @onResume="onResume(task)"
     >
       <template #left>

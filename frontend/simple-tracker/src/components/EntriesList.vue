@@ -21,6 +21,7 @@
           v-for="entry in dateEntries.entries"
           :key="entry.id"
           :entry="entry"
+          class="px-4"
           @onResumeClicked="onResume"
           @onDeleteClicked="onDeleteEntry"
           @onClick="onEntryClick(entry)"
@@ -33,6 +34,7 @@
           v-for="group in dateEntries.entiresById"
           :key="group.id"
           :group="group"
+          class="px-4"
           @onResumeClicked="onResume"
           @onDeleteClicked="onDeleteGroup"
           @onClick="onGroupClick(group)"
@@ -46,16 +48,14 @@
         v-if="detailPageEntry !== null"
         @close="detailPageEntry = null"
         :entry="detailPageEntry"
-        >test</AppPageEntryDetail
-      >
+      ></AppPageEntryDetail>
     </Transition>
     <Transition name="page-slide">
       <AppPageGroupDetail
         v-if="detailPageGroup !== null"
         @close="detailPageGroup = null"
         :group="detailPageGroup"
-        >test</AppPageGroupDetail
-      >
+      ></AppPageGroupDetail>
     </Transition>
 
     <!-- Loading Indicator -->

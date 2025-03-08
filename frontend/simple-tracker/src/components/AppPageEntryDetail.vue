@@ -7,71 +7,73 @@
       </div>
     </template>
     <template #main>
-      <div class="pb-4">
-        <input
-          required="true"
-          type="text"
-          v-model="taskName"
-          class="w-full focus:outline-none focus:border-none text-2xl font-bold caret-primary"
-        />
-      </div>
-      <div class="pb-4 flex flex-col gap-2">
+      <div class="p-4">
+        <div class="pb-4">
+          <input
+            required="true"
+            type="text"
+            v-model="taskName"
+            class="w-full focus:outline-none focus:border-none text-2xl font-bold caret-primary"
+          />
+        </div>
+        <div class="pb-4 flex flex-col gap-2">
+          <div>
+            <div class="flex gap-1 items-center pb-1">
+              <PlayCircleIcon class="text-text/70 size-5"></PlayCircleIcon>
+              <h3 class="text-text/70">Start</h3>
+            </div>
+            <div class="flex justify-between items-center gap-4">
+              <input
+                required="true"
+                type="date"
+                name="start-date"
+                id="start-date"
+                :value="formatDate(start)"
+                @change="onStartDateChange"
+                class="p-2 rounded-md grainy bg-background dark:bg-blend-overlay grow font-medium text-lg focus:outline-none focus:border-none"
+              />
+              <input
+                required="true"
+                type="time"
+                name="start-time"
+                id="start-time"
+                :value="formatTime(start)"
+                @change="onStartTimeChange"
+                class="p-2 rounded-md grainy bg-background dark:bg-blend-overlay grow font-medium text-lg focus:outline-none focus:border-none"
+              />
+            </div>
+          </div>
+          <div v-if="stop !== null">
+            <div class="flex gap-1 items-center pb-1">
+              <StopCircleIcon class="text-text/70 size-5"></StopCircleIcon>
+              <h3 class="text-text/70">Stop</h3>
+            </div>
+            <div class="flex justify-between items-center gap-4">
+              <input
+                required="true"
+                type="date"
+                name="stop-date"
+                id="stop-date"
+                :value="formatDate(stop)"
+                @change="onStopDateChange"
+                class="p-2 rounded-md grainy bg-background dark:bg-blend-overlay grow font-medium text-lg focus:outline-none focus:border-none"
+              />
+              <input
+                required="true"
+                type="time"
+                name="end-time"
+                id="end-time"
+                :value="formatTime(stop)"
+                @change="onEndTimeChange"
+                class="p-2 rounded-md grainy bg-background dark:bg-blend-overlay grow font-medium text-lg focus:outline-none focus:border-none"
+              />
+            </div>
+          </div>
+        </div>
         <div>
-          <div class="flex gap-1 items-center pb-1">
-            <PlayCircleIcon class="text-text/70 size-5"></PlayCircleIcon>
-            <h3 class="text-text/70">Start</h3>
-          </div>
-          <div class="flex justify-between items-center gap-4">
-            <input
-              required="true"
-              type="date"
-              name="start-date"
-              id="start-date"
-              :value="formatDate(start)"
-              @change="onStartDateChange"
-              class="p-2 rounded-md grainy bg-background dark:bg-blend-overlay grow font-medium text-lg focus:outline-none focus:border-none"
-            />
-            <input
-              required="true"
-              type="time"
-              name="start-time"
-              id="start-time"
-              :value="formatTime(start)"
-              @change="onStartTimeChange"
-              class="p-2 rounded-md grainy bg-background dark:bg-blend-overlay grow font-medium text-lg focus:outline-none focus:border-none"
-            />
-          </div>
+          <h3 class="text-text/70">Alt. code</h3>
+          <h3>{{ entry.tasks?.alt_code }}</h3>
         </div>
-        <div v-if="stop !== null">
-          <div class="flex gap-1 items-center pb-1">
-            <StopCircleIcon class="text-text/70 size-5"></StopCircleIcon>
-            <h3 class="text-text/70">Stop</h3>
-          </div>
-          <div class="flex justify-between items-center gap-4">
-            <input
-              required="true"
-              type="date"
-              name="stop-date"
-              id="stop-date"
-              :value="formatDate(stop)"
-              @change="onStopDateChange"
-              class="p-2 rounded-md grainy bg-background dark:bg-blend-overlay grow font-medium text-lg focus:outline-none focus:border-none"
-            />
-            <input
-              required="true"
-              type="time"
-              name="end-time"
-              id="end-time"
-              :value="formatTime(stop)"
-              @change="onEndTimeChange"
-              class="p-2 rounded-md grainy bg-background dark:bg-blend-overlay grow font-medium text-lg focus:outline-none focus:border-none"
-            />
-          </div>
-        </div>
-      </div>
-      <div>
-        <h3 class="text-text/70">Alt. code</h3>
-        <h3>{{ entry.tasks?.alt_code }}</h3>
       </div>
     </template>
   </AppPage>

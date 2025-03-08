@@ -1,5 +1,5 @@
 <template>
-  <div class="relative overflow-hidden px-4">
+  <div class="relative overflow-hidden">
     <div
       ref="actionsContainer"
       class="absolute right-0 top-0 h-full flex items-center px-4 gap-6"
@@ -46,8 +46,8 @@
           <slot name="duration"></slot>
         </div>
         <div color="flex flex-col items-center">
-          <PlayIcon v-if="!loading" class="size-8 text-primary" />
-          <Spinner v-else class="size-8" />
+          <PlayIcon v-if="!hidePlay && !loading" class="size-8 text-primary" />
+          <Spinner v-if="loading" class="size-8" />
         </div>
       </div>
     </div>
@@ -60,10 +60,18 @@ import Spinner from "./Spinner.vue";
 import { PlayIcon, TrashIcon, StarIcon } from "@heroicons/vue/24/solid";
 import { StarIcon as StarIconOutline } from "@heroicons/vue/24/outline";
 
-defineProps<{
-  loading?: boolean;
-  isFavorite?: boolean;
-}>();
+withDefaults(
+  defineProps<{
+    loading?: boolean;
+    isFavorite?: boolean;
+    hidePlay?: boolean;
+  }>(),
+  {
+    loading: false,
+    isFavorite: false,
+    hidePlay: false,
+  }
+);
 
 defineEmits<{
   onResume: void;
