@@ -70,9 +70,28 @@
             </div>
           </div>
         </div>
-        <div>
+        <div class="mb-4">
           <h3 class="text-text/70">Alt. code</h3>
           <h3>{{ entry.tasks?.alt_code }}</h3>
+        </div>
+        <div>
+          <div class="flex gap-1 items-center pb-1">
+            <TagIcon class="text-text/70 size-5"></TagIcon>
+            <h3 class="text-text/70">Tags</h3>
+          </div>
+          <AppTextSelect
+            :items="[
+              { name: 'test' },
+              { name: 'japanese' },
+              { name: 't-japanese' },
+              { name: 't-japan' },
+              { name: 'japan' },
+              { name: 'tart' },
+            ]"
+            itemKey="name"
+            searchBy="name"
+            placeholder="Add tags..."
+          ></AppTextSelect>
         </div>
       </div>
     </template>
@@ -88,9 +107,11 @@ import {
   PlayCircleIcon,
   StopCircleIcon,
   CheckCircleIcon,
+  TagIcon,
 } from "@heroicons/vue/24/solid";
 import { useEntriesListStore } from "../stores/entriesList";
 import { updateEntry } from "../common/supabaseClient";
+import AppTextSelect from "./AppTextSelect.vue";
 
 const props = defineProps<{ entry: TimeEntry }>();
 
