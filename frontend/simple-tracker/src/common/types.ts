@@ -55,3 +55,10 @@ export interface TrackParams {
   altCode?: string;
   name?: string;
 }
+
+export interface Tag {
+  id: string;
+  created_at: string;
+  user_id: string;
+  name: string;
+}

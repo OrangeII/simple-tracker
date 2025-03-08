@@ -3,6 +3,7 @@ import { supabase } from "../main.ts";
 import type {
   CurrentTask,
   CurrentTasksRecord,
+  Tag,
   Task,
   TimeEntry,
 } from "./types.ts";
@@ -443,5 +444,51 @@ export const getFavorites = async (): Promise<Task[] | null> => {
   } catch (error) {
     console.error("Error in getFavorites:", error);
     return null;
+  }
+};
+
+export const getTags = async (): Promise<Tag[] | null> => {
+  try {
+    const { data, error } = await supabase.from("tags").select("*");
+    if (error) {
+      console.error("Error fetching tags:", error);
+      return null;
+    }
+    return data;
+  } catch (error) {
+    console.error("Error in getTags:", error);
+    return null;
+  }
+};
+
+export const createTag = async (tag: Tag): Promise<Tag | null> => {
+  try {
+    const { data, error } = await supabase
+      .from("tags")
+      .insert(tag)
+      .select()
+      .single();
+    if (error) {
+      console.error("Error creating tag:", error);
+      return null;
+    }
+    return data;
+  } catch (error) {
+    console.error("Error in createTag:", error);
+    return null;
+  }
+};
+
+export const deleteTag = async (id: string): Promise<boolean> => {
+  try {
+    const { error } = await supabase.from("tags").delete().eq("id", id);
+    if (error) {
+      console.error("Error deleting tag:", error);
+      return false;
+    }
+    return true;
+  } catch (error) {
+    console.error("Error in deleteTag:", error);
+    return false;
   }
 };
