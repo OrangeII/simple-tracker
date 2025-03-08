@@ -1,5 +1,27 @@
 <template>
+  <AppTextSelect
+    class="mb-2"
+    :items="tagsStore.tags"
+    :exclude="taskTags"
+    itemKey="id"
+    searchBy="name"
+    placeholder="Add tags..."
+    @submit="onSubmit"
+    @select="addTag"
+  ></AppTextSelect>
   <div class="flex flex-wrap gap-2 mb-2">
+    <!-- Skeleton loader -->
+    <template v-if="isLoading">
+      <div
+        v-for="n in 3"
+        :key="n"
+        class="py-1 px-2 rounded-md flex gap-2 items-center justify-between animate-pulse bg-background grainy"
+      >
+        <div class="size-6"></div>
+        <div class="w-16 h-4"></div>
+      </div>
+    </template>
+
     <div
       v-for="tag in taskTags"
       :key="tag.id"
@@ -16,15 +38,6 @@
       </div>
     </div>
   </div>
-  <AppTextSelect
-    :items="tagsStore.tags"
-    :exclude="taskTags"
-    itemKey="id"
-    searchBy="name"
-    placeholder="Add tags..."
-    @submit="onSubmit"
-    @select="addTag"
-  ></AppTextSelect>
 </template>
 
 <script setup lang="ts">
@@ -41,18 +54,23 @@ import { XCircleIcon } from "@heroicons/vue/24/solid";
 
 const tagsStore = useTagsStore();
 const taskTags = ref<Tag[]>([]);
+const isLoading = ref(true);
 
 const props = defineProps<{
   task: Task;
 }>();
 
 onMounted(async () => {
-  await tagsStore.loadTags();
-  const tags = await getTaskTags(props.task.id);
-  if (tags !== null) {
-    taskTags.value = tags;
-  } else {
-    taskTags.value = [];
+  try {
+    await tagsStore.loadTags();
+    const tags = await getTaskTags(props.task.id);
+    if (tags !== null) {
+      taskTags.value = tags;
+    } else {
+      taskTags.value = [];
+    }
+  } finally {
+    isLoading.value = false;
   }
 });
 
