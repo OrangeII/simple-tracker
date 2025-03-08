@@ -2,7 +2,8 @@
   <div class="relative">
     <input
       type="text"
-      class="w-full font-medium text-lg focus:outline-none focus:border-none"
+      class="w-full p-2 rounded-t-md bg-background dark:bg-blend-overlay grainy font-medium text-lg focus:outline-none"
+      :class="[showDropdown ? '' : 'rounded-b-md']"
       :placeholder="placeholder"
       v-model="inputValue"
     />
@@ -10,17 +11,17 @@
     <div
       v-if="showDropdown"
       :class="[
-        dropdownPosition === 'above' ? 'bottom-full mb-1' : 'top-full mt-1',
+        dropdownPosition === 'above' ? 'bottom-full' : 'top-full',
         'absolute left-0 w-full z-10',
       ]"
     >
       <div
-        class="max-h-48 overflow-y-auto rounded-md grainy bg-background dark:bg-blend-overlay flex flex-wrap gap-y-2 py-2 px-1"
+        class="max-h-48 overflow-y-auto rounded-b-md grainy bg-background dark:bg-blend-overlay flex flex-wrap gap-y-2 py-2 px-1"
       >
         <div
           v-if="!hasExactMatch"
-          class="bg-background mx-1 py-1 px-2 rounded-md border-1 border-text/30 flex gap-1 items-center justify-between"
-          @click="emit('submit', { value: inputValue, matchCount: 0 })"
+          class="bg-background mx-1 py-1 px-2 rounded-md border-1 border-text/30 flex gap-2 items-center justify-between"
+          @click="submit"
         >
           <PlusCircleIcon class="size-6 text-primary"></PlusCircleIcon>
           <div>{{ inputValue }}</div>
@@ -44,6 +45,7 @@ import { PlusCircleIcon } from "@heroicons/vue/24/solid";
 
 interface TextSelectProps {
   items: any[];
+  exclude?: any[];
   searchBy: string;
   itemKey: string;
   placeholder?: string;
@@ -84,9 +86,21 @@ const filteredItems = computed(() => {
 
   //search is not case sensitive
   const searchTerm = inputValue.value.toLocaleLowerCase();
-  return props.items.filter((item) =>
-    item[props.searchBy].toLowerCase().includes(searchTerm)
+  let filtered = props.items.filter((item) =>
+    item[props.searchBy].toLowerCase().trim().includes(searchTerm)
   );
+
+  filtered = filtered.filter((item) => {
+    if (props.exclude !== undefined)
+      return !props.exclude.some(
+        (excludeItem) =>
+          excludeItem[props.searchBy].toLowerCase().trim() ===
+          item[props.searchBy].toLowerCase().trim()
+      );
+    else return true;
+  });
+
+  return filtered;
 });
 
 watch(inputValue, (newValue: string) => {
@@ -98,8 +112,14 @@ const getItemKey = (item: any) => {
 };
 
 const handleSelect = (item: any) => {
-  inputValue.value = item[props.searchBy];
+  inputValue.value = "";
   showDropdown.value = false;
   emit("select", item);
+};
+
+const submit = () => {
+  emit("submit", { value: inputValue.value, matchCount: 0 });
+  inputValue.value = "";
+  showDropdown.value = false;
 };
 </script>

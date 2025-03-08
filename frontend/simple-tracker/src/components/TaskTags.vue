@@ -14,6 +14,7 @@
   </div>
   <AppTextSelect
     :items="tagsStore.tags"
+    :exclude="taskTags"
     itemKey="id"
     searchBy="name"
     placeholder="Add tags..."
@@ -83,6 +84,7 @@ const addTag = async (tag: Tag) => {
 };
 
 const removeTag = async (tag: Tag) => {
+  //do nothing if not present
   const index = taskTags.value.findIndex((t) => t.id === tag.id);
   if (index === -1) return;
 
