@@ -4,9 +4,13 @@
       v-for="tag in taskTags"
       :key="tag.id"
       class="py-1 px-2 rounded-md border-1 border-text/30 flex gap-2 items-center justify-between"
+      :style="tag.hex_color ? { borderColor: tag.hex_color } : null"
       @click="removeTag(tag)"
     >
-      <XCircleIcon class="size-6 text-accent"></XCircleIcon>
+      <XCircleIcon
+        class="size-6 text-accent"
+        :style="tag.hex_color ? { color: tag.hex_color } : null"
+      ></XCircleIcon>
       <div>
         {{ tag.name }}
       </div>

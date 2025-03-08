@@ -7,6 +7,7 @@ import type {
   Task,
   TimeEntry,
 } from "./types.ts";
+import { generateRandomColor } from "./colorUtils.ts";
 
 export const getCurrentTaskAndTimeEntry =
   async (): Promise<CurrentTask | null> => {
@@ -461,13 +462,20 @@ export const getTags = async (): Promise<Tag[] | null> => {
   }
 };
 
-export const createTag = async (name: string): Promise<Tag | null> => {
+export const createTag = async (
+  name: string,
+  color?: string
+): Promise<Tag | null> => {
   try {
     name = name.toLowerCase().trim();
 
+    if (!color) {
+      color = generateRandomColor();
+    }
+
     const { data, error } = await supabase
       .from("tags")
-      .insert({ name })
+      .insert({ name, hex_color: color })
       .select()
       .single();
     if (error) {

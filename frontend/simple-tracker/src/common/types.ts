@@ -61,4 +61,5 @@ export interface Tag {
   created_at: string;
   user_id: string;
   name: string;
+  hex_color?: string;
 }

@@ -30,6 +30,7 @@
           v-for="item in filteredItems"
           :key="getItemKey(item)"
           class="bg-background mx-1 py-1 px-2 rounded-md border-1 border-text/30"
+          :style="item.hex_color ? { borderColor: item.hex_color } : null"
           @click="handleSelect(item)"
         >
           {{ item[searchBy] }}
