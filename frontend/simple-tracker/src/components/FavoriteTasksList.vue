@@ -1,7 +1,7 @@
 <template>
   <div class="pt-4 px-4 font-bold uppercase flex gap-1 items-center pb-1">
     <StarIcon class="size-5"></StarIcon>
-    <h3 class="truncate">favorites</h3>
+    <div>favorites</div>
   </div>
   <TransitionGroup name="list-slide-left">
     <EntriesListItemLayout

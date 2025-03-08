@@ -49,6 +49,14 @@
         >test</AppPageEntryDetail
       >
     </Transition>
+    <Transition name="page-slide">
+      <AppPageGroupDetail
+        v-if="detailPageGroup !== null"
+        @close="detailPageGroup = null"
+        :group="detailPageGroup"
+        >test</AppPageGroupDetail
+      >
+    </Transition>
 
     <!-- Loading Indicator -->
     <div v-if="entriesListStore.loading" class="flex flex-row justify-around">
@@ -72,6 +80,7 @@ import { useCurrentTaskStore } from "../stores/currentTask";
 import { useEntriesListStore } from "../stores/entriesList";
 import type { TaskGroup, TimeEntry } from "../common/types.ts";
 import AppPageEntryDetail from "./AppPageEntryDetail.vue";
+import AppPageGroupDetail from "./AppPageGroupDetail.vue";
 import { useFavoriteTasksStore } from "../stores/favoriteTasks.ts";
 
 const observer = ref<IntersectionObserver | null>(null);
@@ -80,6 +89,7 @@ const currentTaskStore = useCurrentTaskStore();
 const favoriteTasksStore = useFavoriteTasksStore();
 
 const detailPageEntry = ref<TimeEntry | null>(null);
+const detailPageGroup = ref<TaskGroup | null>(null);
 
 const { grouped = false } = defineProps<{
   grouped: boolean;
@@ -137,6 +147,8 @@ const onDeleteGroup = async (group: TaskGroup) => {
 const onGroupClick = (group: TaskGroup) => {
   if (group.entries.length == 1) {
     detailPageEntry.value = group.entries[0];
+  } else {
+    detailPageGroup.value = group;
   }
 };
 const onEntryClick = (entry: TimeEntry) => {
