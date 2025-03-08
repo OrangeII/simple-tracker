@@ -31,19 +31,27 @@
     background-blend-mode: luminosity;
   }
 
+  /** animations */
   .page-slide-enter-active,
   .page-slide-leave-active {
     transition: transform 0.3s ease-in-out;
   }
-
   .page-slide-enter-from,
   .page-slide-leave-to {
     transform: translateY(+100%);
   }
-
   .page-slide-enter-to,
   .page-slide-leave-from {
     transform: translateY(0);
+  }
+
+  .list-slide-left-enter-active,
+  .list-slide-left-leave-active {
+    transition: all 0.3s ease;
+  }
+  .list-slide-left-enter-from,
+  .list-slide-left-leave-to {
+    transform: translateX(-100%);
   }
 }
 

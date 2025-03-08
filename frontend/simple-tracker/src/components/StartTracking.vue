@@ -94,6 +94,7 @@ const startTrackingTask = async (params: {
       id: params.taskId || "",
       name: params.name || params.altCode || "",
       created_at: startTime.toISOString(),
+      user_id: "",
       is_favorite: false,
     },
     time_entries: {

@@ -30,7 +30,7 @@
       </slot>
     </div>
     <div
-      class="rounded-sm p-2 my-1.5 flex flex-row justify-between items-center bg-background grainy dark:bg-blend-overlay"
+      class="rounded-sm p-2 my-1.5 flex flex-row justify-between items-center bg-background grainy dark:bg-blend-overlay min-h-18"
       :style="{ transform: `translateX(${offset}px)` }"
       :class="{ 'transition-transform': !isSwiping }"
       @touchstart="onTouchStart"

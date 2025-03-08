@@ -418,3 +418,30 @@ export const updateTask = async (task: Task): Promise<boolean> => {
     return false;
   }
 };
+
+export const getFavorites = async (): Promise<Task[] | null> => {
+  try {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+      return null;
+    }
+
+    const { data, error } = await supabase
+      .from("tasks")
+      .select()
+      .eq("is_favorite", true)
+      .eq("user_id", user.id);
+
+    if (error) {
+      console.error("Error retrieving favorites:", error);
+      return null;
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error in getFavorites:", error);
+    return null;
+  }
+};

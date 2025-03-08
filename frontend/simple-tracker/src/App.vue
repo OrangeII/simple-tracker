@@ -10,6 +10,9 @@
       </header>
 
       <main class="flex-1 overflow-auto" @scroll="handleScroll">
+        <FavoriteTasksList
+          v-if="favoriteTasksStore.favorites.length > 0"
+        ></FavoriteTasksList>
         <EntriesList
           :grouped="preferencesStore.preferences.displayEntriesGroupedById"
         />
@@ -43,9 +46,12 @@ import { useCurrentTaskStore } from "./stores/currentTask";
 import { usePreferencesStore } from "./stores/preferences";
 import Toolbar from "./components/Toolbar.vue";
 import AppPageSettings from "./components/AppPageSettings.vue";
+import { useFavoriteTasksStore } from "./stores/favoriteTasks.ts";
+import FavoriteTasksList from "./components/FavoriteTasksList.vue";
 
 const userStore = useUserStore();
 const currentTaskStore = useCurrentTaskStore();
+const favoriteTasksStore = useFavoriteTasksStore();
 const preferencesStore = usePreferencesStore();
 const showSettingsPage = ref(false);
 let authStateChangeSub: Subscription | null = null;
@@ -60,6 +66,8 @@ onMounted(async () => {
     userStore.user = session?.user || null;
     currentTaskStore.fetchCurrentTask();
     currentTaskStore.initializeSubscriptionToCurrentTask();
+
+    favoriteTasksStore.fetchFavorites();
   });
   authStateChangeSub = subscription;
 });
