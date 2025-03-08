@@ -72,6 +72,7 @@ export const useEntriesListStore = defineStore("entriesList", () => {
       if (!days[dateKey].entiresById[entry.task_id]) {
         days[dateKey].entiresById[entry.task_id] = {
           id: entry.task_id,
+          date: new Date(dateKey).toISOString(),
           name: entry.tasks?.name || "Unknown",
           totalTime: 0,
           entries: [],

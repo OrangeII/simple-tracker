@@ -17,7 +17,7 @@
       </div>
       <EntriesListItemLayout
         v-for="entry in group.entries"
-        :key="entry.id"
+        :key="'group-page-item-' + entry.id"
         :entry="entry"
         :hide-play="true"
         class="px-4"
@@ -56,20 +56,46 @@ import EntriesListItemLayout from "./EntriesListItemLayout.vue";
 import AppPageEntryDetail from "./AppPageEntryDetail.vue";
 import { toDurationString } from "../common/timeUtils";
 import type { TaskGroup, TimeEntry } from "../common/types";
-import { ref } from "vue";
+import { ref, watch } from "vue";
+import { useEntriesListStore } from "../stores/entriesList";
 
-const detailPageEntry = ref<TimeEntry | null>(null);
-
+const entriesListStore = useEntriesListStore();
 const props = defineProps<{ group: TaskGroup }>();
-
+const group = ref(props.group);
+const detailPageEntry = ref<TimeEntry | null>(null);
 const taskName = ref(props.group.name || "");
 
 const emit = defineEmits<{
   close: [];
+  "update:group": [group: TaskGroup];
 }>();
+
+watch(
+  () => entriesListStore.entriesByDate,
+  (newValue) => {
+    //find the group by id and update the group prop
+
+    let dateGroup = newValue[props.group.date];
+
+    if (dateGroup == undefined) {
+      //this date group does not exist anymore
+      emit("close");
+      return;
+    }
+
+    let updatedGroup = dateGroup.entiresById[props.group.id];
+    if (updatedGroup == undefined) {
+      //this group is not in this date anymore
+      emit("close");
+      return;
+    }
+
+    group.value = updatedGroup;
+  },
+  { deep: true }
+);
 
 const onEntryClick = (entry: TimeEntry) => {
   detailPageEntry.value = entry;
-  console.log(detailPageEntry.value);
 };
 </script>

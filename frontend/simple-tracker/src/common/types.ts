@@ -44,6 +44,7 @@ export interface DateGroup {
 
 export interface TaskGroup {
   id: string;
+  date: string;
   name: string;
   totalTime: number;
   entries: TimeEntry[];
