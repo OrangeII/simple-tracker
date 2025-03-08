@@ -17,29 +17,33 @@
       </div>
 
       <div v-if="!grouped">
-        <EntriesListItem
-          v-for="entry in dateEntries.entries"
-          :key="entry.id"
-          :entry="entry"
-          class="px-4"
-          @onResumeClicked="onResume"
-          @onDeleteClicked="onDeleteEntry"
-          @onClick="onEntryClick(entry)"
-          @onFavoriteClicked="onFavoriteClicked"
-        >
-        </EntriesListItem>
+        <TransitionGroup name="list-slide-left">
+          <EntriesListItem
+            v-for="entry in dateEntries.entries"
+            :key="entry.id"
+            :entry="entry"
+            class="px-4"
+            @onResumeClicked="onResume"
+            @onDeleteClicked="onDeleteEntry"
+            @onClick="onEntryClick(entry)"
+            @onFavoriteClicked="onFavoriteClicked"
+          >
+          </EntriesListItem>
+        </TransitionGroup>
       </div>
       <div v-else>
-        <EntriesListGroupedItem
-          v-for="group in dateEntries.entiresById"
-          :key="group.id"
-          :group="group"
-          class="px-4"
-          @onResumeClicked="onResume"
-          @onDeleteClicked="onDeleteGroup"
-          @onClick="onGroupClick(group)"
-          @onFavoriteClicked="onFavoriteClicked"
-        />
+        <TransitionGroup name="list-slide-left">
+          <EntriesListGroupedItem
+            v-for="group in dateEntries.entiresById"
+            :key="group.id"
+            :group="group"
+            class="px-4"
+            @onResumeClicked="onResume"
+            @onDeleteClicked="onDeleteGroup"
+            @onClick="onGroupClick(group)"
+            @onFavoriteClicked="onFavoriteClicked"
+          />
+        </TransitionGroup>
       </div>
     </div>
 

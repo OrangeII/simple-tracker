@@ -10,9 +10,11 @@
       </header>
 
       <main class="flex-1 overflow-auto" @scroll="handleScroll">
-        <FavoriteTasksList
-          v-if="favoriteTasksStore.favorites.length > 0"
-        ></FavoriteTasksList>
+        <Transition name="list-slide-left">
+          <div v-if="favoriteTasksStore.favorites.length > 0">
+            <FavoriteTasksList></FavoriteTasksList>
+          </div>
+        </Transition>
         <EntriesList
           :grouped="preferencesStore.preferences.displayEntriesGroupedById"
         />

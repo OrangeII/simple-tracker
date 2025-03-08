@@ -21,31 +21,32 @@
         {{ group.entries.length > 1 ? "entries" : "entry" }} on
         {{ new Date(group.entries[0].start_time).toLocaleDateString() }}
       </div>
-      <EntriesListItemLayout
-        v-for="entry in group.entries"
-        :key="'group-page-item-' + entry.id"
-        :entry="entry"
-        :hide-play="true"
-        :hide-favorite="true"
-        class="px-4"
-        @onClick="onEntryClick(entry)"
-        @onDelete="onDeleteClick(entry)"
-      >
-        <template #left>
-          <h3 class="truncate">{{ entry.tasks?.name }}</h3>
-        </template>
-        <template v-if="entry.end_time" #duration>
-          {{
-            toDurationString(
-              new Date(
-                new Date(entry.end_time).getTime() -
-                  new Date(entry.start_time).getTime()
+      <TransitionGroup name="list-slide-left">
+        <EntriesListItemLayout
+          v-for="entry in group.entries"
+          :key="'group-page-item-' + entry.id"
+          :entry="entry"
+          :hide-play="true"
+          :hide-favorite="true"
+          class="px-4"
+          @onClick="onEntryClick(entry)"
+          @onDelete="onDeleteClick(entry)"
+        >
+          <template #left>
+            <h3 class="truncate">{{ entry.tasks?.name }}</h3>
+          </template>
+          <template v-if="entry.end_time" #duration>
+            {{
+              toDurationString(
+                new Date(
+                  new Date(entry.end_time).getTime() -
+                    new Date(entry.start_time).getTime()
+                )
               )
-            )
-          }}
-        </template>
-      </EntriesListItemLayout>
-
+            }}
+          </template>
+        </EntriesListItemLayout>
+      </TransitionGroup>
       <Transition name="page-slide">
         <AppPageEntryDetail
           v-if="detailPageEntry !== null"
