@@ -463,6 +463,8 @@ export const getTags = async (): Promise<Tag[] | null> => {
 
 export const createTag = async (name: string): Promise<Tag | null> => {
   try {
+    name = name.toLowerCase().trim();
+
     const { data, error } = await supabase
       .from("tags")
       .insert({ name })
@@ -540,6 +542,28 @@ export const addTagToTask = async (
     return true;
   } catch (error) {
     console.error("Error in addTagToTask:", error);
+    return false;
+  }
+};
+
+export const removeTagFromTask = async (
+  taskId: string,
+  tagId: string
+): Promise<boolean> => {
+  try {
+    const { error } = await supabase
+      .from("tasks_tags")
+      .delete()
+      .match({ task_id: taskId, tag_id: tagId });
+
+    if (error) {
+      console.error("Error removing tag from task:", error);
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Error in removeTagFromTask:", error);
     return false;
   }
 };

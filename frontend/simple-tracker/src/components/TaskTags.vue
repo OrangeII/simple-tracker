@@ -3,9 +3,13 @@
     <div
       v-for="tag in taskTags"
       :key="tag.id"
-      class="py-1 px-2 rounded-md border-1 border-text/30"
+      class="py-1 px-2 rounded-md border-1 border-text/30 flex gap-2 items-center justify-between"
+      @click="removeTag(tag)"
     >
-      {{ tag.name }}
+      <XCircleIcon class="size-6 text-accent"></XCircleIcon>
+      <div>
+        {{ tag.name }}
+      </div>
     </div>
   </div>
   <AppTextSelect
@@ -23,7 +27,12 @@ import { onMounted, ref } from "vue";
 import AppTextSelect from "./AppTextSelect.vue";
 import { useTagsStore } from "../stores/tags";
 import type { Tag, Task } from "../common/types";
-import { addTagToTask, getTaskTags } from "../common/supabaseClient";
+import {
+  addTagToTask,
+  getTaskTags,
+  removeTagFromTask,
+} from "../common/supabaseClient";
+import { XCircleIcon } from "@heroicons/vue/24/solid";
 
 const tagsStore = useTagsStore();
 const taskTags = ref<Tag[]>([]);
@@ -69,6 +78,18 @@ const addTag = async (tag: Tag) => {
     if (index > -1) {
       taskTags.value.splice(index, 1);
     }
+    return;
+  }
+};
+
+const removeTag = async (tag: Tag) => {
+  const index = taskTags.value.findIndex((t) => t.id === tag.id);
+  if (index === -1) return;
+
+  taskTags.value.splice(index, 1);
+  if (!removeTagFromTask(props.task.id, tag.id)) {
+    //revert
+    taskTags.value.splice(index, 0, tag);
     return;
   }
 };
