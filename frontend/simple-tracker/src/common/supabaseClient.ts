@@ -461,11 +461,11 @@ export const getTags = async (): Promise<Tag[] | null> => {
   }
 };
 
-export const createTag = async (tag: Tag): Promise<Tag | null> => {
+export const createTag = async (name: string): Promise<Tag | null> => {
   try {
     const { data, error } = await supabase
       .from("tags")
-      .insert(tag)
+      .insert({ name })
       .select()
       .single();
     if (error) {

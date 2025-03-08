@@ -4,6 +4,7 @@
     itemKey="id"
     searchBy="name"
     placeholder="Add tags..."
+    @submit="onSubmit"
   ></AppTextSelect>
 </template>
 
@@ -17,4 +18,12 @@ const tagsStore = useTagsStore();
 onMounted(() => {
   tagsStore.loadTags();
 });
+
+const onSubmit = async (payload: { value: string; matchCount: number }) => {
+  const newTagName = payload.value.trim().toLowerCase();
+  if (newTagName == "") return;
+
+  //create new tag
+  await tagsStore.addTag(payload.value);
+};
 </script>

@@ -38,7 +38,7 @@ describe("tags store", () => {
     vi.mocked(createTag).mockResolvedValue(newTag);
 
     const store = useTagsStore();
-    await store.addTag(newTag);
+    await store.addTag(newTag.name);
 
     expect(store.tags).toContainEqual(newTag);
   });
@@ -64,12 +64,7 @@ describe("tags store", () => {
     store.tags = [...mockTags];
 
     vi.mocked(createTag).mockResolvedValue(null);
-    await store.addTag({
-      id: "2",
-      name: "New Tag",
-      user_id: "",
-      created_at: "",
-    });
+    await store.addTag("New tag");
     expect(store.tags).toEqual(mockTags);
 
     vi.mocked(deleteTag).mockResolvedValue(false);
@@ -94,7 +89,7 @@ describe("tags store", () => {
     vi.mocked(createTag).mockResolvedValue(mockTag);
     const store = useTagsStore();
     store.tags = [mockTag];
-    await store.addTag(mockTag);
+    await store.addTag(mockTag.name);
     expect(store.tags).toHaveLength(1);
   });
 });

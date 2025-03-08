@@ -13,12 +13,13 @@ export const useTagsStore = defineStore("tags", () => {
     }
   }
 
-  async function addTag(tag: Tag) {
-    if (tags.value.find((t) => (t.id = tag.id))) {
+  async function addTag(name: string) {
+    if (tags.value.find((t) => t.name == name)) {
       return;
     }
 
-    const data = await createTag(tag);
+    console.log(name);
+    const data = await createTag(name);
     if (data) {
       tags.value = [...(tags.value || []), data];
     }
