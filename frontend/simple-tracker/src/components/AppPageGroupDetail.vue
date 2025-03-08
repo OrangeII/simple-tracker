@@ -67,7 +67,6 @@ const taskName = ref(props.group.name || "");
 
 const emit = defineEmits<{
   close: [];
-  "update:group": [group: TaskGroup];
 }>();
 
 watch(
@@ -91,6 +90,7 @@ watch(
     }
 
     group.value = updatedGroup;
+    taskName.value = group.value.name;
   },
   { deep: true }
 );
