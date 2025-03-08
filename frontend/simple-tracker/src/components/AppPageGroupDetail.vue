@@ -3,6 +3,12 @@
     :title="toDurationString(new Date(group.totalTime))"
     @close="emit('close')"
   >
+    <template #actions>
+      <div class="flex gap-1 items-center" @click="onSaveClick">
+        <CheckCircleIcon class="size-8 text-primary"></CheckCircleIcon>
+        <h3 class="uppercase text-primary">save</h3>
+      </div>
+    </template>
     <template #main>
       <input
         required="true"
@@ -61,6 +67,7 @@ import type { TaskGroup, TimeEntry } from "../common/types";
 import { ref, watch } from "vue";
 import { useEntriesListStore } from "../stores/entriesList";
 import { deleteEntry } from "../common/supabaseClient";
+import { CheckCircleIcon } from "@heroicons/vue/24/solid";
 
 const entriesListStore = useEntriesListStore();
 const props = defineProps<{ group: TaskGroup }>();
@@ -115,5 +122,18 @@ const onDeleteClick = async (entry: TimeEntry) => {
     //revert the optimistic change if deletion fails
     entriesListStore.pushEntries([entry]);
   }
+};
+
+const onSaveClick = async () => {
+  if (group.value.entries.length == 0) {
+    return;
+  }
+
+  if (!group.value.entries[0].tasks) {
+    return;
+  }
+
+  const newTask = { ...group.value.entries[0].tasks, name: taskName.value };
+  entriesListStore.updateTask(newTask);
 };
 </script>
