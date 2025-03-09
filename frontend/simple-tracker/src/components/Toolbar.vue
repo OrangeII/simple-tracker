@@ -1,9 +1,15 @@
 <template>
   <div class="flex flex-row items justify-between items-center">
-    <h1>
+    <h1 v-if="isMobile">
       Hello, {{ userStore.user?.user_metadata.preferred_username || "👽" }}
     </h1>
-    <div class="flex flex-row items-center gap-4">
+    <div
+      :class="[
+        isMobile
+          ? 'flex flex-row items-center gap-4'
+          : 'flex flex-col w-16 justify-between items-center gap-4 pt-4',
+      ]"
+    >
       <div v-if="preferencesStore.preferences.darkModeToolbar" id="themeToggle">
         <MoonIcon
           class="text-primary size-8"
@@ -44,6 +50,9 @@ import {
   SunIcon,
   Cog8ToothIcon,
 } from "@heroicons/vue/24/solid";
+import { useBreakpoints } from "../common/breakpoints";
+
+const { isMobile } = useBreakpoints();
 
 defineEmits<{
   settingsClick: [];
