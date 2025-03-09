@@ -2,8 +2,14 @@
   <div class="relative">
     <input
       type="text"
-      class="w-full p-2 rounded-t-md bg-background dark:bg-blend-overlay grainy font-medium text-lg focus:outline-none"
-      :class="[showDropdown ? '' : 'rounded-b-md']"
+      class="w-full p-2 bg-background dark:bg-blend-overlay grainy font-medium text-lg focus:outline-none"
+      :class="[
+        showDropdown
+          ? dropdownPosition === 'above'
+            ? 'rounded-b-md'
+            : 'rounded-t-md'
+          : 'rounded-md',
+      ]"
       :placeholder="placeholder"
       v-model="inputValue"
     />
@@ -16,7 +22,10 @@
       ]"
     >
       <div
-        class="max-h-48 overflow-y-auto rounded-b-md grainy bg-background dark:bg-blend-overlay flex flex-wrap gap-y-2 py-2 px-1"
+        class="max-h-48 overflow-y-auto grainy bg-background dark:bg-blend-overlay flex flex-wrap gap-y-2 py-2 px-1"
+        :class="[
+          dropdownPosition === 'above' ? 'rounded-t-md' : 'rounded-b-md',
+        ]"
       >
         <div
           v-if="showAddNew && !hasExactMatch"
@@ -119,7 +128,9 @@ const filteredItems = computed(() => {
 });
 
 watch(inputValue, (newValue: string) => {
-  showDropdown.value = newValue.length >= N_CHARS;
+  showDropdown.value =
+    newValue.length >= N_CHARS &&
+    (filteredItems.value.length > 0 || !hasExactMatch.value);
 });
 
 const getItemKey = (item: any) => {
