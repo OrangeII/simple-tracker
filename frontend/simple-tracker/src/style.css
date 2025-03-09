@@ -53,6 +53,15 @@
   .list-slide-left-leave-to {
     transform: translateX(-100%);
   }
+
+  .list-slide-right-enter-active,
+  .list-slide-right-leave-active {
+    transition: all 0.3s ease;
+  }
+  .list-slide-right-enter-from,
+  .list-slide-right-leave-to {
+    transform: translateX(+100%);
+  }
 }
 
 @layer components {

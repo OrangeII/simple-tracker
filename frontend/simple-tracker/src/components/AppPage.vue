@@ -1,5 +1,8 @@
 <template>
-  <div class="fixed inset-0 z-50 bg-background overflow-auto">
+  <div
+    class="fixed z-50 bg-background overflow-auto"
+    :class="[isMobile ? 'inset-0' : 'inset-y-0']"
+  >
     <header class="p-4 flex flex-row justify-between items-center">
       <div class="flex flex-row items-center gap-4">
         <ArrowLeftIcon
@@ -18,6 +21,9 @@
 
 <script setup lang="ts">
 import { ArrowLeftIcon } from "@heroicons/vue/24/solid";
+import { useBreakpoints } from "../common/breakpoints";
+
+const { isMobile } = useBreakpoints();
 
 const emit = defineEmits<{
   close: [];

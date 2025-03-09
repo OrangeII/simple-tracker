@@ -38,9 +38,9 @@
         </footer>
       </div>
 
-      <Transition :name="isDesktop ? 'slide-right' : 'page-slide'">
+      <Transition :name="isDesktop ? 'list-slide-left' : 'page-slide'">
         <AppPageSettings
-          :class="[isDesktop ? 'w-96' : 'w-full']"
+          :class="[isDesktop ? 'w-96 border-r border-text/10' : '']"
           v-if="showSettingsPage"
           @close="showSettingsPage = false"
         ></AppPageSettings>

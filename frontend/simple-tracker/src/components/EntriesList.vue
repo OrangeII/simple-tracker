@@ -55,15 +55,25 @@
       </div>
     </div>
 
-    <Transition name="page-slide">
+    <Transition :name="isDesktop ? 'list-slide-right' : 'page-slide'">
       <AppPageEntryDetail
+        :class="[
+          isDesktop
+            ? 'w-96 border-l border-text/10 absolute inset-y-0 right-0'
+            : '',
+        ]"
         v-if="detailPageEntry !== null"
         @close="detailPageEntry = null"
         :entry="detailPageEntry"
       ></AppPageEntryDetail>
     </Transition>
-    <Transition name="page-slide">
+    <Transition :name="isDesktop ? 'list-slide-right' : 'page-slide'">
       <AppPageGroupDetail
+        :class="[
+          isDesktop
+            ? 'w-96 border-l border-text/10 absolute inset-y-0 right-0'
+            : '',
+        ]"
         v-if="detailPageGroup !== null"
         @close="detailPageGroup = null"
         :group="detailPageGroup"
@@ -95,7 +105,9 @@ import AppPageEntryDetail from "./AppPageEntryDetail.vue";
 import AppPageGroupDetail from "./AppPageGroupDetail.vue";
 import { useFavoriteTasksStore } from "../stores/favoriteTasks.ts";
 import EntriesListSkeleton from "./EntriesListSkeleton.vue";
+import { useBreakpoints } from "../common/breakpoints.ts";
 
+const { isDesktop } = useBreakpoints();
 const observer = ref<IntersectionObserver | null>(null);
 const entriesListStore = useEntriesListStore();
 const currentTaskStore = useCurrentTaskStore();
