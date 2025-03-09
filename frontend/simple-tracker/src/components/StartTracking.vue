@@ -10,12 +10,6 @@
       <Spinner v-else class="size-9" />
     </div>
     <div class="flex-grow">
-      <!-- <input
-        type="text"
-        v-model="taskName"
-        placeholder="Let's start working on..."
-        class="w-full px-4 py-2 border-1 rounded-sm caret-primary focus:outline-primary"
-      /> -->
       <AppTextSelect
         v-model="taskName"
         placeholder="Let's start working on..."
