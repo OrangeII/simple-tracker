@@ -62,16 +62,22 @@ import {
 } from "@heroicons/vue/24/solid";
 import { useUserStore } from "../stores/user";
 import { usePreferencesStore } from "../stores/preferences";
+import { useEntriesListStore } from "../stores/entriesList";
+import { useFavoriteTasksStore } from "../stores/favoriteTasks";
 
 const emit = defineEmits<{
   close: [];
 }>();
 const userStore = useUserStore();
 const preferencesStore = usePreferencesStore();
+const entriesListStore = useEntriesListStore();
+const favoriteTasksStore = useFavoriteTasksStore();
 
 const signOut = async () => {
   await supabase.auth.signOut();
   userStore.user = null;
+  entriesListStore.entries = [];
+  favoriteTasksStore.favorites = [];
   emit("close");
 };
 </script>

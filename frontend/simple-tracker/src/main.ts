@@ -8,6 +8,8 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseKey = import.meta.env.VITE_SUPABASE_KEY;
 export const supabase = createClient(supabaseUrl, supabaseKey);
 
+const pinia = createPinia();
+
 const app = createApp(App);
-app.use(createPinia());
+app.use(pinia);
 app.mount("#app");
