@@ -86,6 +86,10 @@ const hasExactMatch = computed(() => {
   return (
     filteredItems.value.find(
       (e) => e[props.searchBy].toLowerCase() == inputValue.value.toLowerCase()
+    ) !== undefined ||
+    props.exclude === undefined ||
+    props.exclude.find(
+      (e) => e[props.searchBy].toLowerCase() == inputValue.value.toLowerCase()
     ) !== undefined
   );
 });
