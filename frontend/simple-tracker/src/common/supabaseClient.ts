@@ -575,3 +575,17 @@ export const removeTagFromTask = async (
     return false;
   }
 };
+
+export const getTasks = async (): Promise<Task[] | null> => {
+  try {
+    const { data, error } = await supabase.from("tasks").select("*");
+    if (error) {
+      console.error("Error fetching tasks:", error);
+      return null;
+    }
+    return data;
+  } catch (error) {
+    console.error("Error in getTasks:", error);
+    return null;
+  }
+};

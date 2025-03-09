@@ -10,12 +10,21 @@
       <Spinner v-else class="size-9" />
     </div>
     <div class="flex-grow">
-      <input
+      <!-- <input
         type="text"
         v-model="taskName"
         placeholder="Let's start working on..."
         class="w-full px-4 py-2 border-1 rounded-sm caret-primary focus:outline-primary"
-      />
+      /> -->
+      <AppTextSelect
+        v-model="taskName"
+        placeholder="Let's start working on..."
+        :items="taskStore.tasks"
+        searchBy="name"
+        itemKey="id"
+        dropdown-position="above"
+        @select="startTrackingTask({ taskId: $event.id, name: $event.name })"
+      ></AppTextSelect>
     </div>
     <div class="pl-2 size-12 flex items-center">
       <PlayIcon
@@ -52,12 +61,14 @@
  * start time entry on new task
  */
 
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { track } from "../common/supabaseClient.ts";
 import QRScanner from "./QRScanner.vue";
 import { QrCodeIcon, PlayIcon } from "@heroicons/vue/24/solid";
 import Spinner from "./Spinner.vue";
 import { useCurrentTaskStore } from "../stores/currentTask";
+import { useTasksStore } from "../stores/tasks.ts";
+import AppTextSelect from "./AppTextSelect.vue";
 
 const taskName = ref("");
 const taskAltCode = ref("");
@@ -65,6 +76,11 @@ const loading = ref(false);
 const message = ref("");
 const qrModalIsOpen = ref(false);
 const currentTaskStore = useCurrentTaskStore();
+const taskStore = useTasksStore();
+
+onMounted(async () => {
+  await taskStore.loadTasks();
+});
 
 const start = async () => {
   if (!taskName.value) {

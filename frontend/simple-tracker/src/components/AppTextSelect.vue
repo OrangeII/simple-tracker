@@ -45,6 +45,7 @@ import { computed, ref, watch } from "vue";
 import { PlusCircleIcon } from "@heroicons/vue/24/solid";
 
 interface TextSelectProps {
+  modelValue?: string;
   items: any[];
   exclude?: any[];
   searchBy: string;
@@ -57,6 +58,7 @@ interface TextSelectProps {
 interface TextSelectEmits {
   (event: "select", item: any): void;
   (event: "submit", payload: { value: string; matchCount: number }): void;
+  (event: "update:modelValue", value: string): void;
 }
 
 const N_CHARS = 1;
@@ -65,11 +67,17 @@ const props = withDefaults(defineProps<TextSelectProps>(), {
   placeholder: "",
   dropdownPosition: "below",
   debounceMs: 300,
+  modelValue: "",
 });
 
 const emit = defineEmits<TextSelectEmits>();
 
-const inputValue = ref("");
+const inputValue = computed({
+  get: () => props.modelValue,
+  set: (value) => {
+    emit("update:modelValue", value);
+  },
+});
 const showDropdown = ref(false);
 
 const hasExactMatch = computed(() => {
