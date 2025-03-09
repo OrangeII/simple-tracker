@@ -1,11 +1,19 @@
 <template>
+  <!-- Loading state -->
+  <EntriesListSkeleton
+    v-if="entriesListStore.loading && entriesListStore.entries.length === 0"
+  />
+
+  <!-- Empty state -->
   <div
-    v-if="entriesListStore.entries.length === 0"
+    v-else-if="entriesListStore.entries.length === 0"
     class="flex flex-col items-center justify-center h-full mt-[40%]"
   >
     <div class="text-2xl font-bold">No entries yet</div>
     <div class="text-text/70">Start tracking to see your entries</div>
   </div>
+
+  <!-- Entries list -->
   <div v-else>
     <div
       v-for="(dateEntries, date) in entriesListStore.entriesByDate"
@@ -86,6 +94,7 @@ import type { TaskGroup, TimeEntry } from "../common/types.ts";
 import AppPageEntryDetail from "./AppPageEntryDetail.vue";
 import AppPageGroupDetail from "./AppPageGroupDetail.vue";
 import { useFavoriteTasksStore } from "../stores/favoriteTasks.ts";
+import EntriesListSkeleton from "./EntriesListSkeleton.vue";
 
 const observer = ref<IntersectionObserver | null>(null);
 const entriesListStore = useEntriesListStore();

@@ -16,13 +16,14 @@
       <div
         v-for="n in 3"
         :key="n"
-        class="py-1 px-2 rounded-md flex gap-2 items-center justify-between animate-pulse bg-background grainy"
+        class="py-1 px-2 rounded-md flex gap-2 items-center justify-between animate-pulse bg-background grainy dark:bg-blend-overlay"
       >
         <div class="size-6"></div>
         <div class="w-16 h-4"></div>
       </div>
     </template>
 
+    <!-- Skeleton loader -->
     <div
       v-for="tag in taskTags"
       :key="tag.id"
