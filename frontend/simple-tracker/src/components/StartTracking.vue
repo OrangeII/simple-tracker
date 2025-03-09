@@ -23,6 +23,7 @@
         searchBy="name"
         itemKey="id"
         dropdown-position="above"
+        :showAddNew="false"
         @select="startTrackingTask({ taskId: $event.id, name: $event.name })"
       ></AppTextSelect>
     </div>

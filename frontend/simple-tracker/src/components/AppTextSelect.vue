@@ -19,7 +19,7 @@
         class="max-h-48 overflow-y-auto rounded-b-md grainy bg-background dark:bg-blend-overlay flex flex-wrap gap-y-2 py-2 px-1"
       >
         <div
-          v-if="!hasExactMatch"
+          v-if="showAddNew && !hasExactMatch"
           class="bg-background mx-1 py-1 px-2 rounded-md border-1 border-text/30 flex gap-2 items-center justify-between"
           @click="submit"
         >
@@ -53,6 +53,7 @@ interface TextSelectProps {
   placeholder?: string;
   dropdownPosition?: "above" | "below";
   debounceMs?: number;
+  showAddNew: boolean;
 }
 
 interface TextSelectEmits {
@@ -62,19 +63,20 @@ interface TextSelectEmits {
 }
 
 const N_CHARS = 1;
+const localValue = ref("");
 
 const props = withDefaults(defineProps<TextSelectProps>(), {
   placeholder: "",
   dropdownPosition: "below",
   debounceMs: 300,
-  modelValue: "",
 });
 
 const emit = defineEmits<TextSelectEmits>();
 
 const inputValue = computed({
-  get: () => props.modelValue,
+  get: () => props.modelValue ?? localValue.value,
   set: (value) => {
+    localValue.value = value;
     emit("update:modelValue", value);
   },
 });

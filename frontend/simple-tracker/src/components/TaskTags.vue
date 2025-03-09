@@ -8,6 +8,7 @@
     placeholder="Add tags..."
     @submit="onSubmit"
     @select="addTag"
+    :showAddNew="true"
   ></AppTextSelect>
   <div class="flex flex-wrap gap-2 mb-2">
     <!-- Skeleton loader -->
