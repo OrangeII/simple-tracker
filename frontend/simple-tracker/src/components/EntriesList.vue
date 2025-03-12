@@ -57,11 +57,9 @@
 
     <Transition :name="isDesktop ? 'list-slide-right' : 'page-slide'">
       <AppPageEntryDetail
-        :class="[
-          isDesktop
-            ? 'w-96 border-l border-text/10 absolute inset-y-0 right-0'
-            : '',
-        ]"
+        anchor="right"
+        :widthClass="isDesktop ? 'w-96' : ''"
+        :class="[isDesktop ? 'border-l border-text/10' : '']"
         v-if="detailPageEntry !== null"
         @close="detailPageEntry = null"
         :entry="detailPageEntry"
@@ -69,11 +67,9 @@
     </Transition>
     <Transition :name="isDesktop ? 'list-slide-right' : 'page-slide'">
       <AppPageGroupDetail
-        :class="[
-          isDesktop
-            ? 'w-96 border-l border-text/10 absolute inset-y-0 right-0'
-            : '',
-        ]"
+        anchor="right"
+        :widthClass="isDesktop ? 'w-96' : ''"
+        :class="[isDesktop ? 'border-l border-text/10' : '']"
         v-if="detailPageGroup !== null"
         @close="detailPageGroup = null"
         :group="detailPageGroup"

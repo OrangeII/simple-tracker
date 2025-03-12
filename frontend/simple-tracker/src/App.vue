@@ -40,7 +40,9 @@
 
       <Transition :name="isDesktop ? 'list-slide-left' : 'page-slide'">
         <AppPageSettings
-          :class="[isDesktop ? 'w-96 border-r border-text/10' : '']"
+          :widthClass="isDesktop ? 'w-86' : ''"
+          :class="[isDesktop ? 'border-r border-text/10' : '']"
+          anchor="left"
           v-if="showSettingsPage"
           @close="showSettingsPage = false"
         ></AppPageSettings>

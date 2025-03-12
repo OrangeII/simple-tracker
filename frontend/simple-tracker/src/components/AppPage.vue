@@ -1,7 +1,12 @@
 <template>
+  <!-- Page content -->
   <div
     class="fixed z-50 bg-background overflow-auto"
-    :class="[isMobile ? 'inset-0' : 'inset-y-0']"
+    :class="[
+      anchor === 'left' ? 'left-0' : 'right-0',
+      isFullWidth ? 'inset-0' : 'top-0 bottom-0',
+      !isFullWidth ? widthClass : '',
+    ]"
   >
     <header class="p-4 flex flex-row justify-between items-center">
       <div class="flex flex-row items-center gap-4">
@@ -21,15 +26,23 @@
 
 <script setup lang="ts">
 import { ArrowLeftIcon } from "@heroicons/vue/24/solid";
-import { useBreakpoints } from "../common/breakpoints";
-
-const { isMobile } = useBreakpoints();
+import { computed } from "vue";
 
 const emit = defineEmits<{
   close: [];
 }>();
 
-defineProps<{
-  title?: string;
-}>();
+const props = withDefaults(
+  defineProps<{
+    title?: string;
+    widthClass?: string;
+    anchor?: "left" | "right";
+  }>(),
+  {
+    widthClass: "",
+    anchor: "right",
+  }
+);
+
+const isFullWidth = computed(() => !props.widthClass);
 </script>
