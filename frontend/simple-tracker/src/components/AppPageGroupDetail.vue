@@ -69,6 +69,7 @@ import { ref, watch } from "vue";
 import { useEntriesListStore } from "../stores/entriesList";
 import { deleteEntry } from "../common/supabaseClient";
 import { CheckCircleIcon } from "@heroicons/vue/24/solid";
+import { updateTask } from "../common/supabaseClient";
 
 const entriesListStore = useEntriesListStore();
 const props = defineProps<{ group: TaskGroup }>();
@@ -133,8 +134,16 @@ const onSaveClick = async () => {
   if (!group.value.entries[0].tasks) {
     return;
   }
-
+  const oldTask = { ...group.value.entries[0].tasks };
   const newTask = { ...group.value.entries[0].tasks, name: taskName.value };
   entriesListStore.updateTask(newTask);
+
+  emit("close");
+
+  //optimistically update the task
+  if (!(await updateTask(newTask))) {
+    //if update is not successful, revert
+    entriesListStore.updateTask(oldTask);
+  }
 };
 </script>
