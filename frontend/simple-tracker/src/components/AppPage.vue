@@ -1,11 +1,19 @@
 <template>
-  <div class="fixed inset-0 z-50 bg-background overflow-auto">
+  <!-- Page content -->
+  <div
+    class="fixed z-50 bg-background overflow-auto"
+    :class="[
+      anchor === 'left' ? 'left-0' : 'right-0',
+      isFullWidth ? 'inset-0' : 'top-0 bottom-0',
+      !isFullWidth ? widthClass : '',
+    ]"
+  >
     <header class="p-4 flex flex-row justify-between items-center">
       <div class="flex flex-row items-center gap-4">
-        <ArrowLeftIcon
-          @click="emit('close')"
-          class="size-8 text-primary"
-        ></ArrowLeftIcon>
+        <div @click="emit('close')" class="size-8 text-primary cursor-pointer">
+          <ArrowRightIcon v-if="anchor === 'right'"></ArrowRightIcon>
+          <ArrowLeftIcon v-else></ArrowLeftIcon>
+        </div>
         <h1>{{ title }}</h1>
       </div>
       <slot name="actions"></slot>
@@ -17,13 +25,24 @@
 </template>
 
 <script setup lang="ts">
-import { ArrowLeftIcon } from "@heroicons/vue/24/solid";
+import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/vue/24/solid";
+import { computed } from "vue";
 
 const emit = defineEmits<{
   close: [];
 }>();
 
-defineProps<{
-  title?: string;
-}>();
+const props = withDefaults(
+  defineProps<{
+    title?: string;
+    widthClass?: string;
+    anchor?: "left" | "right";
+  }>(),
+  {
+    widthClass: "",
+    anchor: "left",
+  }
+);
+
+const isFullWidth = computed(() => !props.widthClass);
 </script>

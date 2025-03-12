@@ -27,7 +27,7 @@
     <div
       v-for="tag in taskTags"
       :key="tag.id"
-      class="py-1 px-2 rounded-md border-1 border-text/30 flex gap-2 items-center justify-between"
+      class="cursor-pointer py-1 px-2 rounded-md border-1 border-text/30 flex gap-2 items-center justify-between"
       :style="tag.hex_color ? { borderColor: tag.hex_color } : null"
       @click="removeTag(tag)"
     >

@@ -5,7 +5,7 @@
       <QrCodeIcon
         v-if="!loading"
         @click="openQRModal"
-        class="w-full h-full text-primary"
+        class="w-full h-full text-primary cursor-pointer"
       />
       <Spinner v-else class="size-9" />
     </div>
@@ -25,7 +25,7 @@
       <PlayIcon
         v-if="!loading"
         @click="start"
-        class="w-full h-full text-primary"
+        class="w-full h-full text-primary cursor-pointer"
       />
       <Spinner v-else class="size-9" />
     </div>

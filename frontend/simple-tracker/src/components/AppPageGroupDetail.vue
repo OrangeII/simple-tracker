@@ -4,7 +4,7 @@
     @close="emit('close')"
   >
     <template #actions>
-      <div class="flex gap-1 items-center" @click="onSaveClick">
+      <div class="flex gap-1 items-center cursor-pointer" @click="onSaveClick">
         <CheckCircleIcon class="size-8 text-primary"></CheckCircleIcon>
         <h3 class="uppercase text-primary">save</h3>
       </div>
@@ -47,8 +47,11 @@
           </template>
         </EntriesListItemLayout>
       </TransitionGroup>
-      <Transition name="page-slide">
+      <Transition :name="isDesktop ? 'list-slide-right' : 'page-slide'">
         <AppPageEntryDetail
+          :anchor="isDesktop ? 'right' : ''"
+          :widthClass="isDesktop ? 'w-96' : ''"
+          :class="[isDesktop ? 'border-l border-text/10' : '']"
           v-if="detailPageEntry !== null"
           @close="detailPageEntry = null"
           :entry="detailPageEntry"
@@ -69,6 +72,7 @@ import { ref, watch } from "vue";
 import { useEntriesListStore } from "../stores/entriesList";
 import { deleteEntry } from "../common/supabaseClient";
 import { CheckCircleIcon } from "@heroicons/vue/24/solid";
+import { useBreakpoints } from "../common/breakpoints";
 import { updateTask } from "../common/supabaseClient";
 
 const entriesListStore = useEntriesListStore();
@@ -76,6 +80,7 @@ const props = defineProps<{ group: TaskGroup }>();
 const group = ref(props.group);
 const detailPageEntry = ref<TimeEntry | null>(null);
 const taskName = ref(props.group.name || "");
+const { isDesktop } = useBreakpoints();
 
 const emit = defineEmits<{
   close: [];

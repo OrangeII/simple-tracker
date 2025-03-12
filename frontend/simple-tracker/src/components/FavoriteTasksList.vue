@@ -14,15 +14,11 @@
         <h3 class="truncate">{{ task.name }}</h3>
       </template>
       <template #actions>
-        <div class="flex items-center pr-1">
-          <div
-            class="h-full flex flex-col items-center"
-            @click="onFavorite(task)"
-          >
-            <StartIconOutline class="size-8 text-primary"></StartIconOutline>
-            <h4>Remove</h4>
-          </div>
-        </div>
+        <AppButtonFavorite
+          @on-favorite-click="onFavorite(task)"
+          :isFavorite="false"
+          text="Remove"
+        ></AppButtonFavorite>
       </template>
     </EntriesListItemLayout>
   </TransitionGroup>
@@ -33,8 +29,8 @@ import type { Task } from "../common/types";
 import { useCurrentTaskStore } from "../stores/currentTask";
 import { useFavoriteTasksStore } from "../stores/favoriteTasks";
 import EntriesListItemLayout from "./EntriesListItemLayout.vue";
-import { StarIcon as StartIconOutline } from "@heroicons/vue/24/outline";
 import { StarIcon } from "@heroicons/vue/24/solid";
+import AppButtonFavorite from "./AppButtonFavorite.vue";
 
 const favoriteTasksStore = useFavoriteTasksStore();
 const currentTaskStore = useCurrentTaskStore();

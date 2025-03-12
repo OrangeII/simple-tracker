@@ -1,37 +1,53 @@
 <template>
   <div
-    :class="[preferencesStore.preferences.darkMode ? 'dark' : '']"
     class="bg-background text-text"
+    :class="[preferencesStore.preferences.darkMode ? 'dark' : '']"
   >
     <Login v-if="!userStore.user" />
-    <div v-else class="flex flex-col min-h-screen max-h-screen">
-      <header class="p-4 transition-[margin] ease-linear duration-300">
-        <Toolbar @settings-click="showSettingsPage = true" />
-      </header>
+    <div v-else :class="{ 'lg:flex lg:flex-row': isDesktop }">
+      <!-- Sidebar for desktop -->
+      <div
+        v-if="isDesktop"
+        class="w-fit h-screen border-r border-text/10 flex flex-col"
+      >
+        <Toolbar @settings-click="showSettingsPage = true"></Toolbar>
+      </div>
 
-      <main class="flex-1 overflow-auto" @scroll="handleScroll">
-        <Transition name="list-slide-left">
-          <div v-if="favoriteTasksStore.favorites.length > 0">
-            <FavoriteTasksList></FavoriteTasksList>
-          </div>
-        </Transition>
-        <EntriesList
-          :grouped="preferencesStore.preferences.displayEntriesGroupedById"
-        />
-      </main>
+      <div class="flex-1 flex flex-col min-h-screen max-h-screen">
+        <header
+          v-if="isMobile"
+          class="p-4 transition-[margin] ease-linear duration-300"
+        >
+          <Toolbar @settings-click="showSettingsPage = true" />
+        </header>
 
-      <footer class="p-4">
-        <StartTracking v-if="!currentTaskStore.task" />
-        <CurrentTask v-else />
-      </footer>
+        <main class="flex-1 overflow-auto" @scroll="handleScroll">
+          <Transition name="list-slide-left">
+            <div v-if="favoriteTasksStore.favorites.length > 0">
+              <FavoriteTasksList></FavoriteTasksList>
+            </div>
+          </Transition>
+          <EntriesList
+            :grouped="preferencesStore.preferences.displayEntriesGroupedById"
+          />
+        </main>
+
+        <footer class="p-4">
+          <StartTracking v-if="!currentTaskStore.task" />
+          <CurrentTask v-else />
+        </footer>
+      </div>
+
+      <Transition :name="isDesktop ? 'list-slide-left' : 'page-slide'">
+        <AppPageSettings
+          :widthClass="isDesktop ? 'w-86' : ''"
+          :class="[isDesktop ? 'border-r border-text/10' : '']"
+          anchor="left"
+          v-if="showSettingsPage"
+          @close="showSettingsPage = false"
+        ></AppPageSettings>
+      </Transition>
     </div>
-
-    <Transition name="page-slide">
-      <AppPageSettings
-        v-if="showSettingsPage"
-        @close="showSettingsPage = false"
-      ></AppPageSettings>
-    </Transition>
   </div>
 </template>
 
@@ -50,12 +66,14 @@ import Toolbar from "./components/Toolbar.vue";
 import AppPageSettings from "./components/AppPageSettings.vue";
 import { useFavoriteTasksStore } from "./stores/favoriteTasks.ts";
 import FavoriteTasksList from "./components/FavoriteTasksList.vue";
+import { useBreakpoints } from "./common/breakpoints.ts";
 
 const userStore = useUserStore();
 const currentTaskStore = useCurrentTaskStore();
 const favoriteTasksStore = useFavoriteTasksStore();
 const preferencesStore = usePreferencesStore();
 const showSettingsPage = ref(false);
+const { isMobile, isDesktop } = useBreakpoints();
 let authStateChangeSub: Subscription | null = null;
 
 onMounted(async () => {

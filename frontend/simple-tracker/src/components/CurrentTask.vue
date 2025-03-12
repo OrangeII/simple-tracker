@@ -12,7 +12,7 @@
       <StopIcon
         v-if="!loading"
         @click="stopTracking"
-        class="size-full text-primary"
+        class="size-full text-primary cursor-pointer"
       />
       <Spinner v-else class="size-9" />
     </div>

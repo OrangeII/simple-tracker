@@ -5,44 +5,54 @@
       class="absolute right-0 top-0 h-full flex items-center px-4 gap-6"
     >
       <slot name="actions">
-        <div class="flex items-center pr-1">
-          <div
-            v-if="!hideFavorite"
-            @click="$emit('onFavoriteClick')"
-            class="h-full flex flex-col items-center"
-          >
-            <div class="size-8 text-primary">
-              <StarIcon v-if="isFavorite"></StarIcon>
-              <StarIconOutline v-else="isFavorite"></StarIconOutline>
-            </div>
-            <h4>Favorite</h4>
-          </div>
-        </div>
-        <div class="flex items-center pr-1">
-          <div
-            v-if="!hideDelete"
-            @click="$emit('onDelete')"
-            class="h-full flex flex-col items-center"
-          >
-            <TrashIcon class="size-8 text-accent"></TrashIcon>
-            <h4>Delete</h4>
-          </div>
-        </div>
+        <AppButtonFavorite
+          v-if="!hideFavorite"
+          @on-favorite-click="$emit('onFavoriteClick')"
+          :isFavorite="isFavorite"
+        />
+        <AppButtonDelete v-if="!hideDelete" @on-delete="$emit('onDelete')" />
       </slot>
     </div>
     <div
-      class="rounded-sm p-2 my-1.5 flex flex-row justify-between items-center bg-background grainy dark:bg-blend-overlay min-h-18"
+      class="hover:outline-1 hover:outline-text/30 rounded-sm p-2 my-1.5 flex flex-row justify-between items-center bg-background grainy dark:bg-blend-overlay min-h-18 overflow-hidden"
       :style="{ transform: `translateX(${offset}px)` }"
       :class="{ 'transition-transform': !isSwiping }"
+      @click="$emit('onClick')"
       @touchstart="onTouchStart"
       @touchmove="onTouchMove"
       @touchend="onTouchEnd"
+      @mouseover="isHovering = true"
+      @mouseleave="isHovering = false"
     >
-      <div class="flex-grow max-w-[75%]" @click="$emit('onClick')">
+      <!-- actions toolbar -->
+      <Transition>
+        <div
+          ref="actionsContainerDesktop"
+          class="h-full flex items-center px-4 gap-6 flex-none"
+          v-if="isDesktop && isHovering"
+        >
+          <slot name="actions">
+            <AppButtonDelete
+              v-if="!hideDelete"
+              @on-delete="$emit('onDelete')"
+            />
+            <AppButtonFavorite
+              v-if="!hideFavorite"
+              @on-favorite-click="$emit('onFavoriteClick')"
+              :isFavorite="isFavorite"
+            />
+          </slot>
+        </div>
+      </Transition>
+
+      <div class="flex-1 min-w-0 overflow-hidden text-ellipsis mr-2">
         <slot name="left"></slot>
       </div>
 
-      <div @click="$emit('onResume')" class="flex flex-col items-end">
+      <div
+        @click.stop="$emit('onResume')"
+        class="flex flex-col items-end cursor-pointer flex-none"
+      >
         <div>
           <slot name="duration"></slot>
         </div>
@@ -58,8 +68,10 @@
 <script setup lang="ts">
 import { ref, useTemplateRef } from "vue";
 import Spinner from "./Spinner.vue";
-import { PlayIcon, TrashIcon, StarIcon } from "@heroicons/vue/24/solid";
-import { StarIcon as StarIconOutline } from "@heroicons/vue/24/outline";
+import { PlayIcon } from "@heroicons/vue/24/solid";
+import AppButtonFavorite from "./AppButtonFavorite.vue";
+import AppButtonDelete from "./AppButtonDelete.vue";
+import { useBreakpoints } from "../common/breakpoints";
 
 withDefaults(
   defineProps<{
@@ -86,6 +98,7 @@ defineEmits<{
 }>();
 
 const actionsContainer = useTemplateRef("actionsContainer");
+const { isDesktop } = useBreakpoints();
 
 const isSwipeOpen = ref(false);
 const isSwiping = ref(false);
@@ -98,6 +111,8 @@ const touchEndX = ref(0);
 //theese are negative numbers because we are translating to the left
 const offset = ref(0);
 const SWIPE_THRESHOLD = -60;
+
+const isHovering = ref(false);
 
 const onTouchStart = (e: TouchEvent) => {
   isSwiping.value = false;

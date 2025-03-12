@@ -55,15 +55,23 @@
       </div>
     </div>
 
-    <Transition name="page-slide">
+    <Transition :name="isDesktop ? 'list-slide-right' : 'page-slide'">
       <AppPageEntryDetail
+        :key="detailPageEntry?.id"
+        :anchor="isDesktop ? 'right' : ''"
+        :widthClass="isDesktop ? 'w-96' : ''"
+        :class="[isDesktop ? 'border-l border-text/10' : '']"
         v-if="detailPageEntry !== null"
         @close="detailPageEntry = null"
         :entry="detailPageEntry"
       ></AppPageEntryDetail>
     </Transition>
-    <Transition name="page-slide">
+    <Transition :name="isDesktop ? 'list-slide-right' : 'page-slide'">
       <AppPageGroupDetail
+        :key="detailPageGroup?.id"
+        :anchor="isDesktop ? 'right' : ''"
+        :widthClass="isDesktop ? 'w-96' : ''"
+        :class="[isDesktop ? 'border-l border-text/10' : '']"
         v-if="detailPageGroup !== null"
         @close="detailPageGroup = null"
         :group="detailPageGroup"
@@ -95,7 +103,9 @@ import AppPageEntryDetail from "./AppPageEntryDetail.vue";
 import AppPageGroupDetail from "./AppPageGroupDetail.vue";
 import { useFavoriteTasksStore } from "../stores/favoriteTasks.ts";
 import EntriesListSkeleton from "./EntriesListSkeleton.vue";
+import { useBreakpoints } from "../common/breakpoints.ts";
 
+const { isDesktop } = useBreakpoints();
 const observer = ref<IntersectionObserver | null>(null);
 const entriesListStore = useEntriesListStore();
 const currentTaskStore = useCurrentTaskStore();
@@ -158,6 +168,10 @@ const onDeleteGroup = async (group: TaskGroup) => {
 };
 
 const onGroupClick = (group: TaskGroup) => {
+  //when clicking on group, clear both entry and group detail
+  detailPageEntry.value = null;
+  detailPageGroup.value = null;
+
   if (group.entries.length == 1) {
     detailPageEntry.value = group.entries[0];
   } else {
@@ -165,6 +179,9 @@ const onGroupClick = (group: TaskGroup) => {
   }
 };
 const onEntryClick = (entry: TimeEntry) => {
+  //possible switch from group detail to entry detail, clear group detail
+  detailPageGroup.value = null;
+
   detailPageEntry.value = entry;
 };
 
