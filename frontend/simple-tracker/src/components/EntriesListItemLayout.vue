@@ -31,18 +31,22 @@
       </slot>
     </div>
     <div
-      class="rounded-sm p-2 my-1.5 flex flex-row justify-between items-center bg-background grainy dark:bg-blend-overlay min-h-18"
+      class="hover:outline-1 hover:outline-text/30 rounded-sm p-2 my-1.5 flex flex-row justify-between items-center bg-background grainy dark:bg-blend-overlay min-h-18"
       :style="{ transform: `translateX(${offset}px)` }"
       :class="{ 'transition-transform': !isSwiping }"
+      @click="$emit('onClick')"
       @touchstart="onTouchStart"
       @touchmove="onTouchMove"
       @touchend="onTouchEnd"
     >
-      <div class="flex-grow max-w-[75%]" @click="$emit('onClick')">
+      <div class="flex-grow max-w-[75%]">
         <slot name="left"></slot>
       </div>
 
-      <div @click="$emit('onResume')" class="flex flex-col items-end">
+      <div
+        @click.stop="$emit('onResume')"
+        class="flex flex-col items-end cursor-pointer"
+      >
         <div>
           <slot name="duration"></slot>
         </div>
