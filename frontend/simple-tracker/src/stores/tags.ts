@@ -1,7 +1,12 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { type Tag } from "../common/types";
-import { getTags, createTag, deleteTag } from "../common/supabaseClient";
+import {
+  getTags,
+  createTag,
+  deleteTag,
+  updateTag as updateTagSupabase,
+} from "../common/supabaseClient";
 
 export const useTagsStore = defineStore("tags", () => {
   const tags = ref<Tag[]>([]);
@@ -26,14 +31,36 @@ export const useTagsStore = defineStore("tags", () => {
   }
 
   async function removeTag(id: string) {
-    if (!tags.value.find((t) => (t.id = id))) {
-      return;
+    if (!tags.value.find((t) => t.id === id)) {
+      return false;
     }
 
     const success = await deleteTag(id);
     if (success) {
       tags.value = tags.value?.filter((tag) => tag.id !== id);
     }
+    return success;
+  }
+
+  async function updateTag(updatedTag: Tag): Promise<boolean> {
+    const index = tags.value.findIndex((tag) => tag.id === updatedTag.id);
+    if (index === -1) {
+      return false;
+    }
+
+    // Optimistically update the tag in the store
+    const oldTag = { ...tags.value[index] };
+    tags.value[index] = updatedTag;
+
+    // Update in the database
+    const success = await updateTagSupabase(updatedTag);
+
+    // Revert if the update failed
+    if (!success) {
+      tags.value[index] = oldTag;
+    }
+
+    return success;
   }
 
   return {
@@ -41,5 +68,6 @@ export const useTagsStore = defineStore("tags", () => {
     loadTags,
     addTag,
     removeTag,
+    updateTag,
   };
 });

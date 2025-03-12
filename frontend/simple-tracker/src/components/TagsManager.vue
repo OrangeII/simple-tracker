@@ -30,8 +30,9 @@
         <div
           v-for="tag in filteredTags"
           :key="tag.id"
-          class="bg-background dark:bg-blend-overlay grainy rounded-md p-3 hover:outline-1 hover:outline-text/30"
+          class="bg-background dark:bg-blend-overlay grainy rounded-md p-3 hover:outline-1 hover:outline-text/30 cursor-pointer transition-all hover:shadow-md"
           :style="[tag.hex_color ? { outlineColor: tag.hex_color } : {}]"
+          @click="selectTag(tag)"
         >
           <div class="flex items-center">
             <div
@@ -50,6 +51,19 @@
         </div>
       </div>
     </div>
+
+    <!-- Tag detail panel -->
+    <Transition :name="isDesktop ? 'list-slide-right' : 'page-slide'">
+      <AppPageTag
+        v-if="selectedTag"
+        :tag="selectedTag"
+        :anchor="isDesktop ? 'right' : 'left'"
+        :widthClass="isDesktop ? 'w-128' : ''"
+        :class="[isDesktop ? 'border-l border-text/10' : '']"
+        @close="selectedTag = null"
+        @tag-updated="onTagUpdated"
+      />
+    </Transition>
   </div>
 </template>
 
@@ -57,6 +71,8 @@
 import { onMounted, ref, computed } from "vue";
 import { useTagsStore } from "../stores/tags";
 import { type Tag } from "../common/types";
+import AppPageTag from "./AppPageTag.vue";
+import { useBreakpoints } from "../common/breakpoints";
 
 onMounted(async () => {
   try {
@@ -69,6 +85,8 @@ onMounted(async () => {
 const tagsStore = useTagsStore();
 const isLoading = ref(true);
 const searchQuery = ref("");
+const selectedTag = ref<Tag | null>(null);
+const { isDesktop } = useBreakpoints();
 
 const filteredTags = computed(() => {
   if (!searchQuery.value) {
@@ -79,4 +97,13 @@ const filteredTags = computed(() => {
     tag.name.toLowerCase().includes(query)
   );
 });
+
+const selectTag = (tag: Tag) => {
+  selectedTag.value = tag;
+};
+
+const onTagUpdated = (_updatedTag: Tag) => {
+  // Close the detail panel
+  selectedTag.value = null;
+};
 </script>

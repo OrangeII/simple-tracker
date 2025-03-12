@@ -14,7 +14,9 @@
           <ArrowRightIcon v-if="anchor === 'right'"></ArrowRightIcon>
           <ArrowLeftIcon v-else></ArrowLeftIcon>
         </div>
-        <h1>{{ title }}</h1>
+        <slot name="title">
+          <h1>{{ title }}</h1>
+        </slot>
       </div>
       <slot name="actions"></slot>
     </header>

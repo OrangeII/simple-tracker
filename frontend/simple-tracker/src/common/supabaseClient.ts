@@ -421,6 +421,27 @@ export const updateTask = async (task: Task): Promise<boolean> => {
   }
 };
 
+export const updateTag = async (tag: Tag): Promise<boolean> => {
+  try {
+    const { error } = await supabase
+      .from("tags")
+      .update({
+        name: tag.name.trim(),
+        hex_color: tag.hex_color,
+      })
+      .eq("id", tag.id);
+
+    if (error) {
+      console.error("Error updating tag:", error);
+      return false;
+    }
+    return true;
+  } catch (error) {
+    console.error("Error in updateTag:", error);
+    return false;
+  }
+};
+
 export const getFavorites = async (): Promise<Task[] | null> => {
   try {
     const {

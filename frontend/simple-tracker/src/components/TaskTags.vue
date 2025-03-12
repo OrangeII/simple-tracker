@@ -23,22 +23,20 @@
       </div>
     </template>
 
-    <!-- Skeleton loader -->
-    <div
+    <TaskTag
       v-for="tag in taskTags"
       :key="tag.id"
-      class="cursor-pointer py-1 px-2 rounded-md border-1 border-text/30 flex gap-2 items-center justify-between"
-      :style="tag.hex_color ? { borderColor: tag.hex_color } : null"
+      :name="tag.name"
+      :hex_color="tag.hex_color"
       @click="removeTag(tag)"
     >
-      <XCircleIcon
-        class="size-6 text-accent"
-        :style="tag.hex_color ? { color: tag.hex_color } : null"
-      ></XCircleIcon>
-      <div>
-        {{ tag.name }}
-      </div>
-    </div>
+      <template #icon>
+        <XCircleIcon
+          class="size-6 text-accent"
+          :style="tag.hex_color ? { color: tag.hex_color } : null"
+        ></XCircleIcon>
+      </template>
+    </TaskTag>
   </div>
 </template>
 
@@ -53,6 +51,7 @@ import {
   removeTagFromTask,
 } from "../common/supabaseClient";
 import { XCircleIcon } from "@heroicons/vue/24/solid";
+import TaskTag from "./TaskTag.vue";
 
 const tagsStore = useTagsStore();
 const taskTags = ref<Tag[]>([]);
