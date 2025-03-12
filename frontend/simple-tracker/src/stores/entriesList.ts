@@ -9,6 +9,13 @@ export const useEntriesListStore = defineStore("entriesList", () => {
   const loading = ref<boolean>(false);
   const entries = ref<TimeEntry[]>([]);
 
+  function reset() {
+    limit.value = 30; //default limit
+    page.value = 0; //default page
+    loading.value = false;
+    entries.value = [];
+  }
+
   async function fetchEntries() {
     if (loading.value) return;
     loading.value = true;
@@ -157,5 +164,6 @@ export const useEntriesListStore = defineStore("entriesList", () => {
     removeEntries,
     updateEntry,
     updateTask,
+    reset,
   };
 });
