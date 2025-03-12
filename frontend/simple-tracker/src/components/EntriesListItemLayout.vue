@@ -14,37 +14,44 @@
       </slot>
     </div>
     <div
-      class="hover:outline-1 hover:outline-text/30 rounded-sm p-2 my-1.5 flex flex-row justify-between items-center bg-background grainy dark:bg-blend-overlay min-h-18"
+      class="hover:outline-1 hover:outline-text/30 rounded-sm p-2 my-1.5 flex flex-row justify-between items-center bg-background grainy dark:bg-blend-overlay min-h-18 overflow-hidden"
       :style="{ transform: `translateX(${offset}px)` }"
       :class="{ 'transition-transform': !isSwiping }"
       @click="$emit('onClick')"
       @touchstart="onTouchStart"
       @touchmove="onTouchMove"
       @touchend="onTouchEnd"
+      @mouseover="isHovering = true"
+      @mouseleave="isHovering = false"
     >
-      <div class="flex-grow max-w-[75%]">
-        <slot name="left"></slot>
-      </div>
-
       <!-- actions toolbar -->
-      <div
-        ref="actionsContainerDesktop"
-        class="h-full flex items-center px-4 gap-6"
-        v-if="isDesktop"
-      >
-        <slot name="actions">
-          <AppButtonFavorite
-            v-if="!hideFavorite"
-            @on-favorite-click="$emit('onFavoriteClick')"
-            :isFavorite="isFavorite"
-          />
-          <AppButtonDelete v-if="!hideDelete" @on-delete="$emit('onDelete')" />
-        </slot>
+      <Transition>
+        <div
+          ref="actionsContainerDesktop"
+          class="h-full flex items-center px-4 gap-6 flex-none"
+          v-if="isDesktop && isHovering"
+        >
+          <slot name="actions">
+            <AppButtonDelete
+              v-if="!hideDelete"
+              @on-delete="$emit('onDelete')"
+            />
+            <AppButtonFavorite
+              v-if="!hideFavorite"
+              @on-favorite-click="$emit('onFavoriteClick')"
+              :isFavorite="isFavorite"
+            />
+          </slot>
+        </div>
+      </Transition>
+
+      <div class="flex-1 min-w-0 overflow-hidden text-ellipsis mr-2">
+        <slot name="left"></slot>
       </div>
 
       <div
         @click.stop="$emit('onResume')"
-        class="flex flex-col items-end cursor-pointer"
+        class="flex flex-col items-end cursor-pointer flex-none"
       >
         <div>
           <slot name="duration"></slot>
@@ -104,6 +111,8 @@ const touchEndX = ref(0);
 //theese are negative numbers because we are translating to the left
 const offset = ref(0);
 const SWIPE_THRESHOLD = -60;
+
+const isHovering = ref(false);
 
 const onTouchStart = (e: TouchEvent) => {
   isSwiping.value = false;
