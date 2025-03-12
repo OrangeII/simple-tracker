@@ -29,7 +29,6 @@ import type { Task } from "../common/types";
 import { useCurrentTaskStore } from "../stores/currentTask";
 import { useFavoriteTasksStore } from "../stores/favoriteTasks";
 import EntriesListItemLayout from "./EntriesListItemLayout.vue";
-import { StarIcon as StartIconOutline } from "@heroicons/vue/24/outline";
 import { StarIcon } from "@heroicons/vue/24/solid";
 import AppButtonFavorite from "./AppButtonFavorite.vue";
 

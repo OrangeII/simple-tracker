@@ -10,16 +10,7 @@
           @on-favorite-click="$emit('onFavoriteClick')"
           :isFavorite="isFavorite"
         />
-        <div class="flex items-center pr-1">
-          <div
-            v-if="!hideDelete"
-            @click="$emit('onDelete')"
-            class="h-full flex flex-col items-center"
-          >
-            <TrashIcon class="size-8 text-accent"></TrashIcon>
-            <h4>Delete</h4>
-          </div>
-        </div>
+        <AppButtonDelete v-if="!hideDelete" @on-delete="$emit('onDelete')" />
       </slot>
     </div>
     <div
@@ -54,8 +45,9 @@
 <script setup lang="ts">
 import { ref, useTemplateRef } from "vue";
 import Spinner from "./Spinner.vue";
-import { PlayIcon, TrashIcon } from "@heroicons/vue/24/solid";
+import { PlayIcon } from "@heroicons/vue/24/solid";
 import AppButtonFavorite from "./AppButtonFavorite.vue";
+import AppButtonDelete from "./AppButtonDelete.vue";
 
 withDefaults(
   defineProps<{

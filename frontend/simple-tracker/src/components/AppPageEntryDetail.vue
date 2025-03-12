@@ -16,6 +16,7 @@
             class="w-full focus:outline-none focus:border-none text-2xl font-bold caret-primary"
           />
         </div>
+
         <div class="pb-4 flex flex-col gap-2">
           <div>
             <div class="flex gap-1 items-center pb-1">
@@ -100,7 +101,6 @@ import {
 import { useEntriesListStore } from "../stores/entriesList";
 import { updateEntry } from "../common/supabaseClient";
 import TaskTags from "./TaskTags.vue";
-
 const props = defineProps<{ entry: TimeEntry }>();
 
 const taskName = ref(props.entry.tasks?.name || "");
