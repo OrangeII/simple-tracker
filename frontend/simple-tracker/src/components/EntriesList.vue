@@ -57,6 +57,7 @@
 
     <Transition :name="isDesktop ? 'list-slide-right' : 'page-slide'">
       <AppPageEntryDetail
+        :key="detailPageEntry?.id"
         :anchor="isDesktop ? 'right' : ''"
         :widthClass="isDesktop ? 'w-96' : ''"
         :class="[isDesktop ? 'border-l border-text/10' : '']"
@@ -67,6 +68,7 @@
     </Transition>
     <Transition :name="isDesktop ? 'list-slide-right' : 'page-slide'">
       <AppPageGroupDetail
+        :key="detailPageGroup?.id"
         :anchor="isDesktop ? 'right' : ''"
         :widthClass="isDesktop ? 'w-96' : ''"
         :class="[isDesktop ? 'border-l border-text/10' : '']"
@@ -166,6 +168,10 @@ const onDeleteGroup = async (group: TaskGroup) => {
 };
 
 const onGroupClick = (group: TaskGroup) => {
+  //when clicking on group, clear both entry and group detail
+  detailPageEntry.value = null;
+  detailPageGroup.value = null;
+
   if (group.entries.length == 1) {
     detailPageEntry.value = group.entries[0];
   } else {
@@ -173,6 +179,9 @@ const onGroupClick = (group: TaskGroup) => {
   }
 };
 const onEntryClick = (entry: TimeEntry) => {
+  //possible switch from group detail to entry detail, clear group detail
+  detailPageGroup.value = null;
+
   detailPageEntry.value = entry;
 };
 
