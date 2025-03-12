@@ -18,12 +18,12 @@ export const useTagsStore = defineStore("tags", () => {
     }
   }
 
-  async function addTag(name: string): Promise<Tag | null> {
+  async function addTag(name: string, color?: string): Promise<Tag | null> {
     if (tags.value.find((t) => t.name == name)) {
       return null;
     }
 
-    const data = await createTag(name);
+    const data = await createTag(name, color);
     if (data) {
       tags.value = [...(tags.value || []), data];
     }

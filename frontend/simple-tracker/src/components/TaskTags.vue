@@ -52,6 +52,7 @@ import {
 } from "../common/supabaseClient";
 import { XCircleIcon } from "@heroicons/vue/24/solid";
 import TaskTag from "./TaskTag.vue";
+import { generateRandomColor } from "../common/colorUtils";
 
 const tagsStore = useTagsStore();
 const taskTags = ref<Tag[]>([]);
@@ -80,7 +81,7 @@ const onSubmit = async (payload: { value: string; matchCount: number }) => {
   if (newTagName == "") return;
 
   //create new tag
-  const added = await tagsStore.addTag(newTagName);
+  const added = await tagsStore.addTag(newTagName, generateRandomColor());
   if (!added) {
     return;
   }
