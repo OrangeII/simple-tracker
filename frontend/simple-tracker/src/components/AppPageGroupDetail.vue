@@ -47,8 +47,11 @@
           </template>
         </EntriesListItemLayout>
       </TransitionGroup>
-      <Transition name="page-slide">
+      <Transition :name="isDesktop ? 'list-slide-right' : 'page-slide'">
         <AppPageEntryDetail
+          :anchor="isDesktop ? 'right' : ''"
+          :widthClass="isDesktop ? 'w-96' : ''"
+          :class="[isDesktop ? 'border-l border-text/10' : '']"
           v-if="detailPageEntry !== null"
           @close="detailPageEntry = null"
           :entry="detailPageEntry"
@@ -69,12 +72,14 @@ import { ref, watch } from "vue";
 import { useEntriesListStore } from "../stores/entriesList";
 import { deleteEntry } from "../common/supabaseClient";
 import { CheckCircleIcon } from "@heroicons/vue/24/solid";
+import { useBreakpoints } from "../common/breakpoints";
 
 const entriesListStore = useEntriesListStore();
 const props = defineProps<{ group: TaskGroup }>();
 const group = ref(props.group);
 const detailPageEntry = ref<TimeEntry | null>(null);
 const taskName = ref(props.group.name || "");
+const { isDesktop } = useBreakpoints();
 
 const emit = defineEmits<{
   close: [];
