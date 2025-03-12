@@ -7,11 +7,14 @@
           class="h-10 w-full rounded-md bg-background grainy dark:bg-blend-overlay"
         ></div>
       </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
-        <div v-for="i in 6" :key="i" class="animate-pulse">
-          <div
-            class="h-24 rounded-md bg-background grainy dark:bg-blend-overlay"
-          ></div>
+      <div class="flex flex-wrap gap-2 mt-4">
+        <div
+          v-for="i in 6"
+          :key="i"
+          class="py-1 px-2 rounded-md flex gap-2 items-center justify-between animate-pulse bg-background grainy dark:bg-blend-overlay"
+        >
+          <div class="size-6"></div>
+          <div class="w-16 h-4"></div>
         </div>
       </div>
     </div>
