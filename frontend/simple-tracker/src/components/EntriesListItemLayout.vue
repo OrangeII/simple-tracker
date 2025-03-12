@@ -5,19 +5,11 @@
       class="absolute right-0 top-0 h-full flex items-center px-4 gap-6"
     >
       <slot name="actions">
-        <div class="flex items-center pr-1">
-          <div
-            v-if="!hideFavorite"
-            @click="$emit('onFavoriteClick')"
-            class="h-full flex flex-col items-center"
-          >
-            <div class="size-8 text-primary">
-              <StarIcon v-if="isFavorite"></StarIcon>
-              <StarIconOutline v-else="isFavorite"></StarIconOutline>
-            </div>
-            <h4>Favorite</h4>
-          </div>
-        </div>
+        <AppButtonFavorite
+          v-if="!hideFavorite"
+          @on-favorite-click="$emit('onFavoriteClick')"
+          :isFavorite="isFavorite"
+        />
         <div class="flex items-center pr-1">
           <div
             v-if="!hideDelete"
@@ -62,8 +54,8 @@
 <script setup lang="ts">
 import { ref, useTemplateRef } from "vue";
 import Spinner from "./Spinner.vue";
-import { PlayIcon, TrashIcon, StarIcon } from "@heroicons/vue/24/solid";
-import { StarIcon as StarIconOutline } from "@heroicons/vue/24/outline";
+import { PlayIcon, TrashIcon } from "@heroicons/vue/24/solid";
+import AppButtonFavorite from "./AppButtonFavorite.vue";
 
 withDefaults(
   defineProps<{
