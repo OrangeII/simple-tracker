@@ -1,11 +1,12 @@
 <template>
   <AppPage @close="emit('close')" :anchor="anchor" :widthClass="widthClass">
     <template #title>
-      <h1>Edit tag</h1>
+      <h1>{{ isNew ? "Create new tag" : "Edit tag" }}</h1>
     </template>
     <template #actions>
       <div class="flex gap-4 items-center">
         <div
+          v-if="!isNew"
           class="flex gap-1 items-center cursor-pointer"
           @click="deleteTagConfirm"
         >
@@ -23,12 +24,17 @@
         <div class="pb-4">
           <div class="flex gap-1 items-center">
             <TaskTag
+              v-if="!isNew"
               class="w-fit"
               :name="tag.name"
               :hex_color="tag.hex_color"
             />
-            <ArrowRightIcon class="size-6 text-text/70" />
-            <TaskTag class="w-fit" :name="tagName" :hex_color="tagColor" />
+            <ArrowRightIcon v-if="!isNew" class="size-6 text-text/70" />
+            <TaskTag
+              class="w-fit"
+              :name="tagName.toLowerCase() || 'new tag'"
+              :hex_color="tagColor"
+            />
           </div>
         </div>
 
@@ -38,6 +44,8 @@
             type="text"
             v-model="tagName"
             class="w-full focus:outline-none focus:border-none text-2xl font-bold caret-primary"
+            placeholder="Tag name"
+            :autofocus="isNew"
           />
         </div>
 
@@ -76,11 +84,13 @@ const props = defineProps<{
   tag: Tag;
   anchor?: "left" | "right";
   widthClass?: string;
+  isNew?: boolean;
 }>();
 
 const emit = defineEmits<{
   close: [];
   "tag-updated": [tag: Tag];
+  "tag-created": [tag: Tag];
 }>();
 
 const tagsStore = useTagsStore();
@@ -92,16 +102,26 @@ const saveTag = async () => {
     return; // Don't save empty tag names
   }
 
-  const updatedTag = {
-    ...props.tag,
-    name: tagName.value.trim(),
-    hex_color: tagColor.value,
-  };
+  if (props.isNew) {
+    // Create new tag
+    const newTag = await tagsStore.addTag(tagName.value.trim(), tagColor.value);
+    if (newTag) {
+      emit("tag-created", newTag);
+      emit("close");
+    }
+  } else {
+    // Update existing tag
+    const updatedTag = {
+      ...props.tag,
+      name: tagName.value.trim(),
+      hex_color: tagColor.value,
+    };
 
-  const success = await tagsStore.updateTag(updatedTag);
-  if (success) {
-    emit("tag-updated", updatedTag);
-    emit("close");
+    const success = await tagsStore.updateTag(updatedTag);
+    if (success) {
+      emit("tag-updated", updatedTag);
+      emit("close");
+    }
   }
 };
 
