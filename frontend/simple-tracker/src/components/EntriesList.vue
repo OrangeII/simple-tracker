@@ -119,8 +119,11 @@ const { grouped = false } = defineProps<{
 }>();
 
 onMounted(async () => {
-  entriesListStore.reset();
-  entriesListStore.fetchEntries();
+  if (entriesListStore.entries.length === 0) {
+    entriesListStore.reset();
+    entriesListStore.fetchEntries();
+  }
+
   observer.value = new IntersectionObserver(observerCallBack, {
     rootMargin: "100px",
   });
