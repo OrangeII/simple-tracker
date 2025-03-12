@@ -24,14 +24,7 @@
 
         <!-- main content -->
         <main class="flex-1 overflow-auto" @scroll="handleScroll">
-          <Transition name="list-slide-left">
-            <div v-if="favoriteTasksStore.favorites.length > 0">
-              <FavoriteTasksList></FavoriteTasksList>
-            </div>
-          </Transition>
-          <EntriesList
-            :grouped="preferencesStore.preferences.displayEntriesGroupedById"
-          />
+          <AppNavigation />
         </main>
 
         <footer class="p-4">
@@ -60,15 +53,14 @@ import type { Subscription } from "@supabase/supabase-js";
 import Login from "./components/Login.vue";
 import StartTracking from "./components/StartTracking.vue";
 import CurrentTask from "./components/CurrentTask.vue";
-import EntriesList from "./components/EntriesList.vue";
 import { useUserStore } from "./stores/user";
 import { useCurrentTaskStore } from "./stores/currentTask";
 import { usePreferencesStore } from "./stores/preferences";
 import Toolbar from "./components/Toolbar.vue";
 import AppPageSettings from "./components/AppPageSettings.vue";
 import { useFavoriteTasksStore } from "./stores/favoriteTasks.ts";
-import FavoriteTasksList from "./components/FavoriteTasksList.vue";
 import { useBreakpoints } from "./common/breakpoints.ts";
+import AppNavigation from "./components/AppNavigation.vue";
 
 const userStore = useUserStore();
 const currentTaskStore = useCurrentTaskStore();

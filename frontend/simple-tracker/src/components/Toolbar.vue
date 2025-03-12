@@ -33,6 +33,14 @@
         @click="preferencesStore.toggle('displayEntriesGroupedById')"
       />
 
+      <HomeIcon
+        class="text-primary size-8 cursor-pointer"
+        @click="navigationStore.navigateTo(NavigationPages.ENTRIES)"
+      ></HomeIcon>
+      <TagIcon
+        class="text-primary size-8 cursor-pointer"
+        @click="navigationStore.navigateTo(NavigationPages.TAGS)"
+      ></TagIcon>
       <Cog8ToothIcon
         class="text-primary size-8 cursor-pointer"
         @click="$emit('settingsClick')"
@@ -49,9 +57,13 @@ import {
   MoonIcon,
   SunIcon,
   Cog8ToothIcon,
+  HomeIcon,
+  TagIcon,
 } from "@heroicons/vue/24/solid";
 import { useBreakpoints } from "../common/breakpoints";
+import { useNavigationStore, NavigationPages } from "../stores/navigation";
 
+const navigationStore = useNavigationStore();
 const { isMobile } = useBreakpoints();
 
 defineEmits<{

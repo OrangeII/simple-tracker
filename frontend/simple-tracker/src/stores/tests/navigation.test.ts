@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { createPinia, setActivePinia } from "pinia";
-import { useNavigationStore, NavigationPage } from "../navigation";
+import { useNavigationStore, NavigationPages } from "../navigation";
 
 describe("Navigation Store", () => {
   beforeEach(() => {
@@ -9,13 +9,13 @@ describe("Navigation Store", () => {
 
   it("should initialize with 'entries' as default page", () => {
     const store = useNavigationStore();
-    expect(store.currentPage).toBe(NavigationPage.ENTRIES);
+    expect(store.currentPage).toBe(NavigationPages.ENTRIES);
   });
 
   it("should change current page when navigating", () => {
     const store = useNavigationStore();
     // Get all enum values
-    const pages = Object.values(NavigationPage);
+    const pages = Object.values(NavigationPages);
 
     for (const page of pages) {
       store.navigateTo(page);
@@ -27,12 +27,12 @@ describe("Navigation Store", () => {
     const store = useNavigationStore();
 
     // Default is "entries"
-    expect(store.isCurrentPage(NavigationPage.ENTRIES)).toBe(true);
-    expect(store.isCurrentPage(NavigationPage.TAGS)).toBe(false);
+    expect(store.isCurrentPage(NavigationPages.ENTRIES)).toBe(true);
+    expect(store.isCurrentPage(NavigationPages.TAGS)).toBe(false);
 
     // Change page
-    store.navigateTo(NavigationPage.TAGS);
-    expect(store.isCurrentPage(NavigationPage.TAGS)).toBe(true);
-    expect(store.isCurrentPage(NavigationPage.ENTRIES)).toBe(false);
+    store.navigateTo(NavigationPages.TAGS);
+    expect(store.isCurrentPage(NavigationPages.TAGS)).toBe(true);
+    expect(store.isCurrentPage(NavigationPages.ENTRIES)).toBe(false);
   });
 });
