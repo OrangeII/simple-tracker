@@ -26,6 +26,22 @@
         <slot name="left"></slot>
       </div>
 
+      <!-- actions toolbar -->
+      <div
+        ref="actionsContainerDesktop"
+        class="h-full flex items-center px-4 gap-6"
+        v-if="isDesktop"
+      >
+        <slot name="actions">
+          <AppButtonFavorite
+            v-if="!hideFavorite"
+            @on-favorite-click="$emit('onFavoriteClick')"
+            :isFavorite="isFavorite"
+          />
+          <AppButtonDelete v-if="!hideDelete" @on-delete="$emit('onDelete')" />
+        </slot>
+      </div>
+
       <div
         @click.stop="$emit('onResume')"
         class="flex flex-col items-end cursor-pointer"
@@ -48,6 +64,7 @@ import Spinner from "./Spinner.vue";
 import { PlayIcon } from "@heroicons/vue/24/solid";
 import AppButtonFavorite from "./AppButtonFavorite.vue";
 import AppButtonDelete from "./AppButtonDelete.vue";
+import { useBreakpoints } from "../common/breakpoints";
 
 withDefaults(
   defineProps<{
@@ -74,6 +91,7 @@ defineEmits<{
 }>();
 
 const actionsContainer = useTemplateRef("actionsContainer");
+const { isDesktop } = useBreakpoints();
 
 const isSwipeOpen = ref(false);
 const isSwiping = ref(false);

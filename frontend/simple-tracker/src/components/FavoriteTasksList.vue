@@ -15,7 +15,7 @@
       </template>
       <template #actions>
         <AppButtonFavorite
-          @click="onFavorite(task)"
+          @on-favorite-click="onFavorite(task)"
           :isFavorite="false"
           text="Remove"
         ></AppButtonFavorite>

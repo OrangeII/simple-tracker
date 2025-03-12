@@ -1,8 +1,8 @@
 <template>
   <div class="flex items-center pr-1">
     <div
-      @click="$emit('onFavoriteClick')"
-      class="h-full flex flex-col items-center"
+      @click.stop="$emit('onFavoriteClick')"
+      class="cursor-pointer h-full flex flex-col items-center"
     >
       <div class="size-8 text-primary">
         <StarIcon v-if="isFavorite"></StarIcon>

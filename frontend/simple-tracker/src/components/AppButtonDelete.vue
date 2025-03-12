@@ -1,6 +1,9 @@
 <template>
   <div class="flex items-center pr-1">
-    <div @click="$emit('onDelete')" class="h-full flex flex-col items-center">
+    <div
+      @click.stop="$emit('onDelete')"
+      class="cursor-pointer h-full flex flex-col items-center"
+    >
       <TrashIcon class="size-8 text-accent"></TrashIcon>
       <h4>Delete</h4>
     </div>
