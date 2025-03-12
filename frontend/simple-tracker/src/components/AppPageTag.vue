@@ -1,17 +1,37 @@
 <template>
   <AppPage @close="emit('close')" :anchor="anchor" :widthClass="widthClass">
     <template #title>
-      <h1>Edit</h1>
-      <TaskTag class="w-fit" :name="tagName" :hex_color="tagColor" />
+      <h1>Edit tag</h1>
     </template>
     <template #actions>
-      <div class="flex gap-1 items-center cursor-pointer" @click="saveTag">
-        <CheckCircleIcon class="size-8 text-primary"></CheckCircleIcon>
-        <h3 class="uppercase text-primary">save</h3>
+      <div class="flex gap-4 items-center">
+        <div
+          class="flex gap-1 items-center cursor-pointer"
+          @click="deleteTagConfirm"
+        >
+          <TrashIcon class="size-8 text-accent"></TrashIcon>
+          <h3 class="uppercase text-accent">delete</h3>
+        </div>
+        <div class="flex gap-1 items-center cursor-pointer" @click="saveTag">
+          <CheckCircleIcon class="size-8 text-primary"></CheckCircleIcon>
+          <h3 class="uppercase text-primary">save</h3>
+        </div>
       </div>
     </template>
     <template #main>
       <div class="p-4">
+        <div class="pb-4">
+          <div class="flex gap-1 items-center">
+            <TaskTag
+              class="w-fit"
+              :name="tag.name"
+              :hex_color="tag.hex_color"
+            />
+            <ArrowRightIcon class="size-6 text-text/70" />
+            <TaskTag class="w-fit" :name="tagName" :hex_color="tagColor" />
+          </div>
+        </div>
+
         <div class="pb-4">
           <input
             required="true"
@@ -38,10 +58,6 @@
           </div>
         </div>
       </div>
-
-      <div class="fixed bottom-4 w-full max-w-[inherit] flex justify-center">
-        <AppButtonDelete @on-delete="deleteTagConfirm" />
-      </div>
     </template>
   </AppPage>
 </template>
@@ -52,8 +68,8 @@ import AppPage from "./AppPage.vue";
 import { useTagsStore } from "../stores/tags";
 import { type Tag } from "../common/types";
 import { CheckCircleIcon, PaintBrushIcon } from "@heroicons/vue/24/solid";
-import AppButtonDelete from "./AppButtonDelete.vue";
 import TaskTag from "./TaskTag.vue";
+import { ArrowRightIcon, TrashIcon } from "@heroicons/vue/24/solid";
 
 const props = defineProps<{
   title?: string;
