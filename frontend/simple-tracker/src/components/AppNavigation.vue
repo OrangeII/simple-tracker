@@ -19,14 +19,15 @@
     v-else-if="navigationStore.isCurrentPage(NavigationPages.TAGS)"
     :key="NavigationPages.TAGS"
   >
-    TAGS
+    <TagsManager />
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useNavigationStore, NavigationPages } from "../stores/navigation";
 import FavoriteTasksList from "./FavoriteTasksList.vue";
 import EntriesList from "./EntriesList.vue";
+import TagsManager from "./TagsManager.vue";
 import { usePreferencesStore } from "../stores/preferences";
 import { useFavoriteTasksStore } from "../stores/favoriteTasks.ts";
 
