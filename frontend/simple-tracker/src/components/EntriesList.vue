@@ -142,6 +142,9 @@ const onResume = async (entry: TimeEntry) => {
 const onDeleteEntry = async (entry: TimeEntry) => {
   if (!entry.tasks) return;
 
+  const c = confirm("Are you sure you want to delete this entry?");
+  if (!c) return;
+
   //optimistically remove the entry
   entriesListStore.removeEntries([entry]);
 
@@ -154,6 +157,11 @@ const onDeleteEntry = async (entry: TimeEntry) => {
 
 const onDeleteGroup = async (group: TaskGroup) => {
   if (!group.entries[0].tasks) return;
+
+  const c = confirm(
+    `Are you sure you want do delete ${group.entries.length} entries?`
+  );
+  if (!c) return;
 
   //optimistically remove the group
   entriesListStore.removeEntries(group.entries);

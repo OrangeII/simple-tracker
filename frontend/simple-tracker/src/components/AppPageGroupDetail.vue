@@ -117,9 +117,10 @@ const onEntryClick = (entry: TimeEntry) => {
 };
 
 const onDeleteClick = async (entry: TimeEntry) => {
-  console.log(entry);
-
   if (!entry.tasks) return;
+
+  const c = confirm("Are you sure you want to delete this entry?");
+  if (!c) return;
 
   //optimistically remove the entry
   entriesListStore.removeEntries([entry]);
