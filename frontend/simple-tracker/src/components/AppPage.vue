@@ -10,10 +10,10 @@
   >
     <header class="p-4 flex flex-row justify-between items-center">
       <div class="flex flex-row items-center gap-4">
-        <ArrowLeftIcon
-          @click="emit('close')"
-          class="size-8 text-primary"
-        ></ArrowLeftIcon>
+        <div @click="emit('close')" class="size-8 text-primary">
+          <ArrowRightIcon v-if="anchor === 'right'"></ArrowRightIcon>
+          <ArrowLeftIcon v-else></ArrowLeftIcon>
+        </div>
         <h1>{{ title }}</h1>
       </div>
       <slot name="actions"></slot>
@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import { ArrowLeftIcon } from "@heroicons/vue/24/solid";
+import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/vue/24/solid";
 import { computed } from "vue";
 
 const emit = defineEmits<{
@@ -40,7 +40,7 @@ const props = withDefaults(
   }>(),
   {
     widthClass: "",
-    anchor: "right",
+    anchor: "left",
   }
 );
 
