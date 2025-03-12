@@ -26,29 +26,21 @@
       />
 
       <!-- Tags display section -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4">
-        <div
+      <div class="flex flex-wrap gap-2 mt-4">
+        <TaskTag
           v-for="tag in filteredTags"
           :key="tag.id"
-          class="bg-background dark:bg-blend-overlay grainy rounded-md p-3 hover:outline-1 hover:outline-text/30 cursor-pointer transition-all hover:shadow-md"
-          :style="[tag.hex_color ? { outlineColor: tag.hex_color } : {}]"
+          :name="tag.name"
+          :hex_color="tag.hex_color"
+          class="w-fit"
           @click="selectTag(tag)"
-        >
-          <div class="flex items-center">
-            <div
-              class="w-4 h-4 rounded-full mr-2"
-              :style="{ backgroundColor: tag.hex_color || '#888888' }"
-            ></div>
-            <h3 class="font-medium truncate">{{ tag.name }}</h3>
-          </div>
-        </div>
-
-        <div
-          v-if="filteredTags.length === 0"
-          class="col-span-full text-center p-4 text-text/70"
-        >
-          No tags found matching your search.
-        </div>
+        ></TaskTag>
+      </div>
+      <div
+        v-if="filteredTags.length === 0"
+        class="col-span-full text-center p-4 text-text/70"
+      >
+        No tags found matching your search.
       </div>
     </div>
 
@@ -57,6 +49,7 @@
       <AppPageTag
         v-if="selectedTag"
         :tag="selectedTag"
+        :key="selectedTag.id"
         :anchor="isDesktop ? 'right' : 'left'"
         :widthClass="isDesktop ? 'w-128' : ''"
         :class="[isDesktop ? 'border-l border-text/10' : '']"
@@ -73,6 +66,7 @@ import { useTagsStore } from "../stores/tags";
 import { type Tag } from "../common/types";
 import AppPageTag from "./AppPageTag.vue";
 import { useBreakpoints } from "../common/breakpoints";
+import TaskTag from "./TaskTag.vue";
 
 onMounted(async () => {
   try {
