@@ -14,6 +14,7 @@
       </div>
 
       <div class="flex-1 flex flex-col min-h-screen max-h-screen">
+        <!-- mobile header -->
         <header
           v-if="isMobile"
           class="p-4 transition-[margin] ease-linear duration-300"
@@ -21,6 +22,7 @@
           <Toolbar @settings-click="showSettingsPage = true" />
         </header>
 
+        <!-- main content -->
         <main class="flex-1 overflow-auto" @scroll="handleScroll">
           <Transition name="list-slide-left">
             <div v-if="favoriteTasksStore.favorites.length > 0">
