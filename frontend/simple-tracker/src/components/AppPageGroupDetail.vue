@@ -4,7 +4,7 @@
     @close="emit('close')"
   >
     <template #actions>
-      <div class="flex gap-1 items-center" @click="onSaveClick">
+      <div class="flex gap-1 items-center cursor-pointer" @click="onSaveClick">
         <CheckCircleIcon class="size-8 text-primary"></CheckCircleIcon>
         <h3 class="uppercase text-primary">save</h3>
       </div>

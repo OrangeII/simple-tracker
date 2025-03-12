@@ -3,7 +3,7 @@
     <template #main>
       <div class="p-4 flex flex-col gap-4">
         <div
-          class="flex gap-4 items-center"
+          class="flex gap-4 items-center cursor-pointer"
           @click="preferencesStore.toggle('darkMode')"
         >
           <div>
@@ -23,7 +23,7 @@
         </div>
 
         <div
-          class="flex gap-4 items-center"
+          class="flex gap-4 items-center cursor-pointer"
           @click="preferencesStore.toggle('displayEntriesGroupedById')"
         >
           <Square3Stack3DIcon
@@ -42,7 +42,7 @@
           </h3>
         </div>
 
-        <div class="flex gap-4 items-center" @click="signOut">
+        <div class="flex gap-4 items-center cursor-pointer" @click="signOut">
           <ArrowLeftStartOnRectangleIcon class="text-primary size-8" />
           <h3>Sign out</h3>
         </div>

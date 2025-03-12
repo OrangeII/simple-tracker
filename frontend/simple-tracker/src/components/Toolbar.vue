@@ -34,7 +34,7 @@
       />
 
       <Cog8ToothIcon
-        class="text-primary size-8"
+        class="text-primary size-8 cursor-pointer"
         @click="$emit('settingsClick')"
       ></Cog8ToothIcon>
     </div>

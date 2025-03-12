@@ -10,7 +10,7 @@
   >
     <header class="p-4 flex flex-row justify-between items-center">
       <div class="flex flex-row items-center gap-4">
-        <div @click="emit('close')" class="size-8 text-primary">
+        <div @click="emit('close')" class="size-8 text-primary cursor-pointer">
           <ArrowRightIcon v-if="anchor === 'right'"></ArrowRightIcon>
           <ArrowLeftIcon v-else></ArrowLeftIcon>
         </div>
