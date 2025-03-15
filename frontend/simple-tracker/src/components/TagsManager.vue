@@ -34,7 +34,7 @@
           class="bg-background text-primary rounded-md border-primary border-1 p-2 flex items-center gap-1 hover:opacity-90"
         >
           <PlusCircleIcon class="size-6" />
-          New Tag
+          New
         </button>
       </div>
 

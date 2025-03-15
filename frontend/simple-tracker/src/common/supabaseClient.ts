@@ -78,7 +78,8 @@ export const stopCurrentTracking = async (): Promise<boolean> => {
 
 export const createTask = async (
   name: string,
-  altCode?: string
+  altCode?: string,
+  isFavorite?: boolean
 ): Promise<Task | null> => {
   try {
     let { data: createdTask, error } = await supabase
@@ -86,6 +87,7 @@ export const createTask = async (
       .insert({
         name: name,
         alt_code: altCode,
+        isFavorite: isFavorite,
       })
       .select()
       .single();

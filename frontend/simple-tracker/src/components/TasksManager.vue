@@ -13,8 +13,19 @@
         class="bg-background text-primary rounded-md border-primary border-1 p-2 flex items-center gap-1 hover:opacity-90"
       >
         <PlusCircleIcon class="size-6" />
-        New Task
+        New
       </button>
+    </div>
+
+    <!-- tasks in a grid -->
+    <div
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+    >
+      <TaskCard
+        v-for="task in tasksStore.tasks"
+        :key="task.id"
+        :task="task"
+      ></TaskCard>
     </div>
   </div>
 </template>
@@ -22,7 +33,10 @@
 <script setup lang="ts">
 import { PlusCircleIcon } from "@heroicons/vue/24/solid";
 import { ref } from "vue";
+import { useTasksStore } from "../stores/tasks";
+import TaskCard from "./TaskCard.vue";
 
+const tasksStore = useTasksStore();
 const searchQuery = ref("");
 
 const createNewTask = () => {

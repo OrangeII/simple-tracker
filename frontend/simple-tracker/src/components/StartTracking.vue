@@ -126,6 +126,8 @@ const startTrackingTask = async (params: {
     return;
   }
 
+  //add task to the tasks store in case it was a new task
+
   //update the store with the actual task
   currentTaskStore.task = ret;
   message.value = "Task started succesfully!";
