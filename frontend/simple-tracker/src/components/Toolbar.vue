@@ -37,6 +37,10 @@
         class="text-primary size-8 cursor-pointer"
         @click="navigationStore.navigateTo(NavigationPages.ENTRIES)"
       ></HomeIcon>
+      <QueueListIcon
+        class="text-primary size-8 cursor-pointer"
+        @click="navigationStore.navigateTo(NavigationPages.TASKS)"
+      ></QueueListIcon>
       <TagIcon
         class="text-primary size-8 cursor-pointer"
         @click="navigationStore.navigateTo(NavigationPages.TAGS)"
@@ -59,6 +63,7 @@ import {
   Cog8ToothIcon,
   HomeIcon,
   TagIcon,
+  QueueListIcon,
 } from "@heroicons/vue/24/solid";
 import { useBreakpoints } from "../common/breakpoints";
 import { useNavigationStore, NavigationPages } from "../stores/navigation";

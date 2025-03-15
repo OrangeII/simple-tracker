@@ -14,6 +14,14 @@
     />
   </div>
 
+  <!-- Tasks management page -->
+  <div
+    v-else-if="navigationStore.isCurrentPage(NavigationPages.TASKS)"
+    :key="NavigationPages.TASKS"
+  >
+    <TasksManager />
+  </div>
+
   <!-- Tags management page -->
   <div
     v-else-if="navigationStore.isCurrentPage(NavigationPages.TAGS)"
@@ -30,6 +38,7 @@ import EntriesList from "./EntriesList.vue";
 import TagsManager from "./TagsManager.vue";
 import { usePreferencesStore } from "../stores/preferences";
 import { useFavoriteTasksStore } from "../stores/favoriteTasks.ts";
+import TasksManager from "./TasksManager.vue";
 
 const preferencesStore = usePreferencesStore();
 const favoriteTasksStore = useFavoriteTasksStore();
