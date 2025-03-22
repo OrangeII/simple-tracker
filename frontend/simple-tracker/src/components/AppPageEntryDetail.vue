@@ -75,12 +75,23 @@
           <h3 class="text-text/70">Alt. code</h3>
           <h3>{{ entry.tasks?.alt_code }}</h3>
         </div>
-        <div>
+
+        <!-- task tags -->
+        <div class="mb-4">
           <div class="flex gap-1 items-center pb-1">
             <TagIcon class="text-text/70 size-5"></TagIcon>
             <h3 class="text-text/70">Tags</h3>
           </div>
           <TaskTags v-if="entry.tasks" :task="entry.tasks" />
+        </div>
+
+        <!-- task stats -->
+        <div class="mb-4">
+          <div class="flex gap-1 items-center pb-1">
+            <ChartBarIcon class="text-text/70 size-5"></ChartBarIcon>
+            <h3 class="text-text/70">Stats</h3>
+          </div>
+          <TaskStats v-if="entry.tasks" :taskId="entry.tasks.id" />
         </div>
       </div>
     </template>
@@ -97,10 +108,13 @@ import {
   StopCircleIcon,
   CheckCircleIcon,
   TagIcon,
+  ChartBarIcon,
 } from "@heroicons/vue/24/solid";
 import { useEntriesListStore } from "../stores/entriesList";
 import { updateEntry } from "../common/supabaseClient";
 import TaskTags from "./TaskTags.vue";
+import TaskStats from "./TaskStats.vue";
+
 const props = defineProps<{ entry: TimeEntry }>();
 
 const taskName = ref(props.entry.tasks?.name || "");

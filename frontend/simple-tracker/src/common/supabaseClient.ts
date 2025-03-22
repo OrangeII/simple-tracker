@@ -5,6 +5,7 @@ import type {
   CurrentTasksRecord,
   Tag,
   Task,
+  TaskStats,
   TimeEntry,
 } from "./types.ts";
 import { generateRandomColor } from "./colorUtils.ts";
@@ -607,6 +608,35 @@ export const getTasks = async (): Promise<Task[] | null> => {
     return data;
   } catch (error) {
     console.error("Error in getTasks:", error);
+    return null;
+  }
+};
+
+export const getTaskStats = async (
+  taskId: string
+): Promise<TaskStats | null> => {
+  try {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+      return null;
+    }
+
+    const { data, error } = await supabase
+      .from("task_stats")
+      .select("*")
+      .eq("task_id", taskId)
+      .maybeSingle();
+
+    if (error) {
+      console.error("Error fetching task stats:", error);
+      return null;
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error in getTaskStats:", error);
     return null;
   }
 };

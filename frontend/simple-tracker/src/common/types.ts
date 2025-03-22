@@ -63,3 +63,10 @@ export interface Tag {
   name: string;
   hex_color?: string;
 }
+
+export interface TaskStats {
+  user_id: string;
+  task_id: string;
+  total_time: number;
+  entries_count: number;
+}
