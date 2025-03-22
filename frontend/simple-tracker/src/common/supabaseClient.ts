@@ -4,6 +4,7 @@ import type {
   CurrentTask,
   CurrentTasksRecord,
   Tag,
+  TagStats,
   Task,
   TaskStats,
   TimeEntry,
@@ -616,13 +617,6 @@ export const getTaskStats = async (
   taskId: string
 ): Promise<TaskStats | null> => {
   try {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    if (!user) {
-      return null;
-    }
-
     const { data, error } = await supabase
       .from("task_stats")
       .select("*")
@@ -637,6 +631,26 @@ export const getTaskStats = async (
     return data;
   } catch (error) {
     console.error("Error in getTaskStats:", error);
+    return null;
+  }
+};
+
+export const getTagStats = async (tagId: string): Promise<TagStats | null> => {
+  try {
+    const { data, error } = await supabase
+      .from("tag_stats")
+      .select("*")
+      .eq("tag_id", tagId)
+      .maybeSingle();
+
+    if (error) {
+      console.error("Error fetching tag stats:", error);
+      return null;
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error in getTagStats:", error);
     return null;
   }
 };

@@ -70,3 +70,11 @@ export interface TaskStats {
   total_time: string;
   entries_count: number;
 }
+
+export interface TagStats {
+  user_id: string;
+  tag_id: string;
+  tasks_count: number;
+  total_time: string;
+  entries_count: number;
+}

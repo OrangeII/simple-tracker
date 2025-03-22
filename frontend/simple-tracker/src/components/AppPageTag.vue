@@ -61,6 +61,15 @@
           </div>
         </div>
 
+        <!-- tag stats -->
+        <div v-if="!isNew" class="mb-4">
+          <div class="flex gap-1 items-center pb-1">
+            <ChartBarIcon class="text-text/70 size-5"></ChartBarIcon>
+            <h3 class="text-text/70">Stats</h3>
+          </div>
+          <TagStats :tagId="tag.id" />
+        </div>
+
         <!-- tag delete button -->
         <div class="flex items-center justify-around">
           <div
@@ -82,9 +91,14 @@ import { ref } from "vue";
 import AppPage from "./AppPage.vue";
 import { useTagsStore } from "../stores/tags";
 import { type Tag } from "../common/types";
-import { CheckCircleIcon, PaintBrushIcon } from "@heroicons/vue/24/solid";
+import {
+  CheckCircleIcon,
+  PaintBrushIcon,
+  ChartBarIcon,
+} from "@heroicons/vue/24/solid";
 import TaskTag from "./TaskTag.vue";
 import { ArrowRightIcon, TrashIcon } from "@heroicons/vue/24/solid";
+import TagStats from "./TagStats.vue";
 
 const props = defineProps<{
   title?: string;
