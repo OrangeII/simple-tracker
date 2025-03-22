@@ -67,6 +67,6 @@ export interface Tag {
 export interface TaskStats {
   user_id: string;
   task_id: string;
-  total_time: number;
+  total_time: string;
   entries_count: number;
 }
