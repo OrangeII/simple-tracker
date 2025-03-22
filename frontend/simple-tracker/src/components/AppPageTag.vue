@@ -5,14 +5,6 @@
     </template>
     <template #actions>
       <div class="flex gap-4 items-center">
-        <div
-          v-if="!isNew"
-          class="flex gap-1 items-center cursor-pointer"
-          @click="deleteTagConfirm"
-        >
-          <TrashIcon class="size-8 text-accent"></TrashIcon>
-          <h3 class="uppercase text-accent">delete</h3>
-        </div>
         <div class="flex gap-1 items-center cursor-pointer" @click="saveTag">
           <CheckCircleIcon class="size-8 text-primary"></CheckCircleIcon>
           <h3 class="uppercase text-primary">save</h3>
@@ -20,7 +12,8 @@
       </div>
     </template>
     <template #main>
-      <div class="p-4">
+      <div class="p-4 flex flex-col">
+        <!-- tag preview -->
         <div class="pb-4">
           <div class="flex gap-1 items-center">
             <TaskTag
@@ -38,6 +31,7 @@
           </div>
         </div>
 
+        <!-- tag name -->
         <div class="pb-4">
           <input
             required="true"
@@ -49,6 +43,7 @@
           />
         </div>
 
+        <!-- tag color picker -->
         <div class="mb-4">
           <div class="flex gap-1 items-center pb-1">
             <PaintBrushIcon class="text-text/70 size-5"></PaintBrushIcon>
@@ -63,6 +58,18 @@
               v-model="tagColor"
               class="p-1 rounded-md grainy bg-background dark:bg-blend-overlay grow font-medium focus:outline-none focus:border-none w-full h-12"
             />
+          </div>
+        </div>
+
+        <!-- tag delete button -->
+        <div class="flex items-center justify-around">
+          <div
+            v-if="!isNew"
+            class="flex gap-1 items-center cursor-pointer"
+            @click="deleteTagConfirm"
+          >
+            <TrashIcon class="size-8 text-accent"></TrashIcon>
+            <h3 class="uppercase text-accent">delete</h3>
           </div>
         </div>
       </div>
