@@ -89,10 +89,19 @@ export interface TimeInsightsDailyPatterns {
   activity: number;
 }
 
+export interface TaskTimeInfo {
+  id: string;
+  name: string;
+  duration: number;
+}
+
 export interface TimeInsights {
   weekTotal: number;
   monthTotal: number;
   allTimeTotal: number;
+  topWeeklyTasks: Array<TaskTimeInfo>;
+  topMonthlyTasks: Array<TaskTimeInfo>;
+  topAllTimeTasks: Array<TaskTimeInfo>;
   weeklyActivity: Array<TimeInsightsWeeklyActivity>;
   dailyPatterns: Array<TimeInsightsDailyPatterns>;
 }

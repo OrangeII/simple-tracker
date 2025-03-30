@@ -7,6 +7,7 @@ import type {
   TagStats,
   Task,
   TaskStats,
+  TaskTimeInfo,
   TimeEntry,
   TimeInsights,
 } from "./types.ts";
@@ -695,6 +696,11 @@ export const getTimeInsights = async (): Promise<TimeInsights | null> => {
     let monthTotal = 0;
     let allTimeTotal = 0;
 
+    // for top tasks
+    const weeklyTasks = new Map<string, TaskTimeInfo>();
+    const monthlyTasks = new Map<string, TaskTimeInfo>();
+    const allTimeTasks = new Map<string, TaskTimeInfo>();
+
     // For weekly activity chart
     const daysOfWeek = [
       "Sunday",
@@ -718,15 +724,41 @@ export const getTimeInsights = async (): Promise<TimeInsights | null> => {
       const startTime = new Date(entry.start_time);
       const endTime = new Date(entry.end_time);
       const duration = endTime.getTime() - startTime.getTime();
+      const taskName = entry.tasks.name || "Unknown Task";
+      const taskId = entry.tasks.id;
 
       // Total durations
+      if (!allTimeTasks.has(taskId)) {
+        allTimeTasks.set(taskId, {
+          id: taskId,
+          name: taskName,
+          duration: 0,
+        });
+      }
+      allTimeTasks.get(taskId)!.duration += duration;
       allTimeTotal += duration;
 
       if (startTime >= startOfMonth) {
+        if (!monthlyTasks.has(taskId)) {
+          monthlyTasks.set(taskId, {
+            id: taskId,
+            name: taskName,
+            duration: 0,
+          });
+        }
+        monthlyTasks.get(taskId)!.duration += duration;
         monthTotal += duration;
       }
 
       if (startTime >= startOfWeek) {
+        if (!weeklyTasks.has(taskId)) {
+          weeklyTasks.set(taskId, {
+            id: taskId,
+            name: taskName,
+            duration: 0,
+          });
+        }
+        weeklyTasks.get(taskId)!.duration += duration;
         weekTotal += duration;
 
         // Add to weekly chart data
@@ -739,10 +771,24 @@ export const getTimeInsights = async (): Promise<TimeInsights | null> => {
       dailyPatterns[hour].activity += duration / 3600000; // Convert ms to hours
     }
 
+    // get top 3 tasks
+    const topWeeklyTasks = Array.from(weeklyTasks.values())
+      .sort((a, b) => b.duration - a.duration)
+      .slice(0, 3);
+    const topMonthlyTasks = Array.from(monthlyTasks.values())
+      .sort((a, b) => b.duration - a.duration)
+      .slice(0, 3);
+    const topAllTimeTasks = Array.from(allTimeTasks.values())
+      .sort((a, b) => b.duration - a.duration)
+      .slice(0, 3);
+
     return {
       weekTotal,
       monthTotal,
       allTimeTotal,
+      topWeeklyTasks,
+      topMonthlyTasks,
+      topAllTimeTasks,
       weeklyActivity,
       dailyPatterns,
     };

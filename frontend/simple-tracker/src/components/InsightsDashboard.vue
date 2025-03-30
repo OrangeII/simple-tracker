@@ -2,36 +2,21 @@
   <div class="p-4 flex flex-col gap-3">
     <!-- Time summary -->
     <div class="flex gap-3 flex-col md:flex-row">
-      <div
-        class="rounded-sm grainy bg-background dark:bg-blend-overlay p-4 flex-1"
-      >
-        <h4 class="text-text/70">This week</h4>
-        <div class="flex gap-2 items-center">
-          <ClockIcon class="size-4 text-text/70"></ClockIcon>
-          <h3>{{ stats.weekTotal }}</h3>
-          <h4 class="text-text/70">Total time</h4>
-        </div>
-      </div>
-      <div
-        class="rounded-sm grainy bg-background dark:bg-blend-overlay p-4 flex-1"
-      >
-        <h4 class="text-text/70">This month</h4>
-        <div class="flex gap-2 items-center">
-          <ClockIcon class="size-4 text-text/70"></ClockIcon>
-          <h3>{{ stats.monthTotal }}</h3>
-          <h4 class="text-text/70">Total time</h4>
-        </div>
-      </div>
-      <div
-        class="rounded-sm grainy bg-background dark:bg-blend-overlay p-4 flex-1"
-      >
-        <h4 class="text-text/70">All time</h4>
-        <div class="flex gap-2 items-center">
-          <ClockIcon class="size-4 text-text/70"></ClockIcon>
-          <h3>{{ stats.allTimeTotal }}</h3>
-          <h4 class="text-text/70">Total time</h4>
-        </div>
-      </div>
+      <AppInsightsTopTasksCard
+        :time-total="stats.weekTotal"
+        :top-tasks="stats.topWeeklyTasks"
+        title="This week"
+      />
+      <AppInsightsTopTasksCard
+        :time-total="stats.monthTotal"
+        :top-tasks="stats.topMonthlyTasks"
+        title="This month"
+      />
+      <AppInsightsTopTasksCard
+        :time-total="stats.allTimeTotal"
+        :top-tasks="stats.topAllTimeTasks"
+        title="All time"
+      />
     </div>
 
     <!-- Weekly time chart -->
@@ -71,14 +56,25 @@ import DailyPatternsChart from "./charts/DailyPatternsChart.vue";
 import type {
   TimeInsightsDailyPatterns,
   TimeInsightsWeeklyActivity,
+  TaskTimeInfo,
 } from "../common/types";
-import { ClockIcon } from "@heroicons/vue/24/solid";
+import AppInsightsTopTasksCard from "./AppInsightsTopTasksCard.vue";
 
 // Stats for the summary cards
-const stats = ref({
+const stats = ref<{
+  weekTotal: string;
+  monthTotal: string;
+  allTimeTotal: string;
+  topWeeklyTasks: Array<TaskTimeInfo>;
+  topMonthlyTasks: Array<TaskTimeInfo>;
+  topAllTimeTasks: Array<TaskTimeInfo>;
+}>({
   weekTotal: "00:00:00",
   monthTotal: "00:00:00",
   allTimeTotal: "00:00:00",
+  topWeeklyTasks: [],
+  topMonthlyTasks: [],
+  topAllTimeTasks: [],
 });
 
 // Charts data
@@ -99,6 +95,9 @@ onMounted(async () => {
       weekTotal: toDurationString(new Date(insights.weekTotal)),
       monthTotal: toDurationString(new Date(insights.monthTotal)),
       allTimeTotal: toDurationString(new Date(insights.allTimeTotal)),
+      topWeeklyTasks: insights.topWeeklyTasks,
+      topMonthlyTasks: insights.topMonthlyTasks,
+      topAllTimeTasks: insights.topAllTimeTasks,
     };
 
     // Update chart data
