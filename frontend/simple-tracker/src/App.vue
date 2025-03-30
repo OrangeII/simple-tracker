@@ -65,8 +65,8 @@ import { useVisibility } from "./common/useVisibility.ts";
 
 const { onVisibilityChange } = useVisibility();
 const unregisterVisibilityChange = onVisibilityChange(
-  () => console.log("visible"),
-  () => console.log("hidden")
+  () => currentTaskStore.fetchCurrentTask(),
+  () => {}
 );
 
 const userStore = useUserStore();
