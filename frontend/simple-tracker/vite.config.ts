@@ -5,15 +5,15 @@ import tailwindcss from "@tailwindcss/vite";
 import { VitePWA } from "vite-plugin-pwa";
 
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [
     vue(),
-    mkcert(),
+    ...(mode === "development" ? [mkcert()] : []),
     tailwindcss(),
     VitePWA({
       registerType: "autoUpdate",
       devOptions: {
-        enabled: true,
+        enabled: mode === "development",
       },
       includeAssets: ["favicon.ico", "apple-touch-icon.png", "mask-icon.svg"],
       manifest: {
@@ -36,4 +36,4 @@ export default defineConfig({
       },
     }),
   ],
-});
+}));
