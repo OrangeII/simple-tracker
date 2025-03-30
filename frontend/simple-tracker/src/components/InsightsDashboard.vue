@@ -1,20 +1,23 @@
 <template>
   <div class="p-4 flex flex-col gap-3">
     <!-- Time summary -->
-    <div class="flex gap-3 flex-col md:flex-row">
+    <div class="flex gap-3 flex-wrap">
       <AppInsightsTopTasksCard
+        class="min-w-70"
         :time-total="stats.weekTotal"
         :top-tasks="stats.topWeeklyTasks"
         title="This week"
         :loading="loading"
       />
       <AppInsightsTopTasksCard
+        class="min-w-70"
         :time-total="stats.monthTotal"
         :top-tasks="stats.topMonthlyTasks"
         title="This month"
         :loading="loading"
       />
       <AppInsightsTopTasksCard
+        class="min-w-70"
         :time-total="stats.allTimeTotal"
         :top-tasks="stats.topAllTimeTasks"
         title="All time"
