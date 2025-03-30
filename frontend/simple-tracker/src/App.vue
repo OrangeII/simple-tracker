@@ -63,7 +63,11 @@ import { useBreakpoints } from "./common/breakpoints.ts";
 import AppNavigation from "./components/AppNavigation.vue";
 import { useVisibility } from "./common/useVisibility.ts";
 
-useVisibility();
+const { onVisibilityChange } = useVisibility();
+const unregisterVisibilityChange = onVisibilityChange(
+  () => console.log("visible"),
+  () => console.log("hidden")
+);
 
 const userStore = useUserStore();
 const currentTaskStore = useCurrentTaskStore();
@@ -92,6 +96,7 @@ onMounted(async () => {
 onUnmounted(() => {
   currentTaskStore.cleanup();
   authStateChangeSub?.unsubscribe();
+  unregisterVisibilityChange();
 });
 
 /**
