@@ -78,3 +78,21 @@ export interface TagStats {
   total_time: string;
   entries_count: number;
 }
+
+export interface TimeInsightsWeeklyActivity {
+  day: string;
+  hours: number;
+}
+
+export interface TimeInsightsDailyPatterns {
+  hour: string;
+  activity: number;
+}
+
+export interface TimeInsights {
+  weekTotal: number;
+  monthTotal: number;
+  allTimeTotal: number;
+  weeklyActivity: Array<TimeInsightsWeeklyActivity>;
+  dailyPatterns: Array<TimeInsightsDailyPatterns>;
+}

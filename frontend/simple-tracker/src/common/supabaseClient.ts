@@ -8,6 +8,7 @@ import type {
   Task,
   TaskStats,
   TimeEntry,
+  TimeInsights,
 } from "./types.ts";
 import { generateRandomColor } from "./colorUtils.ts";
 
@@ -651,6 +652,102 @@ export const getTagStats = async (tagId: string): Promise<TagStats | null> => {
     return data;
   } catch (error) {
     console.error("Error in getTagStats:", error);
+    return null;
+  }
+};
+
+export const getTimeInsights = async (): Promise<TimeInsights | null> => {
+  try {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+      return null;
+    }
+
+    // Get current date info
+    const now = new Date();
+    const startOfWeek = new Date(now);
+    startOfWeek.setDate(now.getDate() - now.getDay());
+    startOfWeek.setHours(0, 0, 0, 0);
+
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+    // Fetch time entries for the calculations
+    const { data: timeEntries, error } = await supabase
+      .from("time_entries")
+      .select(
+        `
+        *,
+        tasks (*)
+      `
+      )
+      .eq("user_id", user.id)
+      .not("end_time", "is", null);
+
+    if (error) {
+      console.error("Error fetching time entries for insights:", error);
+      return null;
+    }
+
+    // Calculate time totals
+    let weekTotal = 0;
+    let monthTotal = 0;
+    let allTimeTotal = 0;
+
+    // For weekly activity chart
+    const daysOfWeek = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
+    const weeklyActivity = daysOfWeek.map((day) => ({ day, hours: 0 }));
+
+    // For daily patterns chart
+    const hoursOfDay = Array.from({ length: 24 }, (_, i) => `${i}:00`);
+    const dailyPatterns = hoursOfDay.map((hour) => ({ hour, activity: 0 }));
+
+    // Process time entries
+    for (const entry of timeEntries) {
+      if (!entry.end_time) continue;
+
+      const startTime = new Date(entry.start_time);
+      const endTime = new Date(entry.end_time);
+      const duration = endTime.getTime() - startTime.getTime();
+
+      // Total durations
+      allTimeTotal += duration;
+
+      if (startTime >= startOfMonth) {
+        monthTotal += duration;
+      }
+
+      if (startTime >= startOfWeek) {
+        weekTotal += duration;
+
+        // Add to weekly chart data
+        const dayOfWeek = startTime.getDay();
+        weeklyActivity[dayOfWeek].hours += duration / 3600000; // Convert ms to hours
+      }
+
+      // Add to daily patterns
+      const hour = startTime.getHours();
+      dailyPatterns[hour].activity += duration / 3600000; // Convert ms to hours
+    }
+
+    return {
+      weekTotal,
+      monthTotal,
+      allTimeTotal,
+      weeklyActivity,
+      dailyPatterns,
+    };
+  } catch (error) {
+    console.error("Error in getTimeInsights:", error);
     return null;
   }
 };
