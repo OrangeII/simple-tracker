@@ -5,6 +5,7 @@ import { ref } from "vue";
 export enum NavigationPages {
   ENTRIES = "entries",
   TAGS = "tags",
+  DASHBOARD = "dashboard",
 }
 
 export const useNavigationStore = defineStore("navigation", () => {
