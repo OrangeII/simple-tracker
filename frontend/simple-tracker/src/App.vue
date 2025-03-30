@@ -61,6 +61,9 @@ import AppPageSettings from "./components/AppPageSettings.vue";
 import { useFavoriteTasksStore } from "./stores/favoriteTasks.ts";
 import { useBreakpoints } from "./common/breakpoints.ts";
 import AppNavigation from "./components/AppNavigation.vue";
+import { useVisibility } from "./common/useVisibility.ts";
+
+useVisibility();
 
 const userStore = useUserStore();
 const currentTaskStore = useCurrentTaskStore();
