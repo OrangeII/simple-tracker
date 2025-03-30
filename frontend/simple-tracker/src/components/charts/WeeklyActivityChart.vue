@@ -16,6 +16,7 @@ import {
   CategoryScale,
   LinearScale,
 } from "chart.js";
+import { generateRandomColor } from "../../common/colorUtils";
 
 ChartJS.register(
   Title,
@@ -40,8 +41,8 @@ const chartData = computed(() => {
       {
         label: "Hours",
         data: props.weeklyData.map((item) => item.hours),
-        backgroundColor: "#4CAF50",
-        borderRadius: 5,
+        backgroundColor: generateRandomColor(),
+        borderRadius: 2,
       },
     ],
   };

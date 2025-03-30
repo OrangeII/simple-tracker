@@ -17,6 +17,7 @@ import {
   PointElement,
   CategoryScale,
 } from "chart.js";
+import { generateRandomColor } from "../../common/colorUtils";
 
 ChartJS.register(
   Title,
@@ -36,14 +37,15 @@ const props = defineProps<{
 }>();
 
 const chartData = computed(() => {
+  const color = generateRandomColor();
   return {
     labels: props.dailyData.map((item) => item.hour),
     datasets: [
       {
         label: "Activity",
         data: props.dailyData.map((item) => item.activity),
-        backgroundColor: "rgba(75, 192, 192, 0.2)",
-        borderColor: "rgba(75, 192, 192, 1)",
+        backgroundColor: color,
+        borderColor: color,
         borderWidth: 2,
         tension: 0.4,
         fill: true,
