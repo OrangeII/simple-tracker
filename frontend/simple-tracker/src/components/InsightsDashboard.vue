@@ -5,20 +5,32 @@
       <div
         class="rounded-sm grainy bg-background dark:bg-blend-overlay p-4 flex-1"
       >
-        <h4 class="text-text/70">Total tracked this week</h4>
-        <h3>{{ stats.weekTotal }}</h3>
+        <h4 class="text-text/70">This week</h4>
+        <div class="flex gap-2 items-center">
+          <ClockIcon class="size-4 text-text/70"></ClockIcon>
+          <h3>{{ stats.weekTotal }}</h3>
+          <h4 class="text-text/70">Total time</h4>
+        </div>
       </div>
       <div
         class="rounded-sm grainy bg-background dark:bg-blend-overlay p-4 flex-1"
       >
-        <h4 class="text-text/70">Total tracked this month</h4>
-        <h3>{{ stats.monthTotal }}</h3>
+        <h4 class="text-text/70">This month</h4>
+        <div class="flex gap-2 items-center">
+          <ClockIcon class="size-4 text-text/70"></ClockIcon>
+          <h3>{{ stats.monthTotal }}</h3>
+          <h4 class="text-text/70">Total time</h4>
+        </div>
       </div>
       <div
         class="rounded-sm grainy bg-background dark:bg-blend-overlay p-4 flex-1"
       >
-        <h4 class="text-text/70">Total tracked all time</h4>
-        <h3>{{ stats.allTimeTotal }}</h3>
+        <h4 class="text-text/70">All time</h4>
+        <div class="flex gap-2 items-center">
+          <ClockIcon class="size-4 text-text/70"></ClockIcon>
+          <h3>{{ stats.allTimeTotal }}</h3>
+          <h4 class="text-text/70">Total time</h4>
+        </div>
       </div>
     </div>
 
@@ -60,6 +72,7 @@ import type {
   TimeInsightsDailyPatterns,
   TimeInsightsWeeklyActivity,
 } from "../common/types";
+import { ClockIcon } from "@heroicons/vue/24/solid";
 
 // Stats for the summary cards
 const stats = ref({
