@@ -27,7 +27,7 @@
     v-else-if="navigationStore.isCurrentPage(NavigationPages.DASHBOARD)"
     :key="NavigationPages.DASHBOARD"
   >
-    <AppPageDashboard />
+    <InsightsDashboard />
   </div>
 </template>
 
@@ -38,7 +38,7 @@ import EntriesList from "./EntriesList.vue";
 import TagsManager from "./TagsManager.vue";
 import { usePreferencesStore } from "../stores/preferences";
 import { useFavoriteTasksStore } from "../stores/favoriteTasks.ts";
-import AppPageDashboard from "./AppPageDashboard.vue";
+import InsightsDashboard from "./InsightsDashboard.vue";
 
 const preferencesStore = usePreferencesStore();
 const favoriteTasksStore = useFavoriteTasksStore();
