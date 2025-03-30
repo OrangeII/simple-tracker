@@ -6,16 +6,19 @@
         :time-total="stats.weekTotal"
         :top-tasks="stats.topWeeklyTasks"
         title="This week"
+        :loading="loading"
       />
       <AppInsightsTopTasksCard
         :time-total="stats.monthTotal"
         :top-tasks="stats.topMonthlyTasks"
         title="This month"
+        :loading="loading"
       />
       <AppInsightsTopTasksCard
         :time-total="stats.allTimeTotal"
         :top-tasks="stats.topAllTimeTasks"
         title="All time"
+        :loading="loading"
       />
     </div>
 
@@ -84,6 +87,7 @@ const dailyChartData = ref<Array<TimeInsightsDailyPatterns>>([]);
 // Loading states
 const loadingWeeklyChart = ref(true);
 const loadingDailyChart = ref(true);
+const loading = ref(true);
 
 onMounted(async () => {
   // Load the insights data
@@ -107,6 +111,7 @@ onMounted(async () => {
     // Set loading states to false
     loadingWeeklyChart.value = false;
     loadingDailyChart.value = false;
+    loading.value = false;
   }
 });
 </script>
