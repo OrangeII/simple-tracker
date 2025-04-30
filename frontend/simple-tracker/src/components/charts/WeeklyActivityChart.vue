@@ -16,7 +16,7 @@ import {
   CategoryScale,
   LinearScale,
 } from "chart.js";
-import { generateRandomColor } from "../../common/colorUtils";
+import { useStyleStore } from "../../stores/style";
 
 ChartJS.register(
   Title,
@@ -26,6 +26,8 @@ ChartJS.register(
   CategoryScale,
   LinearScale
 );
+
+const styleStore = useStyleStore();
 
 const props = defineProps<{
   weeklyData: Array<{
@@ -41,7 +43,7 @@ const chartData = computed(() => {
       {
         label: "Hours",
         data: props.weeklyData.map((item) => item.hours),
-        backgroundColor: generateRandomColor(),
+        backgroundColor: styleStore.getPrimaryColor(),
         borderRadius: 2,
       },
     ],

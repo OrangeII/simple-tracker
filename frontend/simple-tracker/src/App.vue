@@ -1,5 +1,6 @@
 <template>
   <div
+    :id="styleStore.MAIN_DIV_ID"
     class="bg-background text-text"
     :class="[preferencesStore.preferences.darkMode ? 'dark' : '']"
   >
@@ -61,12 +62,14 @@ import AppPageSettings from "./components/AppPageSettings.vue";
 import { useFavoriteTasksStore } from "./stores/favoriteTasks.ts";
 import { useBreakpoints } from "./common/breakpoints.ts";
 import AppNavigation from "./components/AppNavigation.vue";
+import { useStyleStore } from "./stores/style.ts";
 
 const userStore = useUserStore();
 const currentTaskStore = useCurrentTaskStore();
 const favoriteTasksStore = useFavoriteTasksStore();
 const preferencesStore = usePreferencesStore();
 const showSettingsPage = ref(false);
+const styleStore = useStyleStore();
 const { isMobile, isDesktop } = useBreakpoints();
 let authStateChangeSub: Subscription | null = null;
 

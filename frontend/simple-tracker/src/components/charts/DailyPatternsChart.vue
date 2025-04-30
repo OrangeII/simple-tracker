@@ -17,7 +17,7 @@ import {
   PointElement,
   CategoryScale,
 } from "chart.js";
-import { generateRandomColor } from "../../common/colorUtils";
+import { useStyleStore } from "../../stores/style";
 
 ChartJS.register(
   Title,
@@ -29,6 +29,8 @@ ChartJS.register(
   CategoryScale
 );
 
+const styleStore = useStyleStore();
+
 const props = defineProps<{
   dailyData: Array<{
     hour: string;
@@ -37,7 +39,7 @@ const props = defineProps<{
 }>();
 
 const chartData = computed(() => {
-  const color = generateRandomColor();
+  const color = styleStore.getPrimaryColor();
   return {
     labels: props.dailyData.map((item) => item.hour),
     datasets: [
