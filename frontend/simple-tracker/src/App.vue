@@ -27,7 +27,8 @@
           <AppNavigation />
         </main>
 
-        <footer class="p-4">
+        <!-- footer -->
+        <footer class="">
           <StartTracking v-if="!currentTaskStore.task" />
           <CurrentTask v-else />
         </footer>
