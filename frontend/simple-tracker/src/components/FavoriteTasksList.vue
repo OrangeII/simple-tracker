@@ -11,7 +11,10 @@
       @onResume="onResume(task)"
     >
       <template #left>
-        <h3 class="truncate">{{ task.name }}</h3>
+        <div class="flex-col">
+          <h3 class="truncate">{{ task.name }}</h3>
+          <TagDots :task="task" />
+        </div>
       </template>
       <template #actions>
         <AppButtonFavorite
@@ -31,6 +34,7 @@ import { useFavoriteTasksStore } from "../stores/favoriteTasks";
 import EntriesListItemLayout from "./EntriesListItemLayout.vue";
 import { StarIcon } from "@heroicons/vue/24/solid";
 import AppButtonFavorite from "./AppButtonFavorite.vue";
+import TagDots from "./TagDots.vue";
 
 const favoriteTasksStore = useFavoriteTasksStore();
 const currentTaskStore = useCurrentTaskStore();

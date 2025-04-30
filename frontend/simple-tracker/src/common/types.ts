@@ -5,6 +5,7 @@ export interface Task {
   created_at: string;
   user_id: string;
   is_favorite: boolean;
+  tags?: Tag[];
 }
 
 export interface TimeEntry {

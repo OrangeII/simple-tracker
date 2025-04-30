@@ -7,7 +7,10 @@
     :isFavorite="entry.tasks?.is_favorite"
   >
     <template #left>
-      <h3 class="truncate">{{ entry.tasks?.name }}</h3>
+      <div class="flex-col">
+        <h3 class="truncate">{{ entry.tasks?.name }}</h3>
+        <TagDots v-if="entry.tasks" :task="entry.tasks" />
+      </div>
     </template>
 
     <template v-if="entry.end_time" #duration>
@@ -27,6 +30,7 @@
 import { toDurationString } from "../common/timeUtils";
 import type { TimeEntry } from "../common/types";
 import EntriesListItemLayout from "./EntriesListItemLayout.vue";
+import TagDots from "./TagDots.vue";
 
 const emit = defineEmits<{
   onResumeClicked: [entry: TimeEntry];

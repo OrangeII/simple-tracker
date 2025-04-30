@@ -167,7 +167,7 @@ export const getEntries = async (
       .select(
         `
       *, 
-      tasks (*)
+      tasks (*, tags(*))
       `
       )
       .eq("user_id", user.id)
@@ -447,7 +447,7 @@ export const getFavorites = async (): Promise<Task[] | null> => {
 
     const { data, error } = await supabase
       .from("tasks")
-      .select()
+      .select(`*, tags(*)`)
       .eq("is_favorite", true)
       .eq("user_id", user.id);
 
