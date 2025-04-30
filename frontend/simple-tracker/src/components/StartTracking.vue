@@ -1,49 +1,51 @@
 <template>
-  <div v-if="message">{{ message }}</div>
-  <div class="flex flex-row items-center">
-    <div class="pr-2 size-12 flex items-center">
-      <QrCodeIcon
-        v-if="!loading"
-        @click="openQRModal"
-        class="w-full h-full text-primary cursor-pointer"
-      />
-      <Spinner v-else class="size-9" />
-    </div>
-    <div class="flex-grow">
-      <AppTextSelect
-        v-model="taskName"
-        placeholder="Let's start working on..."
-        :items="taskStore.tasks"
-        searchBy="name"
-        itemKey="id"
-        dropdown-position="above"
-        :showAddNew="false"
-        @select="startTrackingTask({ taskId: $event.id, name: $event.name })"
-      ></AppTextSelect>
-    </div>
-    <div class="pl-2 size-12 flex items-center">
-      <PlayIcon
-        v-if="!loading"
-        @click="start"
-        class="w-full h-full text-primary cursor-pointer"
-      />
-      <Spinner v-else class="size-9" />
-    </div>
-  </div>
-
-  <div
-    id="qr-modal"
-    v-if="qrModalIsOpen"
-    @click.self="closeQRModal"
-    class="fixed inset-0 flex items-center justify-center bg-black"
-  >
-    <div class="bg-background rounded-lg shadow-lg max-w-lg w-full p-6">
-      <div class="flex justify-between items-center border-b pb-2">
-        <h2 class="text-xl font-semibold">Scan a QR</h2>
+  <div class="p-4 border-t border-text/10">
+    <div v-if="message">{{ message }}</div>
+    <div class="flex flex-row items-center">
+      <div class="pr-2 size-12 flex items-center">
+        <QrCodeIcon
+          v-if="!loading"
+          @click="openQRModal"
+          class="w-full h-full text-primary cursor-pointer"
+        />
+        <Spinner v-else class="size-9" />
       </div>
+      <div class="flex-grow">
+        <AppTextSelect
+          v-model="taskName"
+          placeholder="Let's start working on..."
+          :items="taskStore.tasks"
+          searchBy="name"
+          itemKey="id"
+          dropdown-position="above"
+          :showAddNew="false"
+          @select="startTrackingTask({ taskId: $event.id, name: $event.name })"
+        ></AppTextSelect>
+      </div>
+      <div class="pl-2 size-12 flex items-center">
+        <PlayIcon
+          v-if="!loading"
+          @click="start"
+          class="w-full h-full text-primary cursor-pointer"
+        />
+        <Spinner v-else class="size-9" />
+      </div>
+    </div>
 
-      <div class="mt-4">
-        <QRScanner @code-captured="onQRCodeCaptured" />
+    <div
+      id="qr-modal"
+      v-if="qrModalIsOpen"
+      @click.self="closeQRModal"
+      class="fixed inset-0 flex items-center justify-center bg-black"
+    >
+      <div class="bg-background rounded-lg shadow-lg max-w-lg w-full p-6">
+        <div class="flex justify-between items-center border-b pb-2">
+          <h2 class="text-xl font-semibold">Scan a QR</h2>
+        </div>
+
+        <div class="mt-4">
+          <QRScanner @code-captured="onQRCodeCaptured" />
+        </div>
       </div>
     </div>
   </div>

@@ -16,13 +16,6 @@ import { generateRandomColor } from "./colorUtils.ts";
 export const getCurrentTaskAndTimeEntry =
   async (): Promise<CurrentTask | null> => {
     try {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) {
-        return null;
-      }
-
       const { data, error } = await supabase
         .from("current_tasks")
         .select(
@@ -32,7 +25,6 @@ export const getCurrentTaskAndTimeEntry =
         time_entries (*)
       `
         )
-        .eq("user_id", user.id)
         .maybeSingle();
 
       if (error) {
@@ -177,7 +169,7 @@ export const getEntries = async (
       .select(
         `
       *, 
-      tasks (*)
+      tasks (*, tags(*))
       `
       )
       .eq("user_id", user.id)
@@ -457,7 +449,7 @@ export const getFavorites = async (): Promise<Task[] | null> => {
 
     const { data, error } = await supabase
       .from("tasks")
-      .select()
+      .select(`*, tags(*)`)
       .eq("is_favorite", true)
       .eq("user_id", user.id);
 

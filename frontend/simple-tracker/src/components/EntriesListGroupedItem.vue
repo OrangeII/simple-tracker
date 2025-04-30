@@ -7,6 +7,7 @@
     :isFavorite="group.entries[0].tasks?.is_favorite"
   >
     <template #left>
+      <!-- main -->
       <div class="flex-grow flex flex-row items-center">
         <div
           v-if="group.entries.length > 1"
@@ -14,7 +15,14 @@
         >
           <p>{{ group.entries.length }}</p>
         </div>
-        <h3 class="truncate">{{ group.name }}</h3>
+        <div class="flex-col">
+          <h3 class="truncate">{{ group.name }}</h3>
+
+          <TagDots
+            v-if="group.entries[0].tasks"
+            :task="group.entries[0].tasks"
+          />
+        </div>
       </div>
     </template>
 
@@ -28,6 +36,7 @@
 import { toDurationString } from "../common/timeUtils";
 import type { TaskGroup, TimeEntry } from "../common/types";
 import EntriesListItemLayout from "./EntriesListItemLayout.vue";
+import TagDots from "./TagDots.vue";
 
 const emit = defineEmits<{
   onResumeClicked: [entry: TimeEntry];

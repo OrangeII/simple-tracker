@@ -1,5 +1,19 @@
 <template>
-  <div v-if="currentTaskStore.task" class="flex flex-row justify-between">
+  <!-- working bar -->
+  <div
+    class="working-bar w-full h-[1px]"
+    :class="[
+      preferencesStore.preferences.darkMode
+        ? 'gradient-dark'
+        : 'gradient-light',
+    ]"
+  ></div>
+
+  <!-- current task -->
+  <div
+    v-if="currentTaskStore.task"
+    class="flex flex-row justify-between px-4 pt-4 pb-3"
+  >
     <div class="flex-grow max-w-[60%]">
       <h2>
         <RunningTime
@@ -30,10 +44,12 @@ import Spinner from "./Spinner.vue";
 import RunningTime from "./RunningTime.vue";
 import { useCurrentTaskStore } from "../stores/currentTask";
 import { useEntriesListStore } from "../stores/entriesList";
+import { usePreferencesStore } from "../stores/preferences.ts";
 
 const loading = ref(false);
 const currentTaskStore = useCurrentTaskStore();
 const entriesListStore = useEntriesListStore();
+const preferencesStore = usePreferencesStore();
 
 const stopTracking = async () => {
   if (!currentTaskStore.task) return;
@@ -54,3 +70,28 @@ const stopTracking = async () => {
   loading.value = false;
 };
 </script>
+
+<style scoped>
+.gradient-light {
+  background: linear-gradient(to right, #654ea3, #eaafc8);
+}
+.gradient-dark {
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+}
+.working-bar {
+  animation: gradientAnimation 8s ease infinite;
+  background-size: 200vw auto;
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+</style>

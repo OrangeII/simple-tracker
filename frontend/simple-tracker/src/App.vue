@@ -28,7 +28,8 @@
           <AppNavigation />
         </main>
 
-        <footer class="p-4">
+        <!-- footer -->
+        <footer class="">
           <StartTracking v-if="!currentTaskStore.task" />
           <CurrentTask v-else />
         </footer>
@@ -63,6 +64,13 @@ import { useFavoriteTasksStore } from "./stores/favoriteTasks.ts";
 import { useBreakpoints } from "./common/breakpoints.ts";
 import AppNavigation from "./components/AppNavigation.vue";
 import { useStyleStore } from "./stores/style.ts";
+import { useVisibility } from "./common/useVisibility.ts";
+
+const { onVisibilityChange } = useVisibility();
+const unregisterVisibilityChange = onVisibilityChange(
+  () => currentTaskStore.fetchCurrentTask(),
+  () => {}
+);
 
 const userStore = useUserStore();
 const currentTaskStore = useCurrentTaskStore();
@@ -92,6 +100,7 @@ onMounted(async () => {
 onUnmounted(() => {
   currentTaskStore.cleanup();
   authStateChangeSub?.unsubscribe();
+  unregisterVisibilityChange();
 });
 
 /**
