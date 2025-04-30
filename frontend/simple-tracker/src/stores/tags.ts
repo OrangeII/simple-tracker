@@ -63,11 +63,16 @@ export const useTagsStore = defineStore("tags", () => {
     return success;
   }
 
+  function getTagById(id: string): Tag | undefined {
+    return tags.value.find((tag) => tag.id === id);
+  }
+
   return {
     tags,
     loadTags,
     addTag,
     removeTag,
     updateTag,
+    getTagById,
   };
 });

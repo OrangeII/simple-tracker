@@ -92,4 +92,27 @@ describe("tags store", () => {
     await store.addTag(mockTag.name);
     expect(store.tags).toHaveLength(1);
   });
+
+  it("getTagById returns the correct tag", () => {
+    const mockTags: Tag[] = [
+      { id: "1", name: "Tag 1", user_id: "", created_at: "" },
+      { id: "2", name: "Tag 2", user_id: "", created_at: "" },
+    ];
+    const store = useTagsStore();
+    store.tags = [...mockTags];
+
+    const foundTag = store.getTagById("1");
+    expect(foundTag).toEqual(mockTags[0]);
+  });
+
+  it("getTagById returns undefined if tag not found", () => {
+    const mockTags: Tag[] = [
+      { id: "1", name: "Tag 1", user_id: "", created_at: "" },
+    ];
+    const store = useTagsStore();
+    store.tags = [...mockTags];
+
+    const foundTag = store.getTagById("non-existent-id");
+    expect(foundTag).toBeUndefined();
+  });
 });
