@@ -15,9 +15,8 @@
         >
           <p>{{ group.entries.length }}</p>
         </div>
-        <div class="flex-col">
-          <h3 class="truncate">{{ group.name }}</h3>
-
+        <div class="flex-col max-w-full overflow-hidden">
+          <h3 class="truncate max-w-full">{{ group.name }}</h3>
           <TagDots
             v-if="group.entries[0].tasks"
             :task="group.entries[0].tasks"

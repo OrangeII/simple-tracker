@@ -1,5 +1,10 @@
 <template>
-  <AppPage title="Settings" @close="emit('close')">
+  <AppPage
+    :title="`Hello, ${
+      userStore.user?.user_metadata.preferred_username || '👽'
+    }`"
+    @close="emit('close')"
+  >
     <template #main>
       <div class="p-4 flex flex-col gap-4">
         <div
