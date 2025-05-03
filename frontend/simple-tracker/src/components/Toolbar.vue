@@ -29,29 +29,17 @@
       @click="preferencesStore.toggle('displayEntriesGroupedById')"
     />
 
-    <div class="flex flex-col items-center gap-1 grow">
-      <HomeIcon
-        class="text-primary size-8 cursor-pointer"
-        @click="navigationStore.navigateTo(NavigationPages.ENTRIES)"
-      ></HomeIcon>
-      <div
-        v-if="navigationStore.isCurrentPage(NavigationPages.ENTRIES)"
-        class="w-full h-[2px] bg-primary"
-        :class="[isMobile ? 'mt-2' : '']"
-      ></div>
-    </div>
+    <ToolbarNavigationButton
+      :icon="HomeIcon"
+      :is-active="navigationStore.isCurrentPage(NavigationPages.ENTRIES)"
+      @click="navigationStore.navigateTo(NavigationPages.ENTRIES)"
+    />
 
-    <div class="flex flex-col items-center gap-1 grow">
-      <TagIcon
-        class="text-primary size-8 cursor-pointer"
-        @click="navigationStore.navigateTo(NavigationPages.TAGS)"
-      ></TagIcon>
-      <div
-        v-if="navigationStore.isCurrentPage(NavigationPages.TAGS)"
-        class="w-full h-[2px] bg-primary"
-        :class="[isMobile ? 'mt-2' : '']"
-      ></div>
-    </div>
+    <ToolbarNavigationButton
+      :icon="TagIcon"
+      :is-active="navigationStore.isCurrentPage(NavigationPages.TAGS)"
+      @click="navigationStore.navigateTo(NavigationPages.TAGS)"
+    />
 
     <Cog8ToothIcon
       class="text-primary size-8 cursor-pointer grow"
@@ -72,6 +60,7 @@ import {
 } from "@heroicons/vue/24/solid";
 import { useBreakpoints } from "../common/breakpoints";
 import { useNavigationStore, NavigationPages } from "../stores/navigation";
+import ToolbarNavigationButton from "./ToolbarNavigationButton.vue";
 
 const navigationStore = useNavigationStore();
 const { isMobile } = useBreakpoints();
