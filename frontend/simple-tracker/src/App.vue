@@ -17,7 +17,7 @@
         <!-- mobile header -->
         <header
           v-if="isMobile"
-          class="p-4 transition-[margin] ease-linear duration-300"
+          class="transition-[margin] ease-linear duration-300"
         >
           <Toolbar @settings-click="showSettingsPage = true" />
         </header>
