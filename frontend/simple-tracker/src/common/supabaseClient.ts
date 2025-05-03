@@ -7,7 +7,9 @@ import type {
   TagStats,
   Task,
   TaskStats,
+  TaskTimeInfo,
   TimeEntry,
+  TimeInsights,
 } from "./types.ts";
 import { generateRandomColor } from "./colorUtils.ts";
 
@@ -643,6 +645,147 @@ export const getTagStats = async (tagId: string): Promise<TagStats | null> => {
     return data;
   } catch (error) {
     console.error("Error in getTagStats:", error);
+    return null;
+  }
+};
+
+export const getTimeInsights = async (): Promise<TimeInsights | null> => {
+  try {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+      return null;
+    }
+
+    // Get current date info
+    const now = new Date();
+    const startOfWeek = new Date(now);
+    startOfWeek.setDate(now.getDate() - now.getDay());
+    startOfWeek.setHours(0, 0, 0, 0);
+
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+    // Fetch time entries for the calculations
+    const { data: timeEntries, error } = await supabase
+      .from("time_entries")
+      .select(
+        `
+        *,
+        tasks (*)
+      `
+      )
+      .eq("user_id", user.id)
+      .not("end_time", "is", null);
+
+    if (error) {
+      console.error("Error fetching time entries for insights:", error);
+      return null;
+    }
+
+    // Calculate time totals
+    let weekTotal = 0;
+    let monthTotal = 0;
+    let allTimeTotal = 0;
+
+    // for top tasks
+    const weeklyTasks = new Map<string, TaskTimeInfo>();
+    const monthlyTasks = new Map<string, TaskTimeInfo>();
+    const allTimeTasks = new Map<string, TaskTimeInfo>();
+
+    // For weekly activity chart
+    const daysOfWeek = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
+    const weeklyActivity = daysOfWeek.map((day) => ({ day, hours: 0 }));
+
+    // For daily patterns chart
+    const hoursOfDay = Array.from({ length: 24 }, (_, i) => `${i}:00`);
+    const dailyPatterns = hoursOfDay.map((hour) => ({ hour, activity: 0 }));
+
+    // Process time entries
+    for (const entry of timeEntries) {
+      if (!entry.end_time) continue;
+
+      const startTime = new Date(entry.start_time);
+      const endTime = new Date(entry.end_time);
+      const duration = endTime.getTime() - startTime.getTime();
+      const taskName = entry.tasks.name || "Unknown Task";
+      const taskId = entry.tasks.id;
+
+      // Total durations
+      if (!allTimeTasks.has(taskId)) {
+        allTimeTasks.set(taskId, {
+          id: taskId,
+          name: taskName,
+          duration: 0,
+        });
+      }
+      allTimeTasks.get(taskId)!.duration += duration;
+      allTimeTotal += duration;
+
+      if (startTime >= startOfMonth) {
+        if (!monthlyTasks.has(taskId)) {
+          monthlyTasks.set(taskId, {
+            id: taskId,
+            name: taskName,
+            duration: 0,
+          });
+        }
+        monthlyTasks.get(taskId)!.duration += duration;
+        monthTotal += duration;
+      }
+
+      if (startTime >= startOfWeek) {
+        if (!weeklyTasks.has(taskId)) {
+          weeklyTasks.set(taskId, {
+            id: taskId,
+            name: taskName,
+            duration: 0,
+          });
+        }
+        weeklyTasks.get(taskId)!.duration += duration;
+        weekTotal += duration;
+
+        // Add to weekly chart data
+        const dayOfWeek = startTime.getDay();
+        weeklyActivity[dayOfWeek].hours += duration / 3600000; // Convert ms to hours
+      }
+
+      // Add to daily patterns
+      const hour = startTime.getHours();
+      dailyPatterns[hour].activity += duration / 3600000; // Convert ms to hours
+    }
+
+    // get top 3 tasks
+    const topWeeklyTasks = Array.from(weeklyTasks.values())
+      .sort((a, b) => b.duration - a.duration)
+      .slice(0, 3);
+    const topMonthlyTasks = Array.from(monthlyTasks.values())
+      .sort((a, b) => b.duration - a.duration)
+      .slice(0, 3);
+    const topAllTimeTasks = Array.from(allTimeTasks.values())
+      .sort((a, b) => b.duration - a.duration)
+      .slice(0, 3);
+
+    return {
+      weekTotal,
+      monthTotal,
+      allTimeTotal,
+      topWeeklyTasks,
+      topMonthlyTasks,
+      topAllTimeTasks,
+      weeklyActivity,
+      dailyPatterns,
+    };
+  } catch (error) {
+    console.error("Error in getTimeInsights:", error);
     return null;
   }
 };

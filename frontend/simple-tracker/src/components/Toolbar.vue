@@ -41,6 +41,12 @@
       @click="navigationStore.navigateTo(NavigationPages.TAGS)"
     />
 
+    <ToolbarNavigationButton
+      :icon="ChartBarIcon"
+      :is-active="navigationStore.isCurrentPage(NavigationPages.DASHBOARD)"
+      @click="navigationStore.navigateTo(NavigationPages.DASHBOARD)"
+    />
+
     <Cog8ToothIcon
       class="text-primary size-8 cursor-pointer grow"
       @click="$emit('settingsClick')"
@@ -57,6 +63,7 @@ import {
   Cog8ToothIcon,
   HomeIcon,
   TagIcon,
+  ChartBarIcon,
 } from "@heroicons/vue/24/solid";
 import { useBreakpoints } from "../common/breakpoints";
 import { useNavigationStore, NavigationPages } from "../stores/navigation";
