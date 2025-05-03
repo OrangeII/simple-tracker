@@ -18,18 +18,22 @@
       <h3>{{ timeTotal }}</h3>
       <h4 class="text-text/70">Total time</h4>
     </div>
-    <div>
-      <div v-for="(item, index) in topTasks" :key="index">
-        <div class="flex items-center gap-1">
-          <span v-if="index === 0">🥇</span>
-          <span v-else-if="index === 1">🥈</span>
-          <span v-else-if="index === 2">🥉</span>
-          <div class="flex gap-2 items-center max-w-full overflow-hidden">
-            <h3 class="max-w-full truncate">{{ item.name }}</h3>
-            <h4 class="text-text/70">
-              {{ toDurationString(new Date(item.duration)) }}
-            </h4>
-          </div>
+    <div class="flex flex-col">
+      <div
+        v-for="(item, index) in topTasks"
+        :key="index"
+        class="flex items-center gap-1 grow"
+      >
+        <span v-if="index === 0">🥇</span>
+        <span v-else-if="index === 1">🥈</span>
+        <span v-else-if="index === 2">🥉</span>
+        <div
+          class="flex gap-2 items-center max-w-full overflow-hidden grow justify-between"
+        >
+          <h3 class="max-w-full truncate">{{ item.name }}</h3>
+          <h4 class="text-text/70">
+            {{ toDurationString(new Date(item.duration)) }}
+          </h4>
         </div>
       </div>
     </div>
