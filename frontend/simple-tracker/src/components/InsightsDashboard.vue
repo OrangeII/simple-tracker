@@ -38,18 +38,20 @@
       class="animate-pulse h-64 rounded-sm grainy bg-background dark:bg-blend-overlay"
     ></div>
 
-    <!-- Daily patterns chart -->
-    <div
-      class="rounded-sm grainy bg-background dark:bg-blend-overlay p-4"
-      v-if="!loadingDailyChart"
-    >
-      <h2 class="text-xl font-bold mb-2">Daily Patterns</h2>
-      <DailyPatternsChart :daily-data="dailyChartData" />
-    </div>
-    <div
-      v-else
-      class="animate-pulse h-64 rounded-sm grainy bg-background dark:bg-blend-overlay"
-    ></div>
+    <!-- Daily patterns chart - Conditionally displayed based on feature flag -->
+    <template v-if="showDailyPatterns">
+      <div
+        class="rounded-sm grainy bg-background dark:bg-blend-overlay p-4"
+        v-if="!loadingDailyChart"
+      >
+        <h2 class="text-xl font-bold mb-2">Daily Patterns</h2>
+        <DailyPatternsChart :daily-data="dailyChartData" />
+      </div>
+      <div
+        v-else
+        class="animate-pulse h-64 rounded-sm grainy bg-background dark:bg-blend-overlay"
+      ></div>
+    </template>
   </div>
 </template>
 
@@ -65,6 +67,10 @@ import type {
   TaskTimeInfo,
 } from "../common/types";
 import AppInsightsTopTasksCard from "./AppInsightsTopTasksCard.vue";
+
+// Feature flag for daily patterns chart
+const showDailyPatterns =
+  import.meta.env.VITE_FF_SHOW_DAILY_PATTERNS === "true";
 
 // Stats for the summary cards
 const stats = ref<{
