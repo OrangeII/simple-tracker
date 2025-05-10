@@ -20,7 +20,7 @@ export const useTasksStore = defineStore("tasks", () => {
     if (!task) {
       throw new Error("Failed to create task");
     }
-    tasks.value.push(task);
+    put(task);
     return task;
   }
 
@@ -37,10 +37,7 @@ export const useTasksStore = defineStore("tasks", () => {
     if (!updatedTask) {
       throw new Error("Failed to update task");
     }
-    const index = tasks.value.findIndex((t) => t.id === task.id);
-    if (index !== -1) {
-      tasks.value[index] = task;
-    }
+    put(task);
     return updatedTask;
   }
 
@@ -62,10 +59,20 @@ export const useTasksStore = defineStore("tasks", () => {
     }
   }
 
+  /**
+   * gets a task by id
+   * @param id id of the task to get
+   * @returns task with the given id or undefined if not found
+   */
+  function get(id: string) {
+    return tasks.value.find((t) => t.id === id);
+  }
+
   return {
     tasks,
     create,
     update,
     put,
+    get,
   };
 });
