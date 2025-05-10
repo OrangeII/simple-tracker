@@ -104,6 +104,13 @@ describe("currentTask store", () => {
 
     expect(store.taskId).toBe(mockCurrentTask.task_id);
     expect(store.timeEntryId).toBe(mockCurrentTask.time_entry_id);
+
+    const tasksStore = useTasksStore();
+    const timeEntriesStore = useTimeEntriesStore();
+    expect(tasksStore.tasks).toContainEqual(mockCurrentTask.tasks);
+    expect(timeEntriesStore.timeEntries).toContainEqual(
+      mockCurrentTask.time_entries
+    );
   });
 
   it("should throw an error if task to track is not provided", async () => {
