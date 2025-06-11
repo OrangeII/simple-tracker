@@ -67,7 +67,7 @@ export const useTasksStore = defineStore("tasks", () => {
 
     const index = tasks.value.findIndex((t) => t.id === task.id);
     if (index !== -1) {
-      tasks.value[index] = task;
+      tasks.value[index] = { ...tasks.value[index], ...task };
     } else {
       tasks.value.push(task);
     }
