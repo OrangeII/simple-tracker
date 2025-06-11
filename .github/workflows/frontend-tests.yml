@@ -28,6 +28,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+        cache-dependency-path: frontend/simple-tracker/package-lock.json
 
     - name: Install dependencies
       working-directory: ./frontend/simple-tracker
