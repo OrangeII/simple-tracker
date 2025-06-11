@@ -1,12 +1,20 @@
 import { setActivePinia, createPinia } from "pinia";
-import { createTask, updateTask } from "../../common/supabaseClient";
+import {
+  createTask,
+  updateTask,
+  addTagToTask,
+  removeTagFromTask,
+} from "../../common/supabaseClient";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { useTasksStore } from "../tasks";
-import type { Task } from "../../common/types";
+import { useTagsStore } from "../tags";
+import type { Tag, Task } from "../../common/types";
 
 vi.mock("../../common/supabaseClient", () => ({
   createTask: vi.fn(),
   updateTask: vi.fn(),
+  addTagToTask: vi.fn(),
+  removeTagFromTask: vi.fn(),
 }));
 
 describe("tasks store", () => {
@@ -145,5 +153,236 @@ describe("tasks store", () => {
     const store = useTasksStore();
     let task: Task = null as unknown as Task; // Type assertion to avoid TypeScript error
     expect(() => store.put(task)).toThrow("Task is required");
+  });
+
+  it("should add a tag to a task", async () => {
+    const store = useTasksStore();
+    const task: Task = {
+      id: "1",
+      name: "Test Task",
+      alt_code: "TT",
+      user_id: "",
+      created_at: "",
+      is_favorite: false,
+    };
+    store.put(task);
+
+    const tagsStore = useTagsStore();
+    const mockTag: Tag = {
+      id: "1",
+      name: "Test Tag",
+      created_at: new Date().toISOString(),
+      user_id: "user1",
+    };
+    tagsStore.tags.push(mockTag);
+
+    vi.mocked(addTagToTask).mockResolvedValue(true);
+    await store.addTagToTask(task.id, mockTag.id);
+    expect(store.tasks[0].tags).toContainEqual(mockTag);
+  });
+
+  it("should not add a tag that does not exist", async () => {
+    const store = useTasksStore();
+    const task: Task = {
+      id: "1",
+      name: "Test Task",
+      alt_code: "TT",
+      user_id: "",
+      created_at: "",
+      is_favorite: false,
+    };
+    store.put(task);
+
+    const tagsStore = useTagsStore();
+    const mockTag: Tag = {
+      id: "1",
+      name: "Test Tag",
+      created_at: new Date().toISOString(),
+      user_id: "user1",
+    };
+    tagsStore.tags.push(mockTag);
+
+    await expect(
+      store.addTagToTask(task.id, "nonexistent-tag-id")
+    ).rejects.toThrow("Tag not found");
+  });
+
+  it("should not add a tag to a task that does not exist", async () => {
+    const store = useTasksStore();
+    const tagsStore = useTagsStore();
+    const mockTag: Tag = {
+      id: "1",
+      name: "Test Tag",
+      created_at: new Date().toISOString(),
+      user_id: "user1",
+    };
+    tagsStore.tags.push(mockTag);
+
+    await expect(
+      store.addTagToTask("nonexistent-task-id", mockTag.id)
+    ).rejects.toThrow("Task not found");
+  });
+
+  it("should not add a duplicate tag to a task that already has it", async () => {
+    const tagsStore = useTagsStore();
+    const mockTag: Tag = {
+      id: "1",
+      name: "Test Tag",
+      created_at: new Date().toISOString(),
+      user_id: "user1",
+    };
+    tagsStore.tags.push(mockTag);
+
+    const store = useTasksStore();
+    const task: Task = {
+      id: "1",
+      name: "Test Task",
+      alt_code: "TT",
+      user_id: "",
+      created_at: "",
+      is_favorite: false,
+      tags: [mockTag], // Start with the tag already added
+    };
+    store.put(task);
+
+    // Add the tag first
+    await store.addTagToTask(task.id, mockTag.id);
+
+    const taskAfterAdding = store.get(task.id);
+    expect(taskAfterAdding).toBeDefined();
+    expect(taskAfterAdding!.tags).toHaveLength(1); // Should still have only one instance of the tag
+  });
+
+  it("should revert tag addition if backend fails", async () => {
+    const store = useTasksStore();
+    const task: Task = {
+      id: "1",
+      name: "Test Task",
+      alt_code: "TT",
+      user_id: "",
+      created_at: "",
+      is_favorite: false,
+    };
+    store.put(task);
+    const tagsStore = useTagsStore();
+    const mockTag: Tag = {
+      id: "1",
+      name: "Test Tag",
+      created_at: new Date().toISOString(),
+      user_id: "user1",
+    };
+    tagsStore.tags.push(mockTag);
+    vi.mocked(addTagToTask).mockResolvedValueOnce(false);
+    await expect(store.addTagToTask(task.id, mockTag.id)).rejects.toThrow(
+      "Failed to add tag to task"
+    );
+    expect(store.tasks[0].tags).toEqual([]); // Tag should not be added
+  });
+  it("should remove a tag from a task", async () => {
+    const store = useTasksStore();
+    const task: Task = {
+      id: "1",
+      name: "Test Task",
+      alt_code: "TT",
+      user_id: "",
+      created_at: "",
+      is_favorite: false,
+      tags: [
+        {
+          id: "1",
+          name: "Test Tag",
+          created_at: new Date().toISOString(),
+          user_id: "user1",
+        },
+      ],
+    };
+    store.put(task);
+    const tagsStore = useTagsStore();
+    const mockTag: Tag = {
+      id: "1",
+      name: "Test Tag",
+      created_at: new Date().toISOString(),
+      user_id: "user1",
+    };
+    tagsStore.tags.push(mockTag);
+    vi.mocked(removeTagFromTask).mockResolvedValue(true);
+    await store.removeTagFromTask(task.id, mockTag.id);
+    expect(store.tasks[0].tags).toEqual([]); // Tag should be removed
+  });
+
+  it("should not remove a tag that does not exist in the task", async () => {
+    const store = useTasksStore();
+    const task: Task = {
+      id: "1",
+      name: "Test Task",
+      alt_code: "TT",
+      user_id: "",
+      created_at: "",
+      is_favorite: false,
+      tags: [],
+    };
+    store.put(task);
+    const tagsStore = useTagsStore();
+    const mockTag: Tag = {
+      id: "1",
+      name: "Test Tag",
+      created_at: new Date().toISOString(),
+      user_id: "user1",
+    };
+    tagsStore.tags.push(mockTag);
+
+    await store.removeTagFromTask(task.id, mockTag.id);
+
+    expect(store.tasks[0].tags).toEqual([]); // No change expected
+  });
+
+  it("should not remove a tag from a task that does not exist", async () => {
+    const store = useTasksStore();
+    const tagsStore = useTagsStore();
+    const mockTag: Tag = {
+      id: "1",
+      name: "Test Tag",
+      created_at: new Date().toISOString(),
+      user_id: "user1",
+    };
+    tagsStore.tags.push(mockTag);
+
+    await expect(
+      store.removeTagFromTask("nonexistent-task-id", mockTag.id)
+    ).rejects.toThrow("Task not found");
+  });
+
+  it("should revert tag removal if backend fails", async () => {
+    const store = useTasksStore();
+    const task: Task = {
+      id: "1",
+      name: "Test Task",
+      alt_code: "TT",
+      user_id: "",
+      created_at: "",
+      is_favorite: false,
+      tags: [
+        {
+          id: "1",
+          name: "Test Tag",
+          created_at: new Date().toISOString(),
+          user_id: "user1",
+        },
+      ],
+    };
+    store.put(task);
+    const tagsStore = useTagsStore();
+    const mockTag: Tag = {
+      id: "1",
+      name: "Test Tag",
+      created_at: new Date().toISOString(),
+      user_id: "user1",
+    };
+    tagsStore.tags.push(mockTag);
+    vi.mocked(removeTagFromTask).mockResolvedValueOnce(false);
+    await expect(store.removeTagFromTask(task.id, mockTag.id)).rejects.toThrow(
+      "Failed to remove tag from task"
+    );
+    expect(store.tasks[0].tags).toContainEqual(mockTag); // Tag should still be present
   });
 });

@@ -1,10 +1,17 @@
 import { defineStore } from "pinia";
 import type { Task } from "../common/types";
-import { createTask, updateTask } from "../common/supabaseClient";
+import {
+  createTask,
+  updateTask,
+  addTagToTask as backendAddTagToTask,
+  removeTagFromTask as backendRemoveTagFromTask,
+} from "../common/supabaseClient";
 import { ref } from "vue";
+import { useTagsStore } from "./tags";
 
 export const useTasksStore = defineStore("tasks", () => {
   const tasks = ref<Task[]>([]);
+  const tagsStore = useTagsStore();
 
   /**
    * creates a new task on the backend and adds it to the store
@@ -75,11 +82,86 @@ export const useTasksStore = defineStore("tasks", () => {
     return tasks.value.find((t) => t.id === id);
   }
 
+  /**
+   * adds a tag to a task.
+   * @param taskId task id to which the tag should be added
+   * @param tagId tag id to add to the task
+   * @returns void
+   * @throws Error if task or tag is not found, or if adding the tag fails
+   */
+  async function addTagToTask(taskId: string, tagId: string) {
+    const task = get(taskId);
+    if (!task) {
+      throw new Error("Task not found");
+    }
+
+    const tag = tagsStore.getTagById(tagId);
+    if (!tag) {
+      throw new Error("Tag not found");
+    }
+
+    if (!task.tags) {
+      task.tags = [];
+    }
+
+    //no duplicates
+    if (task.tags.findIndex((t) => t.id === tag.id) > -1) {
+      return;
+    }
+
+    task.tags.push(tag);
+    put(task);
+
+    // Update the task in the backend
+    if (!(await backendAddTagToTask(task.id, tag.id))) {
+      //revert
+      const index = task.tags.findIndex((t) => t.id === tag.id);
+      if (index > -1) {
+        task.tags.splice(index, 1);
+        put(task);
+      }
+      throw new Error("Failed to add tag to task");
+    }
+  }
+
+  async function removeTagFromTask(taskId: string, tagId: string) {
+    const task = get(taskId);
+    if (!task) {
+      throw new Error("Task not found");
+    }
+
+    if (!task.tags || task.tags.length === 0) {
+      return;
+    }
+
+    const tagIndex = task.tags.findIndex((t) => t.id === tagId);
+    if (tagIndex < 0) {
+      return;
+    }
+
+    // Remove the tag from the task
+    task.tags.splice(tagIndex, 1);
+    put(task);
+
+    // Update the task in the backend
+    if (!(await backendRemoveTagFromTask(task.id, tagId))) {
+      // Revert the change if the backend update fails
+      const tag = tagsStore.getTagById(tagId);
+      if (tag) {
+        task.tags.push(tag);
+        put(task);
+      }
+      throw new Error("Failed to remove tag from task");
+    }
+  }
+
   return {
     tasks,
     create,
     update,
     put,
     get,
+    addTagToTask,
+    removeTagFromTask,
   };
 });

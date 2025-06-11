@@ -46,18 +46,12 @@ import AppTextSelect from "./AppTextSelect.vue";
 import { useTagsStore } from "../stores/tags";
 import { useTasksStore } from "../stores/tasks";
 import type { Tag } from "../common/types";
-import {
-  addTagToTask,
-  getTaskTags,
-  removeTagFromTask,
-} from "../common/supabaseClient";
 import { XCircleIcon } from "@heroicons/vue/24/solid";
 import TaskTag from "./TaskTag.vue";
 import { generateRandomColor } from "../common/colorUtils";
 
 const tagsStore = useTagsStore();
 const tasksStore = useTasksStore();
-const taskTags = ref<Tag[]>([]);
 const isLoading = ref(true);
 
 const props = defineProps<{
@@ -67,6 +61,18 @@ const props = defineProps<{
 const task = computed(() => {
   return tasksStore.get(props.taskId);
 });
+const taskTags = computed(() => {
+  if (!task.value) return [];
+  if (!task.value.tags) return [];
+  const tags: Tag[] = [];
+  task.value.tags.forEach((tag) => {
+    const foundTag = tagsStore.getTagById(tag.id);
+    if (foundTag) {
+      tags.push(foundTag);
+    }
+  });
+  return tags;
+});
 
 onMounted(async () => {
   if (!task.value) {
@@ -74,12 +80,9 @@ onMounted(async () => {
     return;
   }
   try {
-    await tagsStore.loadTags();
-    const tags = await getTaskTags(task.value.id);
-    if (tags !== null) {
-      taskTags.value = tags;
-    } else {
-      taskTags.value = [];
+    if (!tagsStore.tags.length) {
+      isLoading.value = true;
+      await tagsStore.loadTags();
     }
   } finally {
     isLoading.value = false;
@@ -104,21 +107,8 @@ const addTag = async (tag: Tag) => {
     console.error("Task not found for ID:", props.taskId);
     return;
   }
-  //no duplicates
-  if (taskTags.value.findIndex((t) => t.id === tag.id) > -1) {
-    return;
-  }
 
-  //add the tag to this task
-  taskTags.value.push(tag);
-  if (!(await addTagToTask(task.value.id, tag.id))) {
-    //revert
-    const index = taskTags.value.findIndex((t) => t.id === tag.id);
-    if (index > -1) {
-      taskTags.value.splice(index, 1);
-    }
-    return;
-  }
+  tasksStore.addTagToTask(task.value.id, tag.id);
 };
 
 const removeTag = async (tag: Tag) => {
@@ -126,15 +116,8 @@ const removeTag = async (tag: Tag) => {
     console.error("Task not found for ID:", props.taskId);
     return;
   }
-  //do nothing if not present
-  const index = taskTags.value.findIndex((t) => t.id === tag.id);
-  if (index === -1) return;
 
-  taskTags.value.splice(index, 1);
-  if (!removeTagFromTask(task.value.id, tag.id)) {
-    //revert
-    taskTags.value.splice(index, 0, tag);
-    return;
-  }
+  tasksStore.removeTagFromTask(task.value.id, tag.id);
+  return;
 };
 </script>
