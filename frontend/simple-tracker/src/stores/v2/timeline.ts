@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { useTasksStore } from "./tasks";
 import { useTimeEntriesStore } from "./timeEntries";
 import { computed, ref } from "vue";
-import type { TimeEntry } from "../../common/types";
+import type { TimeEntry, DateGroup } from "../../common/types";
 import { getEntries } from "../../common/supabaseClient";
 
 export const useTimelineStore = defineStore("timeline", () => {
@@ -63,8 +63,55 @@ export const useTimelineStore = defineStore("timeline", () => {
     }
   }
 
+  const timeEntriesByDate = computed<Record<string, DateGroup>>(() => {
+    const days: Record<string, DateGroup> = {};
+    for (const entry of timeEntries.value) {
+      //group entries by start date
+
+      //get entry start date
+      const date = new Date(entry.start_time);
+      date.setHours(0, 0, 0, 0);
+      const dateKey = date.toISOString();
+      //make a new group if necessary
+      if (!days[dateKey]) {
+        days[dateKey] = {
+          date,
+          totalTime: 0,
+          entries: [],
+          entiresById: {},
+        };
+      }
+      //push entry to date group
+      days[dateKey].entries.push(entry);
+
+      //also group entries by id within this date group
+      if (!days[dateKey].entiresById[entry.task_id]) {
+        days[dateKey].entiresById[entry.task_id] = {
+          id: entry.task_id,
+          date: new Date(dateKey).toISOString(),
+          name: entry.tasks?.name || "Unknown",
+          totalTime: 0,
+          entries: [],
+        };
+      }
+      //push entry in the id group
+      days[dateKey].entiresById[entry.task_id].entries.push(entry);
+
+      //add tracked time to totals
+      if (entry.end_time) {
+        const trackedTime =
+          new Date(entry.end_time).getTime() -
+          new Date(entry.start_time).getTime();
+        days[dateKey].totalTime += trackedTime;
+        days[dateKey].entiresById[entry.task_id].totalTime += trackedTime;
+      }
+    }
+    return days;
+  });
+
   return {
     timeEntries,
+    timeEntriesByDate,
     limit,
     page,
     loading,

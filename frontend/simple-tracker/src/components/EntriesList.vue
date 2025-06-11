@@ -1,12 +1,12 @@
 <template>
   <!-- Loading state -->
   <EntriesListSkeleton
-    v-if="entriesListStore.loading && entriesListStore.entries.length === 0"
+    v-if="timeLineStore.loading && timeLineStore.timeEntries.length === 0"
   />
 
   <!-- Empty state -->
   <div
-    v-else-if="entriesListStore.entries.length === 0"
+    v-else-if="timeLineStore.timeEntries.length === 0"
     class="flex flex-col items-center justify-center h-full mt-[40%]"
   >
     <div class="text-2xl font-bold">No entries yet</div>
@@ -16,7 +16,7 @@
   <!-- Entries list -->
   <div v-else>
     <div
-      v-for="(dateEntries, date) in entriesListStore.entriesByDate"
+      v-for="(dateEntries, date) in timeLineStore.timeEntriesByDate"
       :key="date"
     >
       <div class="pt-4 px-4 font-bold uppercase flex flex-row justify-between">
@@ -79,7 +79,7 @@
     </Transition>
 
     <!-- Loading Indicator -->
-    <div v-if="entriesListStore.loading" class="flex flex-row justify-around">
+    <div v-if="timeLineStore.loading" class="flex flex-row justify-around">
       <Spinner class="mt-4 size-10" />
     </div>
   </div>
@@ -91,13 +91,13 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { deleteEntry } from "../common/supabaseClient.ts";
 import { toDurationString, toEntriesDateString } from "../common/timeUtils.ts";
 import Spinner from "./Spinner.vue";
 import EntriesListItem from "./EntriesListItem.vue";
 import EntriesListGroupedItem from "./EntriesListGroupedItem.vue";
 import { useCurrentTaskStore } from "../stores/currentTask";
-import { useEntriesListStore } from "../stores/entriesList";
+import { useTimelineStore } from "../stores/v2/timeline.ts";
+import { useTimeEntriesStore } from "../stores/v2/timeEntries.ts";
 import type { TaskGroup, TimeEntry } from "../common/types.ts";
 import AppPageEntryDetail from "./AppPageEntryDetail.vue";
 import AppPageGroupDetail from "./AppPageGroupDetail.vue";
@@ -107,7 +107,8 @@ import { useBreakpoints } from "../common/breakpoints.ts";
 
 const { isDesktop } = useBreakpoints();
 const observer = ref<IntersectionObserver | null>(null);
-const entriesListStore = useEntriesListStore();
+const timeLineStore = useTimelineStore();
+const timeEntriesStore = useTimeEntriesStore();
 const currentTaskStore = useCurrentTaskStore();
 const favoriteTasksStore = useFavoriteTasksStore();
 
@@ -119,9 +120,9 @@ const { grouped = false } = defineProps<{
 }>();
 
 onMounted(async () => {
-  if (entriesListStore.entries.length === 0) {
-    entriesListStore.reset();
-    entriesListStore.fetchEntries();
+  if (timeLineStore.timeEntries.length === 0) {
+    timeLineStore.reset();
+    timeLineStore.fetchEntries();
   }
 
   observer.value = new IntersectionObserver(observerCallBack, {
@@ -134,7 +135,7 @@ onMounted(async () => {
 
 const observerCallBack = (intersections: IntersectionObserverEntry[]) => {
   if (intersections[0].isIntersecting) {
-    entriesListStore.fetchEntries();
+    timeLineStore.fetchEntries();
   }
 };
 
@@ -149,14 +150,7 @@ const onDeleteEntry = async (entry: TimeEntry) => {
   const c = confirm("Are you sure you want to delete this entry?");
   if (!c) return;
 
-  //optimistically remove the entry
-  entriesListStore.removeEntries([entry]);
-
-  //delete the entry form the database
-  if (!(await deleteEntry(entry.id))) {
-    //revert the optimistic change if deletion fails
-    entriesListStore.pushEntries([entry]);
-  }
+  timeEntriesStore.remove(entry);
 };
 
 const onDeleteGroup = async (group: TaskGroup) => {
@@ -168,15 +162,7 @@ const onDeleteGroup = async (group: TaskGroup) => {
   if (!c) return;
 
   //optimistically remove the group
-  entriesListStore.removeEntries(group.entries);
-
-  //delete the group from the database
-  for (const entry of group.entries) {
-    if (!(await deleteEntry(entry.id))) {
-      //revert the optimistic change if deletion fails
-      entriesListStore.pushEntries([entry]);
-    }
-  }
+  timeEntriesStore.removeAll(group.entries);
 };
 
 const onGroupClick = (group: TaskGroup) => {

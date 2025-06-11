@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import type { TimeEntry } from "../../common/types";
 import { ref } from "vue";
+import { deleteEntry } from "../../common/supabaseClient";
 
 export const useTimeEntriesStore = defineStore("timeEntries", () => {
   const timeEntries = ref<TimeEntry[]>([]);
@@ -33,9 +34,45 @@ export const useTimeEntriesStore = defineStore("timeEntries", () => {
     return timeEntry;
   }
 
+  /**
+   * deletes a time entry from the store and the backend.
+   * @param entry the time entry to remove
+   * @throws Error if the entry is not provided or if the deletion fails
+   */
+  async function remove(entry: TimeEntry) {
+    if (!entry) {
+      throw new Error("Time entry is required");
+    }
+
+    // optimistically remove the entry from the store
+    const index = timeEntries.value.findIndex((e) => e.id === entry.id);
+    if (index !== -1) {
+      timeEntries.value.splice(index, 1);
+    }
+
+    // delete entry from the backend
+    if (!(await deleteEntry(entry.id))) {
+      //revert the optimistic change if deletion fails
+      timeEntries.value.push(entry);
+      throw new Error("Failed to delete time entry");
+    }
+  }
+
+  async function removeAll(entries: TimeEntry[]) {
+    for (const entry of entries) {
+      try {
+        await remove(entry);
+      } catch (error) {
+        console.error(`Failed to remove entry ${entry.id}:`, error);
+      }
+    }
+  }
+
   return {
     timeEntries,
     put,
     get,
+    remove,
+    removeAll,
   };
 });
