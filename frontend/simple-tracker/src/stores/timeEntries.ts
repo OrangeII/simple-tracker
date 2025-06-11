@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
-import type { TimeEntry } from "../../common/types";
+import type { TimeEntry } from "../common/types";
 import { ref } from "vue";
-import { deleteEntry, updateEntry } from "../../common/supabaseClient";
+import { deleteEntry, updateEntry } from "../common/supabaseClient";
 
 export const useTimeEntriesStore = defineStore("timeEntries", () => {
   const timeEntries = ref<TimeEntry[]>([]);

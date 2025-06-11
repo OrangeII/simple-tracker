@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import type { Task } from "../common/types";
 import { ref } from "vue";
 import { getFavorites } from "../common/supabaseClient";
-import { useTasksStore } from "./v2/tasks";
+import { useTasksStore } from "./tasks";
 
 export const useFavoriteTasksStore = defineStore("favoriteTasks", () => {
   const favorites = ref<Task[]>([]);

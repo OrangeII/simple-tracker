@@ -1,9 +1,9 @@
 import { defineStore } from "pinia";
-import type { Task } from "../../common/types";
-import { createTask, updateTask } from "../../common/supabaseClient";
+import type { Task } from "../common/types";
+import { createTask, updateTask } from "../common/supabaseClient";
 import { ref } from "vue";
 
-export const useTasksStore = defineStore("tasksV2", () => {
+export const useTasksStore = defineStore("tasks", () => {
   const tasks = ref<Task[]>([]);
 
   /**

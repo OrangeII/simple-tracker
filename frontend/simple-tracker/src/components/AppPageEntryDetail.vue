@@ -110,8 +110,8 @@ import {
   TagIcon,
   ChartBarIcon,
 } from "@heroicons/vue/24/solid";
-import { useTimeEntriesStore } from "../stores/v2/timeEntries";
-import { useTasksStore } from "../stores/v2/tasks";
+import { useTimeEntriesStore } from "../stores/timeEntries";
+import { useTasksStore } from "../stores/tasks";
 import TaskTags from "./TaskTags.vue";
 import TaskStats from "./TaskStats.vue";
 

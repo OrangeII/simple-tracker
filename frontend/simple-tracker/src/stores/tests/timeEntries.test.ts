@@ -1,10 +1,10 @@
 import { setActivePinia, createPinia } from "pinia";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { useTimeEntriesStore } from "../timeEntries";
-import type { TimeEntry } from "../../../common/types";
-import { deleteEntry, updateEntry } from "../../../common/supabaseClient";
+import type { TimeEntry } from "../../common/types";
+import { deleteEntry, updateEntry } from "../../common/supabaseClient";
 
-vi.mock("../../../common/supabaseClient", () => ({
+vi.mock("../../common/supabaseClient", () => ({
   deleteEntry: vi.fn(),
   updateEntry: vi.fn(),
 }));

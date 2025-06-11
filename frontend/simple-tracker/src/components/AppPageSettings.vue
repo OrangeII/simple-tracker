@@ -67,9 +67,9 @@ import {
 } from "@heroicons/vue/24/solid";
 import { useUserStore } from "../stores/user";
 import { usePreferencesStore } from "../stores/preferences";
-import { useTimeEntriesStore } from "../stores/v2/timeEntries";
+import { useTimeEntriesStore } from "../stores/timeEntries";
 import { useFavoriteTasksStore } from "../stores/favoriteTasks";
-import { useTasksStore } from "../stores/v2/tasks";
+import { useTasksStore } from "../stores/tasks";
 
 const emit = defineEmits<{
   close: [];

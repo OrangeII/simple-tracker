@@ -5,15 +5,15 @@ import {
   subscribeToCurrentTasks,
   track,
   stopCurrentTracking,
-} from "../../../common/supabaseClient";
+} from "../../common/supabaseClient";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { useCurrentTaskStore } from "../currentTask";
-import type { CurrentTask, Task, TimeEntry } from "../../../common/types";
+import type { CurrentTask, Task, TimeEntry } from "../../common/types";
 import { useTasksStore } from "../tasks";
 import { useTimeEntriesStore } from "../timeEntries";
 import type { RealtimeChannel } from "@supabase/supabase-js";
 
-vi.mock("../../../common/supabaseClient", () => ({
+vi.mock("../../common/supabaseClient", () => ({
   getCurrentTaskAndTimeEntry: vi.fn(),
   updateTask: vi.fn(),
   subscribeToCurrentTasks: vi.fn(),

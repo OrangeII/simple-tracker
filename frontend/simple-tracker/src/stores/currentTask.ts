@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import type { CurrentTask, Task } from "../../common/types";
+import type { CurrentTask, Task } from "../common/types";
 import { computed, ref } from "vue";
 import {
   getCurrentTaskAndTimeEntry,
@@ -7,7 +7,7 @@ import {
   unsubscribeFromCurrentTasks,
   stopCurrentTracking,
   track as supabaseTrack,
-} from "../../common/supabaseClient";
+} from "../common/supabaseClient";
 import type { RealtimeChannel } from "@supabase/supabase-js";
 import { useTimeEntriesStore } from "./timeEntries";
 import { useTasksStore } from "./tasks";

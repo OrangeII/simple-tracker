@@ -46,7 +46,7 @@ import { ref } from "vue";
 import { StopIcon } from "@heroicons/vue/24/solid";
 import Spinner from "./Spinner.vue";
 import RunningTime from "./RunningTime.vue";
-import { useCurrentTaskStore } from "../stores/v2/currentTask";
+import { useCurrentTaskStore } from "../stores/currentTask.ts";
 import { usePreferencesStore } from "../stores/preferences.ts";
 
 const loading = ref(false);

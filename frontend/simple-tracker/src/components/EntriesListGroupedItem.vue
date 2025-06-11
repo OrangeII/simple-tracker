@@ -33,7 +33,7 @@ import { toDurationString } from "../common/timeUtils";
 import type { TaskGroup, TimeEntry } from "../common/types";
 import EntriesListItemLayout from "./EntriesListItemLayout.vue";
 import TagDots from "./TagDots.vue";
-import { useTasksStore } from "../stores/v2/tasks";
+import { useTasksStore } from "../stores/tasks";
 import { computed } from "vue";
 
 const emit = defineEmits<{

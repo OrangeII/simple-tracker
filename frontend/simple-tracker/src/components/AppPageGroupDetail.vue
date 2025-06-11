@@ -69,9 +69,9 @@ import AppPageEntryDetail from "./AppPageEntryDetail.vue";
 import { toDurationString } from "../common/timeUtils";
 import type { TaskGroup, TimeEntry } from "../common/types";
 import { computed, ref, watch } from "vue";
-import { useTimeEntriesStore } from "../stores/v2/timeEntries";
-import { useTimelineStore } from "../stores/v2/timeline";
-import { useTasksStore } from "../stores/v2/tasks";
+import { useTimeEntriesStore } from "../stores/timeEntries";
+import { useTimelineStore } from "../stores/timeline";
+import { useTasksStore } from "../stores/tasks";
 import { CheckCircleIcon } from "@heroicons/vue/24/solid";
 import { useBreakpoints } from "../common/breakpoints";
 

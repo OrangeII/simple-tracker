@@ -2,7 +2,7 @@ import { setActivePinia, createPinia } from "pinia";
 import { describe, beforeEach, it, expect, vi } from "vitest";
 import { useFavoriteTasksStore } from "../favoriteTasks";
 import { getFavorites, updateTask } from "../../common/supabaseClient";
-import { useTasksStore } from "../v2/tasks";
+import { useTasksStore } from "../tasks";
 
 //mock the supabase client
 vi.mock("../../common/supabaseClient", () => ({

@@ -29,7 +29,7 @@
 
 <script setup lang="ts">
 import type { Task } from "../common/types";
-import { useCurrentTaskStore } from "../stores/v2/currentTask";
+import { useCurrentTaskStore } from "../stores/currentTask";
 import { useFavoriteTasksStore } from "../stores/favoriteTasks";
 import EntriesListItemLayout from "./EntriesListItemLayout.vue";
 import { StarIcon } from "@heroicons/vue/24/solid";

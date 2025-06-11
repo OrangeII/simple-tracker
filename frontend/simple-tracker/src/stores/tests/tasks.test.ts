@@ -1,10 +1,10 @@
 import { setActivePinia, createPinia } from "pinia";
-import { createTask, updateTask } from "../../../common/supabaseClient";
+import { createTask, updateTask } from "../../common/supabaseClient";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { useTasksStore } from "../tasks";
-import type { Task } from "../../../common/types";
+import type { Task } from "../../common/types";
 
-vi.mock("../../../common/supabaseClient", () => ({
+vi.mock("../../common/supabaseClient", () => ({
   createTask: vi.fn(),
   updateTask: vi.fn(),
 }));

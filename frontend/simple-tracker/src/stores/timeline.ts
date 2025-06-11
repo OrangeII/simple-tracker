@@ -2,8 +2,8 @@ import { defineStore } from "pinia";
 import { useTasksStore } from "./tasks";
 import { useTimeEntriesStore } from "./timeEntries";
 import { computed, ref } from "vue";
-import type { DateGroup, TimeEntryRecord } from "../../common/types";
-import { getEntries } from "../../common/supabaseClient";
+import type { DateGroup, TimeEntryRecord } from "../common/types";
+import { getEntries } from "../common/supabaseClient";
 
 export const useTimelineStore = defineStore("timeline", () => {
   const timeEntriesStore = useTimeEntriesStore();

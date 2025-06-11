@@ -4,10 +4,10 @@ import { useTimelineStore } from "../timeline";
 import { useTimeEntriesStore } from "../timeEntries";
 import { useTasksStore } from "../tasks";
 import { useCurrentTaskStore } from "../currentTask";
-import * as supabaseClient from "../../../common/supabaseClient";
-import type { CurrentTask, Task, TimeEntryRecord } from "../../../common/types";
+import * as supabaseClient from "../../common/supabaseClient";
+import type { CurrentTask, Task, TimeEntryRecord } from "../../common/types";
 
-vi.mock("../../../common/supabaseClient", () => ({
+vi.mock("../../common/supabaseClient", () => ({
   getEntries: vi.fn(),
   stopCurrentTracking: vi.fn(),
 }));

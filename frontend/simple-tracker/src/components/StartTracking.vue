@@ -62,8 +62,8 @@ import { ref } from "vue";
 import QRScanner from "./QRScanner.vue";
 import { QrCodeIcon, PlayIcon } from "@heroicons/vue/24/solid";
 import Spinner from "./Spinner.vue";
-import { useCurrentTaskStore } from "../stores/v2/currentTask";
-import { useTasksStore } from "../stores/v2/tasks.ts";
+import { useCurrentTaskStore } from "../stores/currentTask.ts";
+import { useTasksStore } from "../stores/tasks.ts";
 import AppTextSelect from "./AppTextSelect.vue";
 
 const taskName = ref("");

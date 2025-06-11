@@ -56,7 +56,7 @@ import Login from "./components/Login.vue";
 import StartTracking from "./components/StartTracking.vue";
 import CurrentTask from "./components/CurrentTask.vue";
 import { useUserStore } from "./stores/user";
-import { useCurrentTaskStore } from "./stores/v2/currentTask";
+import { useCurrentTaskStore } from "./stores/currentTask.ts";
 import { usePreferencesStore } from "./stores/preferences";
 import Toolbar from "./components/Toolbar.vue";
 import AppPageSettings from "./components/AppPageSettings.vue";

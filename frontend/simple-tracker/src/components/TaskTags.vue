@@ -44,7 +44,7 @@
 import { computed, onMounted, ref } from "vue";
 import AppTextSelect from "./AppTextSelect.vue";
 import { useTagsStore } from "../stores/tags";
-import { useTasksStore } from "../stores/v2/tasks";
+import { useTasksStore } from "../stores/tasks";
 import type { Tag } from "../common/types";
 import {
   addTagToTask,
