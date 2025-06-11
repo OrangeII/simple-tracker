@@ -19,7 +19,7 @@
           itemKey="id"
           dropdown-position="above"
           :showAddNew="false"
-          @select="startTrackingTask({ taskId: $event.id, name: $event.name })"
+          @select="currentTaskStore.track($event)"
         ></AppTextSelect>
       </div>
       <div class="pl-2 size-12 flex items-center">
@@ -58,13 +58,12 @@
  * start time entry on new task
  */
 
-import { onMounted, ref } from "vue";
-import { track } from "../common/supabaseClient.ts";
+import { ref } from "vue";
 import QRScanner from "./QRScanner.vue";
 import { QrCodeIcon, PlayIcon } from "@heroicons/vue/24/solid";
 import Spinner from "./Spinner.vue";
-import { useCurrentTaskStore } from "../stores/currentTask";
-import { useTasksStore } from "../stores/tasks.ts";
+import { useCurrentTaskStore } from "../stores/v2/currentTask";
+import { useTasksStore } from "../stores/v2/tasks.ts";
 import AppTextSelect from "./AppTextSelect.vue";
 
 const taskName = ref("");
@@ -75,65 +74,13 @@ const qrModalIsOpen = ref(false);
 const currentTaskStore = useCurrentTaskStore();
 const taskStore = useTasksStore();
 
-onMounted(async () => {
-  await taskStore.loadTasks();
-});
-
 const start = async () => {
   if (!taskName.value) {
     message.value = "Insert task name";
     return;
   }
 
-  await startTrackingTask({ name: taskName.value, altCode: taskAltCode.value });
-};
-
-const startTrackingTask = async (params: {
-  taskId?: string;
-  name?: string;
-  altCode?: string;
-}) => {
-  loading.value = true;
-  message.value = "";
-
-  const startTime = new Date();
-
-  //optimistically change the store
-  currentTaskStore.task = {
-    user_id: "",
-    task_id: params.taskId || "",
-    time_entry_id: "",
-    tasks: {
-      id: params.taskId || "",
-      name: params.name || params.altCode || "",
-      created_at: startTime.toISOString(),
-      user_id: "",
-      is_favorite: false,
-    },
-    time_entries: {
-      id: "",
-      task_id: params.taskId || "",
-      user_id: "",
-      start_time: startTime.toISOString(),
-      created_at: startTime.toISOString(),
-    },
-  };
-
-  const ret = await track({ ...params, startTime });
-  if (!ret) {
-    message.value = "Could not start tracking task!";
-    loading.value = false;
-    //revert optimistic change
-    currentTaskStore.task = null;
-    return;
-  }
-
-  //update the store with the actual task
-  currentTaskStore.task = ret;
-  message.value = "Task started succesfully!";
-  taskName.value = "";
-  taskAltCode.value = "";
-  loading.value = false;
+  await currentTaskStore.trackNew(taskName.value, taskAltCode.value);
 };
 
 const openQRModal = () => {
@@ -163,11 +110,17 @@ const onQRCodeCaptured = async (rawCode: string) => {
     return;
   }
 
-  //start tracking the task
-  await startTrackingTask({
-    taskId: code.taskId,
-    name: code.name,
-    altCode: code.altCode,
-  });
+  if (code.taskId) {
+    //if it has taskId, we can track it directly
+    const task = taskStore.get(code.taskId);
+    if (!task) {
+      message.value = "Task not found!";
+      return;
+    }
+    await currentTaskStore.track(task);
+  } else {
+    //otherwise we create a new task with the name and altCode
+    await currentTaskStore.trackNew(code.name || "", code.altCode || "");
+  }
 };
 </script>

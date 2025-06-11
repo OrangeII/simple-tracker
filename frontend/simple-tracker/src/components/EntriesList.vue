@@ -95,7 +95,7 @@ import { toDurationString, toEntriesDateString } from "../common/timeUtils.ts";
 import Spinner from "./Spinner.vue";
 import EntriesListItem from "./EntriesListItem.vue";
 import EntriesListGroupedItem from "./EntriesListGroupedItem.vue";
-import { useCurrentTaskStore } from "../stores/currentTask";
+import { useCurrentTaskStore } from "../stores/v2/currentTask";
 import { useTimelineStore } from "../stores/v2/timeline.ts";
 import { useTimeEntriesStore } from "../stores/v2/timeEntries.ts";
 import type { TaskGroup, TimeEntry } from "../common/types.ts";
@@ -104,6 +104,7 @@ import AppPageGroupDetail from "./AppPageGroupDetail.vue";
 import { useFavoriteTasksStore } from "../stores/favoriteTasks.ts";
 import EntriesListSkeleton from "./EntriesListSkeleton.vue";
 import { useBreakpoints } from "../common/breakpoints.ts";
+import { useTasksStore } from "../stores/v2/tasks.ts";
 
 const { isDesktop } = useBreakpoints();
 const observer = ref<IntersectionObserver | null>(null);
@@ -111,6 +112,7 @@ const timeLineStore = useTimelineStore();
 const timeEntriesStore = useTimeEntriesStore();
 const currentTaskStore = useCurrentTaskStore();
 const favoriteTasksStore = useFavoriteTasksStore();
+const tasksStore = useTasksStore();
 
 const detailPageEntry = ref<TimeEntry | null>(null);
 const detailPageGroup = ref<TaskGroup | null>(null);
@@ -140,13 +142,16 @@ const observerCallBack = (intersections: IntersectionObserverEntry[]) => {
 };
 
 const onResume = async (entry: TimeEntry) => {
-  if (!entry.tasks) return;
-  await currentTaskStore.track(entry.tasks);
+  const task = tasksStore.get(entry.task_id);
+  if (!task) {
+    console.error("Task not found for entry:", entry);
+    return;
+  }
+
+  await currentTaskStore.track(task);
 };
 
 const onDeleteEntry = async (entry: TimeEntry) => {
-  if (!entry.tasks) return;
-
   const c = confirm("Are you sure you want to delete this entry?");
   if (!c) return;
 
@@ -154,8 +159,6 @@ const onDeleteEntry = async (entry: TimeEntry) => {
 };
 
 const onDeleteGroup = async (group: TaskGroup) => {
-  if (!group.entries[0].tasks) return;
-
   const c = confirm(
     `Are you sure you want do delete ${group.entries.length} entries?`
   );
@@ -184,8 +187,12 @@ const onEntryClick = (entry: TimeEntry) => {
 };
 
 const onFavoriteClicked = async (entry: TimeEntry) => {
-  if (!entry.tasks) return;
+  const task = tasksStore.get(entry.task_id);
+  if (!task) {
+    console.error("Task not found for entry:", entry);
+    return;
+  }
 
-  favoriteTasksStore.toggle(entry.tasks);
+  favoriteTasksStore.toggle(task);
 };
 </script>
