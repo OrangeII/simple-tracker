@@ -33,8 +33,15 @@ export const useTasksStore = defineStore("tasks", () => {
     if (!task) {
       throw new Error("Task is required");
     }
+
+    const oldTask = get(task.id);
+    if (!oldTask) {
+      throw new Error("Task not found");
+    }
+
     const updatedTask = await updateTask(task);
     if (!updatedTask) {
+      put(oldTask); // revert to old task if update fails
       throw new Error("Failed to update task");
     }
     put(task);

@@ -379,10 +379,6 @@ export const updateEntry = async (entry: TimeEntry): Promise<boolean> => {
       return false;
     }
 
-    if (entry.tasks) {
-      await updateTask(entry.tasks);
-    }
-
     return true;
   } catch (error) {
     console.error("Error in updateEntry:", error);

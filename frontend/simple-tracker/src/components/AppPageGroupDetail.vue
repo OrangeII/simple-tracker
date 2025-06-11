@@ -33,7 +33,7 @@
           @onDelete="onDeleteClick(entry)"
         >
           <template #left>
-            <h3 class="truncate">{{ entry.tasks?.name }}</h3>
+            <h3 class="truncate">{{ tasksStore.get(entry.task_id)?.name }}</h3>
           </template>
           <template v-if="entry.end_time" #duration>
             {{
@@ -69,13 +69,15 @@ import AppPageEntryDetail from "./AppPageEntryDetail.vue";
 import { toDurationString } from "../common/timeUtils";
 import type { TaskGroup, TimeEntry } from "../common/types";
 import { ref, watch } from "vue";
-import { useEntriesListStore } from "../stores/entriesList";
-import { deleteEntry } from "../common/supabaseClient";
+import { useTimeEntriesStore } from "../stores/v2/timeEntries";
+import { useTimelineStore } from "../stores/v2/timeline";
+import { useTasksStore } from "../stores/v2/tasks";
 import { CheckCircleIcon } from "@heroicons/vue/24/solid";
 import { useBreakpoints } from "../common/breakpoints";
-import { updateTask } from "../common/supabaseClient";
 
-const entriesListStore = useEntriesListStore();
+const timeEntriesStore = useTimeEntriesStore();
+const timeLineStore = useTimelineStore();
+const tasksStore = useTasksStore();
 const props = defineProps<{ group: TaskGroup }>();
 const group = ref(props.group);
 const detailPageEntry = ref<TimeEntry | null>(null);
@@ -87,7 +89,7 @@ const emit = defineEmits<{
 }>();
 
 watch(
-  () => entriesListStore.entriesByDate,
+  () => timeLineStore.timeEntriesByDate,
   (newValue) => {
     //find the group by id and update the group prop
 
@@ -123,13 +125,7 @@ const onDeleteClick = async (entry: TimeEntry) => {
   if (!c) return;
 
   //optimistically remove the entry
-  entriesListStore.removeEntries([entry]);
-
-  //delete the entry form the database
-  if (!(await deleteEntry(entry.id))) {
-    //revert the optimistic change if deletion fails
-    entriesListStore.pushEntries([entry]);
-  }
+  timeEntriesStore.remove(entry);
 };
 
 const onSaveClick = async () => {
@@ -140,16 +136,9 @@ const onSaveClick = async () => {
   if (!group.value.entries[0].tasks) {
     return;
   }
-  const oldTask = { ...group.value.entries[0].tasks };
   const newTask = { ...group.value.entries[0].tasks, name: taskName.value };
-  entriesListStore.updateTask(newTask);
+  tasksStore.update(newTask);
 
   emit("close");
-
-  //optimistically update the task
-  if (!(await updateTask(newTask))) {
-    //if update is not successful, revert
-    entriesListStore.updateTask(oldTask);
-  }
 };
 </script>

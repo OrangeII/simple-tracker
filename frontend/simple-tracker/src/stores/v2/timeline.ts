@@ -66,6 +66,8 @@ export const useTimelineStore = defineStore("timeline", () => {
   const timeEntriesByDate = computed<Record<string, DateGroup>>(() => {
     const days: Record<string, DateGroup> = {};
     for (const entry of timeEntries.value) {
+      let task = tasksStore.get(entry.task_id);
+
       //group entries by start date
 
       //get entry start date
@@ -89,7 +91,7 @@ export const useTimelineStore = defineStore("timeline", () => {
         days[dateKey].entiresById[entry.task_id] = {
           id: entry.task_id,
           date: new Date(dateKey).toISOString(),
-          name: entry.tasks?.name || "Unknown",
+          name: task?.name || "Unknown",
           totalTime: 0,
           entries: [],
         };
