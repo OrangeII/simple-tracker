@@ -111,7 +111,6 @@ import {
   ChartBarIcon,
 } from "@heroicons/vue/24/solid";
 import { useTimeEntriesStore } from "../stores/v2/timeEntries";
-import { updateEntry } from "../common/supabaseClient";
 import TaskTags from "./TaskTags.vue";
 import TaskStats from "./TaskStats.vue";
 
