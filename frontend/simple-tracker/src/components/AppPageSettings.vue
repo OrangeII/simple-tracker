@@ -69,7 +69,7 @@ import { useUserStore } from "../stores/user";
 import { usePreferencesStore } from "../stores/preferences";
 import { useTimeEntriesStore } from "../stores/v2/timeEntries";
 import { useFavoriteTasksStore } from "../stores/favoriteTasks";
-import { useTasksStore } from "../stores/tasks";
+import { useTasksStore } from "../stores/v2/tasks";
 
 const emit = defineEmits<{
   close: [];

@@ -5,7 +5,7 @@ import { useTimeEntriesStore } from "../timeEntries";
 import { useTasksStore } from "../tasks";
 import { useCurrentTaskStore } from "../currentTask";
 import * as supabaseClient from "../../../common/supabaseClient";
-import type { CurrentTask, Task, TimeEntry } from "../../../common/types";
+import type { CurrentTask, Task, TimeEntryRecord } from "../../../common/types";
 
 vi.mock("../../../common/supabaseClient", () => ({
   getEntries: vi.fn(),
@@ -22,7 +22,7 @@ const createMockTask = (id: string): Task => ({
   is_favorite: false,
 });
 
-const createMockTimeEntry = (id: string, taskId: string): TimeEntry => ({
+const createMockTimeEntry = (id: string, taskId: string): TimeEntryRecord => ({
   id,
   task_id: taskId,
   start_time: new Date().toISOString(),
@@ -32,7 +32,7 @@ const createMockTimeEntry = (id: string, taskId: string): TimeEntry => ({
 });
 
 const createMockTimeEntries = (count: number) => {
-  const entries: TimeEntry[] = [];
+  const entries: TimeEntryRecord[] = [];
   for (let i = 0; i < count; i++) {
     const taskId = `task${i}`;
     const entryId = `entry${i}`;
@@ -108,7 +108,7 @@ describe("useTimelineStore", () => {
   });
 
   it("should fetch entries and put entries to entries store", async () => {
-    const mockEntries: TimeEntry[] = createMockTimeEntries(2);
+    const mockEntries: TimeEntryRecord[] = createMockTimeEntries(2);
     const getEntriesMock = vi.mocked(supabaseClient.getEntries);
     getEntriesMock.mockResolvedValue(mockEntries);
 
@@ -127,7 +127,7 @@ describe("useTimelineStore", () => {
   });
 
   it("should not increment page when fewer entries than limit are returned", async () => {
-    const mockEntries: TimeEntry[] = createMockTimeEntries(1);
+    const mockEntries: TimeEntryRecord[] = createMockTimeEntries(1);
 
     const getEntriesMock = vi.mocked(supabaseClient.getEntries);
     getEntriesMock.mockResolvedValue(mockEntries);
@@ -140,7 +140,7 @@ describe("useTimelineStore", () => {
   });
 
   it("should increment page when limit entries are returned", async () => {
-    const mockEntries: TimeEntry[] = createMockTimeEntries(30);
+    const mockEntries: TimeEntryRecord[] = createMockTimeEntries(30);
 
     const getEntriesMock = vi.mocked(supabaseClient.getEntries);
     getEntriesMock.mockResolvedValue(mockEntries);
@@ -163,7 +163,7 @@ describe("useTimelineStore", () => {
   });
 
   it("timeEntries computed should not include ongoing entry", async () => {
-    const mockEntries: TimeEntry[] = createMockTimeEntries(2);
+    const mockEntries: TimeEntryRecord[] = createMockTimeEntries(2);
     const getEntriesMock = vi.mocked(supabaseClient.getEntries);
     getEntriesMock.mockResolvedValue(mockEntries);
 
@@ -186,7 +186,7 @@ describe("useTimelineStore", () => {
   });
 
   it("timeEntries computed should include stopped entry", async () => {
-    const mockEntries: TimeEntry[] = createMockTimeEntries(2);
+    const mockEntries: TimeEntryRecord[] = createMockTimeEntries(2);
     const getEntriesMock = vi.mocked(supabaseClient.getEntries);
     getEntriesMock.mockResolvedValue(mockEntries);
 

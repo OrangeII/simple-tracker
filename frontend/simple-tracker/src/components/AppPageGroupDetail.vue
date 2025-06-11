@@ -33,7 +33,7 @@
           @onDelete="onDeleteClick(entry)"
         >
           <template #left>
-            <h3 class="truncate">{{ tasksStore.get(entry.task_id)?.name }}</h3>
+            <h3 class="truncate">{{ task?.name }}</h3>
           </template>
           <template v-if="entry.end_time" #duration>
             {{
@@ -68,7 +68,7 @@ import EntriesListItemLayout from "./EntriesListItemLayout.vue";
 import AppPageEntryDetail from "./AppPageEntryDetail.vue";
 import { toDurationString } from "../common/timeUtils";
 import type { TaskGroup, TimeEntry } from "../common/types";
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useTimeEntriesStore } from "../stores/v2/timeEntries";
 import { useTimelineStore } from "../stores/v2/timeline";
 import { useTasksStore } from "../stores/v2/tasks";
@@ -80,6 +80,9 @@ const timeLineStore = useTimelineStore();
 const tasksStore = useTasksStore();
 const props = defineProps<{ group: TaskGroup }>();
 const group = ref(props.group);
+const task = computed(() => {
+  return tasksStore.get(props.group.id);
+});
 const detailPageEntry = ref<TimeEntry | null>(null);
 const taskName = ref(props.group.name || "");
 const { isDesktop } = useBreakpoints();
@@ -119,8 +122,6 @@ const onEntryClick = (entry: TimeEntry) => {
 };
 
 const onDeleteClick = async (entry: TimeEntry) => {
-  if (!entry.tasks) return;
-
   const c = confirm("Are you sure you want to delete this entry?");
   if (!c) return;
 
@@ -133,10 +134,10 @@ const onSaveClick = async () => {
     return;
   }
 
-  if (!group.value.entries[0].tasks) {
+  if (!task.value) {
     return;
   }
-  const newTask = { ...group.value.entries[0].tasks, name: taskName.value };
+  const newTask = { ...task.value, name: taskName.value };
   tasksStore.update(newTask);
 
   emit("close");

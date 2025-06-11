@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { useTasksStore } from "./tasks";
 import { useTimeEntriesStore } from "./timeEntries";
 import { computed, ref } from "vue";
-import type { TimeEntry, DateGroup } from "../../common/types";
+import type { DateGroup, TimeEntryRecord } from "../../common/types";
 import { getEntries } from "../../common/supabaseClient";
 
 export const useTimelineStore = defineStore("timeline", () => {
@@ -54,7 +54,7 @@ export const useTimelineStore = defineStore("timeline", () => {
    * Also puts time entries tasks to the tasks store.
    * @param newEntries an array of TimeEntry objects to add to the timeEntries store
    */
-  function putEntries(newEntries: TimeEntry[]) {
+  function putEntries(newEntries: TimeEntryRecord[]) {
     for (const newEntry of newEntries) {
       timeEntriesStore.put(newEntry);
       if (newEntry.tasks) {

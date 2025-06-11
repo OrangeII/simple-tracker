@@ -3,7 +3,7 @@ import type { Task } from "../../common/types";
 import { createTask, updateTask } from "../../common/supabaseClient";
 import { ref } from "vue";
 
-export const useTasksStore = defineStore("tasks", () => {
+export const useTasksStore = defineStore("tasksV2", () => {
   const tasks = ref<Task[]>([]);
 
   /**

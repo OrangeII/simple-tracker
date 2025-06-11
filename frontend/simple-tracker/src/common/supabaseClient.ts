@@ -9,6 +9,7 @@ import type {
   TaskStats,
   TaskTimeInfo,
   TimeEntry,
+  TimeEntryRecord,
   TimeInsights,
 } from "./types.ts";
 import { generateRandomColor } from "./colorUtils.ts";
@@ -154,7 +155,7 @@ export const startTracking = async (
 export const getEntries = async (
   limit: number,
   page: number
-): Promise<TimeEntry[] | null> => {
+): Promise<TimeEntryRecord[] | null> => {
   try {
     const {
       data: { user },

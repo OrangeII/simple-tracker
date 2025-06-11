@@ -41,10 +41,11 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import AppTextSelect from "./AppTextSelect.vue";
 import { useTagsStore } from "../stores/tags";
-import type { Tag, Task } from "../common/types";
+import { useTasksStore } from "../stores/v2/tasks";
+import type { Tag } from "../common/types";
 import {
   addTagToTask,
   getTaskTags,
@@ -55,17 +56,26 @@ import TaskTag from "./TaskTag.vue";
 import { generateRandomColor } from "../common/colorUtils";
 
 const tagsStore = useTagsStore();
+const tasksStore = useTasksStore();
 const taskTags = ref<Tag[]>([]);
 const isLoading = ref(true);
 
 const props = defineProps<{
-  task: Task;
+  taskId: string;
 }>();
 
+const task = computed(() => {
+  return tasksStore.get(props.taskId);
+});
+
 onMounted(async () => {
+  if (!task.value) {
+    console.error("Task not found for ID:", props.taskId);
+    return;
+  }
   try {
     await tagsStore.loadTags();
-    const tags = await getTaskTags(props.task.id);
+    const tags = await getTaskTags(task.value.id);
     if (tags !== null) {
       taskTags.value = tags;
     } else {
@@ -90,6 +100,10 @@ const onSubmit = async (payload: { value: string; matchCount: number }) => {
 };
 
 const addTag = async (tag: Tag) => {
+  if (!task.value) {
+    console.error("Task not found for ID:", props.taskId);
+    return;
+  }
   //no duplicates
   if (taskTags.value.findIndex((t) => t.id === tag.id) > -1) {
     return;
@@ -97,7 +111,7 @@ const addTag = async (tag: Tag) => {
 
   //add the tag to this task
   taskTags.value.push(tag);
-  if (!(await addTagToTask(props.task.id, tag.id))) {
+  if (!(await addTagToTask(task.value.id, tag.id))) {
     //revert
     const index = taskTags.value.findIndex((t) => t.id === tag.id);
     if (index > -1) {
@@ -108,12 +122,16 @@ const addTag = async (tag: Tag) => {
 };
 
 const removeTag = async (tag: Tag) => {
+  if (!task.value) {
+    console.error("Task not found for ID:", props.taskId);
+    return;
+  }
   //do nothing if not present
   const index = taskTags.value.findIndex((t) => t.id === tag.id);
   if (index === -1) return;
 
   taskTags.value.splice(index, 1);
-  if (!removeTagFromTask(props.task.id, tag.id)) {
+  if (!removeTagFromTask(task.value.id, tag.id)) {
     //revert
     taskTags.value.splice(index, 0, tag);
     return;
