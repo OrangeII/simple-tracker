@@ -110,7 +110,7 @@ import {
   TagIcon,
   ChartBarIcon,
 } from "@heroicons/vue/24/solid";
-import { useEntriesListStore } from "../stores/entriesList";
+import { useTimeEntriesStore } from "../stores/v2/timeEntries";
 import { updateEntry } from "../common/supabaseClient";
 import TaskTags from "./TaskTags.vue";
 import TaskStats from "./TaskStats.vue";
@@ -125,7 +125,7 @@ const duration = computed(() => {
   return new Date(stop.value.getTime() - start.value.getTime());
 });
 
-const entriesListStore = useEntriesListStore();
+const timeEntriesStore = useTimeEntriesStore();
 
 const emit = defineEmits<{
   close: [];
@@ -216,8 +216,6 @@ const onSaveClick = async () => {
     return;
   }
 
-  //make a clone of the entry
-  const oldEntry = { ...props.entry };
   const newEntry = { ...props.entry };
 
   //update values on the clone
@@ -227,13 +225,7 @@ const onSaveClick = async () => {
     newEntry.end_time = stop.value.toISOString();
   }
 
-  entriesListStore.updateEntry(newEntry);
+  timeEntriesStore.update(newEntry);
   emit("close");
-
-  //optimistically update the entry on the store
-  if (!(await updateEntry(newEntry))) {
-    //if update is not successful, revert
-    entriesListStore.updateEntry(oldEntry);
-  }
 };
 </script>

@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import type { TimeEntry } from "../../common/types";
 import { ref } from "vue";
-import { deleteEntry } from "../../common/supabaseClient";
+import { deleteEntry, updateEntry } from "../../common/supabaseClient";
 
 export const useTimeEntriesStore = defineStore("timeEntries", () => {
   const timeEntries = ref<TimeEntry[]>([]);
@@ -68,11 +68,38 @@ export const useTimeEntriesStore = defineStore("timeEntries", () => {
     }
   }
 
+  /**
+   * updates a time entry in the store and the backend.
+   * @param entry the time entry to update
+   * @throws Error if the entry is not provided or if the update fails
+   */
+  async function update(entry: TimeEntry) {
+    if (!entry) {
+      throw new Error("Time entry is required");
+    }
+
+    const oldEntry = get(entry.id);
+    if (!oldEntry) {
+      throw new Error("Time entry not found");
+    }
+
+    // optimistically update the entry in the store
+    put(entry);
+
+    // update entry in the backend
+    if (!(await updateEntry(entry))) {
+      //revert the optimistic change if update fails
+      put(oldEntry);
+      throw new Error("Failed to update time entry");
+    }
+  }
+
   return {
     timeEntries,
     put,
     get,
     remove,
     removeAll,
+    update,
   };
 });
