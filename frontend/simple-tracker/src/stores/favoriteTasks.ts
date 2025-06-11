@@ -1,12 +1,12 @@
 import { defineStore } from "pinia";
 import type { Task } from "../common/types";
 import { ref } from "vue";
-import { getFavorites, updateTask } from "../common/supabaseClient";
-import { useEntriesListStore } from "./entriesList";
+import { getFavorites } from "../common/supabaseClient";
+import { useTasksStore } from "./tasks";
 
 export const useFavoriteTasksStore = defineStore("favoriteTasks", () => {
   const favorites = ref<Task[]>([]);
-  const entriesListStore = useEntriesListStore();
+  const tasksStore = useTasksStore();
 
   const fetchFavorites = async () => {
     const data = await getFavorites();
@@ -20,13 +20,16 @@ export const useFavoriteTasksStore = defineStore("favoriteTasks", () => {
     if (favorites.value.some((t) => t.id === newFavorite.id)) return;
     newFavorite.is_favorite = true;
     favorites.value.push(newFavorite);
-    entriesListStore.updateTask(newFavorite);
 
-    if (!(await updateTask(newFavorite))) {
+    try {
+      //update the task on the backend
+      await tasksStore.update(newFavorite);
+    } catch (error) {
       //revert
       const index = favorites.value.findIndex((t) => t.id === newFavorite.id);
       favorites.value.splice(index, 1);
       newFavorite.is_favorite = false;
+      throw new Error("Failed to add favorite task");
     }
   }
 
@@ -35,11 +38,15 @@ export const useFavoriteTasksStore = defineStore("favoriteTasks", () => {
     if (index !== -1) {
       const del = favorites.value.splice(index, 1);
       del[0].is_favorite = false;
-      entriesListStore.updateTask(del[0]);
-      if (!(await updateTask(del[0]))) {
+
+      try {
+        //update the task on the backend
+        await tasksStore.update(del[0]);
+      } catch (error) {
         //revert
         favorites.value.splice(index, 0, del[0]);
         del[0].is_favorite = true;
+        throw new Error("Failed to remove favorite task");
       }
     }
   }

@@ -1,22 +1,59 @@
 import { defineStore } from "pinia";
 import type { CurrentTask, Task } from "../common/types";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import {
   getCurrentTaskAndTimeEntry,
   subscribeToCurrentTasks,
   unsubscribeFromCurrentTasks,
+  stopCurrentTracking,
   track as supabaseTrack,
 } from "../common/supabaseClient";
 import type { RealtimeChannel } from "@supabase/supabase-js";
-import { useEntriesListStore } from "./entriesList";
+import { useTimeEntriesStore } from "./timeEntries";
+import { useTasksStore } from "./tasks";
 
 export const useCurrentTaskStore = defineStore("currentTask", () => {
-  const task = ref<CurrentTask | null>(null);
   const taskSubscription = ref<RealtimeChannel>();
-  const entriesListStore = useEntriesListStore();
+
+  const timeEntriesStore = useTimeEntriesStore();
+  const tasksStore = useTasksStore();
+
+  const taskId = ref<string | null>(null);
+  const task = computed(() => {
+    if (taskId.value == null) {
+      return null;
+    }
+    return tasksStore.get(taskId.value);
+  });
+
+  const timeEntryId = ref<string | null>(null);
+  const timeEntry = computed(() => {
+    if (timeEntryId.value == null) {
+      return null;
+    }
+    return timeEntriesStore.get(timeEntryId.value);
+  });
 
   async function fetchCurrentTask() {
-    task.value = await getCurrentTaskAndTimeEntry();
+    const currentTask = await getCurrentTaskAndTimeEntry();
+    setCurrentTask(currentTask);
+  }
+
+  function setCurrentTask(currentTask: CurrentTask | null) {
+    if (!currentTask) {
+      taskId.value = null;
+      timeEntryId.value = null;
+      return;
+    }
+
+    taskId.value = currentTask.task_id;
+    if (currentTask.tasks && currentTask.tasks.id) {
+      tasksStore.put(currentTask.tasks);
+    }
+    timeEntryId.value = currentTask.time_entry_id;
+    if (currentTask.time_entries && currentTask.time_entries.id) {
+      timeEntriesStore.put(currentTask.time_entries);
+    }
   }
 
   async function initializeSubscriptionToCurrentTask() {
@@ -40,19 +77,27 @@ export const useCurrentTaskStore = defineStore("currentTask", () => {
     }
   }
 
-  async function track(taskToTrack: Task) {
-    const startTime = new Date();
-
-    //push the current task to the entries list
-    if (task.value) {
-      task.value.time_entries.end_time = new Date().toISOString();
-      task.value.time_entries.tasks = task.value.tasks;
-      entriesListStore.pushEntries([task.value.time_entries]);
-      task.value = null;
+  /**
+   * Start tracking a task.
+   * If a task is already being tracked, the current time entry will be stopped and put to the timeEntries list.
+   * Then a new time entry will be started on the provided task and put to the timeEntries list.
+   * @param taskToTrack task to start tracking
+   * @returns true if the task was successfully tracked, false otherwise
+   */
+  async function track(taskToTrack: Task): Promise<boolean> {
+    if (!taskToTrack) {
+      throw new Error("Task to track is required");
     }
 
-    //optimistically change the store
-    task.value = {
+    //optimistically put the stopped time entry to the store
+    if (timeEntry.value) {
+      timeEntry.value.end_time = new Date().toISOString();
+      timeEntriesStore.put(timeEntry.value);
+    }
+
+    //optimistically set the current task
+    const startTime = new Date();
+    setCurrentTask({
       user_id: taskToTrack.user_id,
       task_id: taskToTrack.id,
       time_entry_id: "",
@@ -62,27 +107,75 @@ export const useCurrentTaskStore = defineStore("currentTask", () => {
         task_id: taskToTrack.id,
         user_id: taskToTrack.user_id,
         start_time: startTime.toISOString(),
-        created_at: startTime.toISOString(),
+        created_at: new Date().toISOString(),
       },
-    };
+    });
 
     const ret = await supabaseTrack({ taskId: taskToTrack.id, startTime });
-    if (!ret) {
-      //reverse the optimistic change
-      task.value = null;
-      return;
+    //update store with the actual task
+    setCurrentTask(ret);
+
+    return !!ret;
+  }
+
+  /**
+   * creates a new task and starts tracking it.
+   * If a task is already being tracked, the current time entry will be stopped and put to the timeEntries list.
+   * @param name task name
+   * @param altCode task alt code
+   * @returns the new task if it was created and tracked
+   */
+  async function trackNew(name: string, altCode?: string): Promise<Task> {
+    if (!name) {
+      throw new Error("Task name is required");
+    }
+    const taskToTrack = await tasksStore.create(name, altCode);
+    if (!taskToTrack) {
+      throw new Error("Failed to create task");
+    }
+    const res = await track(taskToTrack);
+    if (!res) {
+      throw new Error("Failed to track task");
+    }
+    return taskToTrack;
+  }
+
+  /**
+   * stops tracking the current task and stops the current time entry.
+   * If a task is not being tracked, an error will be thrown.
+   * @returns true if the task was successfully stopped, false otherwise
+   */
+  async function stop(): Promise<Boolean> {
+    if (!taskId.value) {
+      throw new Error("Can't stop tracking: No task is being tracked");
     }
 
-    //update store with the actual task
-    task.value = ret;
+    //optimistically set the end time to the current time entry
+    if (timeEntry.value) {
+      timeEntry.value.end_time = new Date().toISOString();
+      timeEntriesStore.put(timeEntry.value);
+    }
+
+    const res = await stopCurrentTracking();
+    if (!res) {
+      throw new Error("Failed to stop tracking task");
+    }
+    setCurrentTask(null);
+    return res;
   }
 
   return {
+    taskId,
     task,
+    timeEntryId,
+    timeEntry,
     taskSubscription,
     fetchCurrentTask,
+    setCurrentTask,
     initializeSubscriptionToCurrentTask,
     cleanup,
     track,
+    trackNew,
+    stop,
   };
 });

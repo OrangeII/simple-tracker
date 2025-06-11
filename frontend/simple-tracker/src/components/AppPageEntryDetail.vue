@@ -73,7 +73,7 @@
         </div>
         <div class="mb-4">
           <h3 class="text-text/70">Alt. code</h3>
-          <h3>{{ entry.tasks?.alt_code }}</h3>
+          <h3>{{ tasksStore.get(entry.task_id)?.alt_code }}</h3>
         </div>
 
         <!-- task tags -->
@@ -82,7 +82,7 @@
             <TagIcon class="text-text/70 size-5"></TagIcon>
             <h3 class="text-text/70">Tags</h3>
           </div>
-          <TaskTags v-if="entry.tasks" :task="entry.tasks" />
+          <TaskTags v-if="task" :taskId="entry.task_id" />
         </div>
 
         <!-- task stats -->
@@ -91,7 +91,7 @@
             <ChartBarIcon class="text-text/70 size-5"></ChartBarIcon>
             <h3 class="text-text/70">Stats</h3>
           </div>
-          <TaskStats v-if="entry.tasks" :taskId="entry.tasks.id" />
+          <TaskStats v-if="task" :taskId="entry.task_id" />
         </div>
       </div>
     </template>
@@ -110,22 +110,26 @@ import {
   TagIcon,
   ChartBarIcon,
 } from "@heroicons/vue/24/solid";
-import { useEntriesListStore } from "../stores/entriesList";
-import { updateEntry } from "../common/supabaseClient";
+import { useTimeEntriesStore } from "../stores/timeEntries";
+import { useTasksStore } from "../stores/tasks";
 import TaskTags from "./TaskTags.vue";
 import TaskStats from "./TaskStats.vue";
 
-const props = defineProps<{ entry: TimeEntry }>();
+const timeEntriesStore = useTimeEntriesStore();
+const tasksStore = useTasksStore();
 
-const taskName = ref(props.entry.tasks?.name || "");
+const props = defineProps<{ entry: TimeEntry }>();
+const task = computed(() => {
+  return tasksStore.get(props.entry.task_id);
+});
+
+const taskName = ref(task.value?.name || "");
 const start = ref(new Date(props.entry.start_time));
 const stop = ref(props.entry.end_time ? new Date(props.entry.end_time) : null);
 const duration = computed(() => {
   if (!stop.value) return new Date(0);
   return new Date(stop.value.getTime() - start.value.getTime());
 });
-
-const entriesListStore = useEntriesListStore();
 
 const emit = defineEmits<{
   close: [];
@@ -199,7 +203,7 @@ const setTimeFromEvent = (
 };
 
 const onSaveClick = async () => {
-  if (!props.entry.tasks) return;
+  if (!task.value) return;
 
   //task must have a name
   if (!taskName.value) return;
@@ -216,24 +220,19 @@ const onSaveClick = async () => {
     return;
   }
 
-  //make a clone of the entry
-  const oldEntry = { ...props.entry };
   const newEntry = { ...props.entry };
 
   //update values on the clone
-  newEntry.tasks = { ...props.entry.tasks, name: taskName.value };
   newEntry.start_time = start.value.toISOString();
   if (stop.value) {
     newEntry.end_time = stop.value.toISOString();
   }
 
-  entriesListStore.updateEntry(newEntry);
-  emit("close");
-
-  //optimistically update the entry on the store
-  if (!(await updateEntry(newEntry))) {
-    //if update is not successful, revert
-    entriesListStore.updateEntry(oldEntry);
+  timeEntriesStore.update(newEntry);
+  if (task.value.name !== taskName.value) {
+    //update task name if it has changed
+    tasksStore.update({ ...task.value, name: taskName.value });
   }
+  emit("close");
 };
 </script>

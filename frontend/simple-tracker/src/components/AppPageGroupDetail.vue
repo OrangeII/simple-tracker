@@ -33,7 +33,7 @@
           @onDelete="onDeleteClick(entry)"
         >
           <template #left>
-            <h3 class="truncate">{{ entry.tasks?.name }}</h3>
+            <h3 class="truncate">{{ task?.name }}</h3>
           </template>
           <template v-if="entry.end_time" #duration>
             {{
@@ -68,16 +68,21 @@ import EntriesListItemLayout from "./EntriesListItemLayout.vue";
 import AppPageEntryDetail from "./AppPageEntryDetail.vue";
 import { toDurationString } from "../common/timeUtils";
 import type { TaskGroup, TimeEntry } from "../common/types";
-import { ref, watch } from "vue";
-import { useEntriesListStore } from "../stores/entriesList";
-import { deleteEntry } from "../common/supabaseClient";
+import { computed, ref, watch } from "vue";
+import { useTimeEntriesStore } from "../stores/timeEntries";
+import { useTimelineStore } from "../stores/timeline";
+import { useTasksStore } from "../stores/tasks";
 import { CheckCircleIcon } from "@heroicons/vue/24/solid";
 import { useBreakpoints } from "../common/breakpoints";
-import { updateTask } from "../common/supabaseClient";
 
-const entriesListStore = useEntriesListStore();
+const timeEntriesStore = useTimeEntriesStore();
+const timeLineStore = useTimelineStore();
+const tasksStore = useTasksStore();
 const props = defineProps<{ group: TaskGroup }>();
 const group = ref(props.group);
+const task = computed(() => {
+  return tasksStore.get(props.group.id);
+});
 const detailPageEntry = ref<TimeEntry | null>(null);
 const taskName = ref(props.group.name || "");
 const { isDesktop } = useBreakpoints();
@@ -87,7 +92,7 @@ const emit = defineEmits<{
 }>();
 
 watch(
-  () => entriesListStore.entriesByDate,
+  () => timeLineStore.timeEntriesByDate,
   (newValue) => {
     //find the group by id and update the group prop
 
@@ -117,19 +122,11 @@ const onEntryClick = (entry: TimeEntry) => {
 };
 
 const onDeleteClick = async (entry: TimeEntry) => {
-  if (!entry.tasks) return;
-
   const c = confirm("Are you sure you want to delete this entry?");
   if (!c) return;
 
   //optimistically remove the entry
-  entriesListStore.removeEntries([entry]);
-
-  //delete the entry form the database
-  if (!(await deleteEntry(entry.id))) {
-    //revert the optimistic change if deletion fails
-    entriesListStore.pushEntries([entry]);
-  }
+  timeEntriesStore.remove(entry);
 };
 
 const onSaveClick = async () => {
@@ -137,19 +134,12 @@ const onSaveClick = async () => {
     return;
   }
 
-  if (!group.value.entries[0].tasks) {
+  if (!task.value) {
     return;
   }
-  const oldTask = { ...group.value.entries[0].tasks };
-  const newTask = { ...group.value.entries[0].tasks, name: taskName.value };
-  entriesListStore.updateTask(newTask);
+  const newTask = { ...task.value, name: taskName.value };
+  tasksStore.update(newTask);
 
   emit("close");
-
-  //optimistically update the task
-  if (!(await updateTask(newTask))) {
-    //if update is not successful, revert
-    entriesListStore.updateTask(oldTask);
-  }
 };
 </script>

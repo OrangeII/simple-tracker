@@ -17,10 +17,14 @@
     <div class="flex-grow max-w-[60%]">
       <h2>
         <RunningTime
-          :start="new Date(currentTaskStore.task.time_entries.start_time)"
+          :start="
+            currentTaskStore.timeEntry
+              ? new Date(currentTaskStore.timeEntry.start_time)
+              : new Date()
+          "
         />
       </h2>
-      <div class="truncate">{{ currentTaskStore.task.tasks.name }}</div>
+      <div class="truncate">{{ currentTaskStore.task.name }}</div>
     </div>
     <div class="size-12 flex items-center">
       <StopIcon
@@ -38,17 +42,15 @@
  * this component is responsible for displaying an active task and for stopping its tracking
  */
 import { ref } from "vue";
-import { stopCurrentTracking } from "../common/supabaseClient.ts";
+
 import { StopIcon } from "@heroicons/vue/24/solid";
 import Spinner from "./Spinner.vue";
 import RunningTime from "./RunningTime.vue";
-import { useCurrentTaskStore } from "../stores/currentTask";
-import { useEntriesListStore } from "../stores/entriesList";
+import { useCurrentTaskStore } from "../stores/currentTask.ts";
 import { usePreferencesStore } from "../stores/preferences.ts";
 
 const loading = ref(false);
 const currentTaskStore = useCurrentTaskStore();
-const entriesListStore = useEntriesListStore();
 const preferencesStore = usePreferencesStore();
 
 const stopTracking = async () => {
@@ -56,18 +58,11 @@ const stopTracking = async () => {
 
   loading.value = true;
 
-  //optimistically push the current task to the entries list and reset the current task
-  currentTaskStore.task.time_entries.end_time = new Date().toISOString();
-  currentTaskStore.task.time_entries.tasks = currentTaskStore.task.tasks;
-  entriesListStore.pushEntries([currentTaskStore.task.time_entries]);
-  currentTaskStore.task = null;
-
-  if (!(await stopCurrentTracking())) {
+  try {
+    await currentTaskStore.stop();
+  } finally {
     loading.value = false;
-    return;
   }
-
-  loading.value = false;
 };
 </script>
 

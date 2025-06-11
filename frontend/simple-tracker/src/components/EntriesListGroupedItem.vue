@@ -4,7 +4,7 @@
     @onResume="onResume"
     @onDelete="onDelete"
     @onFavoriteClick="onFavoriteClicked"
-    :isFavorite="group.entries[0].tasks?.is_favorite"
+    :isFavorite="task?.is_favorite"
   >
     <template #left>
       <!-- main -->
@@ -17,10 +17,7 @@
         </div>
         <div class="flex-col max-w-full overflow-hidden">
           <h3 class="truncate max-w-full">{{ group.name }}</h3>
-          <TagDots
-            v-if="group.entries[0].tasks"
-            :task="group.entries[0].tasks"
-          />
+          <TagDots v-if="task" :task="task" />
         </div>
       </div>
     </template>
@@ -36,6 +33,8 @@ import { toDurationString } from "../common/timeUtils";
 import type { TaskGroup, TimeEntry } from "../common/types";
 import EntriesListItemLayout from "./EntriesListItemLayout.vue";
 import TagDots from "./TagDots.vue";
+import { useTasksStore } from "../stores/tasks";
+import { computed } from "vue";
 
 const emit = defineEmits<{
   onResumeClicked: [entry: TimeEntry];
@@ -46,6 +45,11 @@ const emit = defineEmits<{
 const props = defineProps<{
   group: TaskGroup;
 }>();
+
+const tasksStore = useTasksStore();
+const task = computed(() => {
+  return tasksStore.get(props.group.id);
+});
 
 const onResume = () => {
   emit("onResumeClicked", props.group.entries[0]);

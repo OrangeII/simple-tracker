@@ -15,8 +15,18 @@ export interface TimeEntry {
   start_time: string;
   end_time?: string;
   created_at: string;
-  tasks?: Task;
   loading?: boolean;
+}
+
+export interface TimeEntryRecord {
+  id: string;
+  task_id: string;
+  user_id: string;
+  start_time: string;
+  end_time?: string;
+  created_at: string;
+  loading?: boolean;
+  tasks?: Task;
 }
 
 export interface CurrentTask {
