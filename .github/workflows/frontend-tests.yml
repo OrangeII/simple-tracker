@@ -1,4 +1,4 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# This workflow will do a clean installation of node dependencies, cache/restore them and run tests across different versions of node
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
 
 name: Run Frontend Tests
@@ -6,8 +6,12 @@ name: Run Frontend Tests
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - frontend/simple-tracker/**
   pull_request:
     branches: [ "main" ]
+    paths:
+      - frontend/simple-tracker/**
 
 jobs:
   test:
@@ -16,7 +20,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x, 20.x, 22.x]
+        node-version: [20.x, 22.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
