@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import type { Task } from "../common/types";
 
 export const useQRCodesStore = defineStore("qrcodes", () => {
   /**
@@ -37,5 +38,20 @@ export const useQRCodesStore = defineStore("qrcodes", () => {
     return { taskId, name, altCode };
   }
 
-  return { parseQRCodeJson };
+  function getQrCodeJsonFromTask(task: Task): string {
+    if (!task) {
+      throw new Error("Task is required to generate QR code JSON");
+    }
+
+    const qrCodeData: any = {};
+    qrCodeData.taskId = task.id;
+    qrCodeData.name = task.name;
+    if (task.alt_code) {
+      qrCodeData.altCode = task.alt_code;
+    }
+
+    return JSON.stringify(qrCodeData);
+  }
+
+  return { parseQRCodeJson, getQrCodeJsonFromTask };
 });
