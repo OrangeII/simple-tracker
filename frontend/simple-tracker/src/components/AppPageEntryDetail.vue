@@ -93,6 +93,17 @@
           </div>
           <TaskStats v-if="task" :taskId="entry.task_id" />
         </div>
+
+        <!-- actions -->
+        <div class="flex items-center justify-around">
+          <div
+            class="flex gap-1 items-center cursor-pointer"
+            @click="console.log('qr clicked')"
+          >
+            <QrCodeIcon class="size-8 text-primary"></QrCodeIcon>
+            <h3 class="uppercase text-primary">Get QR Code</h3>
+          </div>
+        </div>
       </div>
     </template>
   </AppPage>
@@ -109,6 +120,7 @@ import {
   CheckCircleIcon,
   TagIcon,
   ChartBarIcon,
+  QrCodeIcon,
 } from "@heroicons/vue/24/solid";
 import { useTimeEntriesStore } from "../stores/timeEntries";
 import { useTasksStore } from "../stores/tasks";
