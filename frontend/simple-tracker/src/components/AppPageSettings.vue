@@ -85,7 +85,7 @@ const signOut = async () => {
   userStore.user = null;
   timeEntriesStore.timeEntries = [];
   tasksStore.tasks = [];
-  favoriteTasksStore.favorites = [];
+  favoriteTasksStore.clear();
   emit("close");
 };
 </script>
