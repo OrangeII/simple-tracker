@@ -65,6 +65,7 @@ import Spinner from "./Spinner.vue";
 import { useCurrentTaskStore } from "../stores/currentTask.ts";
 import { useTasksStore } from "../stores/tasks.ts";
 import AppTextSelect from "./AppTextSelect.vue";
+import { useQRCodesStore } from "../stores/qrcodes.ts";
 
 const taskName = ref("");
 const taskAltCode = ref("");
@@ -73,6 +74,7 @@ const message = ref("");
 const qrModalIsOpen = ref(false);
 const currentTaskStore = useCurrentTaskStore();
 const taskStore = useTasksStore();
+const qrCodesStore = useQRCodesStore();
 
 const start = async () => {
   if (!taskName.value) {
@@ -95,18 +97,9 @@ const onQRCodeCaptured = async (rawCode: string) => {
   qrModalIsOpen.value = false;
 
   //validate raw code
-  let code;
-  try {
-    code = JSON.parse(rawCode);
-  } catch (error) {
-    message.value = "Invalid code!";
-    return;
-  }
-  message.value = code.altCode;
-
-  //it should have at least one of theese to be a valid code
-  if (!(code.taskId || code.name || code.altCode)) {
-    message.value = "Invalid code!";
+  let code = qrCodesStore.parseQRCodeJson(rawCode);
+  if (!code) {
+    message.value = "Invalid QR code!";
     return;
   }
 
