@@ -284,4 +284,38 @@ describe("favoriteTasks Store", () => {
     expect(store.favorites).not.toContainEqual(mockTask);
     expect(store.favorites).toHaveLength(0);
   });
+
+  it("should clear all favorites", async () => {
+    const mockTasks = [
+      {
+        id: "1",
+        name: "Task 1",
+        alt_code: "T1",
+        created_at: "2023-01-01T00:00:00.000Z",
+        user_id: "",
+        is_favorite: true,
+      },
+      {
+        id: "2",
+        name: "Task 2",
+        alt_code: "T2",
+        created_at: "2023-01-01T00:00:00.000Z",
+        user_id: "",
+        is_favorite: true,
+      },
+    ];
+
+    vi.mocked(updateTask).mockResolvedValue(true);
+    const store = useFavoriteTasksStore();
+    const tasksStore = useTasksStore();
+    for (const t of mockTasks) {
+      tasksStore.put(t);
+      await store.addFavorite(t);
+    }
+
+    expect(store.favorites).toHaveLength(mockTasks.length);
+
+    store.clear();
+    expect(store.favorites).toHaveLength(0);
+  });
 });

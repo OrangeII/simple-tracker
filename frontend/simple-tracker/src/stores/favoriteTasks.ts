@@ -73,5 +73,16 @@ export const useFavoriteTasksStore = defineStore("favoriteTasks", () => {
     }
   }
 
-  return { favorites, fetchFavorites, addFavorite, removeFavorite, toggle };
+  function clear() {
+    _favorites.value = [];
+  }
+
+  return {
+    favorites,
+    fetchFavorites,
+    addFavorite,
+    removeFavorite,
+    toggle,
+    clear,
+  };
 });
