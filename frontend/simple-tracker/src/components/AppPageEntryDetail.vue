@@ -93,6 +93,31 @@
           </div>
           <TaskStats v-if="task" :taskId="entry.task_id" />
         </div>
+
+        <!-- actions -->
+        <div class="flex items-center justify-around">
+          <div
+            class="flex gap-1 items-center cursor-pointer"
+            @click="openQRModal"
+          >
+            <QrCodeIcon class="size-8 text-primary"></QrCodeIcon>
+            <h3 class="uppercase text-primary">Get QR Code</h3>
+          </div>
+        </div>
+      </div>
+
+      <!-- qrcode modal -->
+      <div
+        id="qr-modal"
+        v-if="qrModalIsOpen"
+        @click.self="closeQRModal"
+        class="fixed inset-0 flex items-center justify-center bg-black"
+      >
+        <img
+          class="bg-background rounded-lg p-6"
+          :src="qrCode"
+          alt="Task QR Code"
+        />
       </div>
     </template>
   </AppPage>
@@ -109,19 +134,28 @@ import {
   CheckCircleIcon,
   TagIcon,
   ChartBarIcon,
+  QrCodeIcon,
 } from "@heroicons/vue/24/solid";
 import { useTimeEntriesStore } from "../stores/timeEntries";
 import { useTasksStore } from "../stores/tasks";
 import TaskTags from "./TaskTags.vue";
 import TaskStats from "./TaskStats.vue";
+import { useQRCodesStore } from "../stores/qrcodes";
+import { useQRCode } from "@vueuse/integrations/useQRCode";
 
 const timeEntriesStore = useTimeEntriesStore();
 const tasksStore = useTasksStore();
+const qrcodesStore = useQRCodesStore();
 
 const props = defineProps<{ entry: TimeEntry }>();
 const task = computed(() => {
   return tasksStore.get(props.entry.task_id);
 });
+const qrData = computed(() => {
+  if (!task.value) return "";
+  return qrcodesStore.getQrCodeJsonFromTask(task.value);
+});
+const qrCode = useQRCode(qrData);
 
 const taskName = ref(task.value?.name || "");
 const start = ref(new Date(props.entry.start_time));
@@ -130,6 +164,13 @@ const duration = computed(() => {
   if (!stop.value) return new Date(0);
   return new Date(stop.value.getTime() - start.value.getTime());
 });
+const qrModalIsOpen = ref(false);
+const closeQRModal = () => {
+  qrModalIsOpen.value = false;
+};
+const openQRModal = () => {
+  qrModalIsOpen.value = true;
+};
 
 const emit = defineEmits<{
   close: [];
