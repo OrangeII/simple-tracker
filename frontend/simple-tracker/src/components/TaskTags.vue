@@ -28,6 +28,7 @@
       :key="tag.id"
       :name="tag.name"
       :hex_color="tag.hex_color"
+      :useConfirmClick="true"
       @click="removeTag(tag)"
     >
       <template #icon>
