@@ -23,21 +23,23 @@
       </div>
     </template>
 
-    <TaskTag
-      v-for="tag in taskTags"
-      :key="tag.id"
-      :name="tag.name"
-      :hex_color="tag.hex_color"
-      :useConfirmClick="true"
-      @click="removeTag(tag)"
-    >
-      <template #icon>
-        <XCircleIcon
-          class="size-6 text-accent"
-          :style="tag.hex_color ? { color: tag.hex_color } : null"
-        ></XCircleIcon>
-      </template>
-    </TaskTag>
+    <TransitionGroup name="list">
+      <TaskTag
+        v-for="tag in taskTags"
+        :key="tag.id"
+        :name="tag.name"
+        :hex_color="tag.hex_color"
+        :useConfirmClick="true"
+        @click="removeTag(tag)"
+      >
+        <template #icon>
+          <XCircleIcon
+            class="size-6 text-accent"
+            :style="tag.hex_color ? { color: tag.hex_color } : null"
+          ></XCircleIcon>
+        </template>
+      </TaskTag>
+    </TransitionGroup>
   </div>
 </template>
 
@@ -122,3 +124,23 @@ const removeTag = async (tag: Tag) => {
   return;
 };
 </script>
+
+<style scoped>
+.list-move, /* apply transition to moving elements */
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.1s ease;
+}
+
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: scale(0);
+}
+
+/* ensure leaving items are taken out of layout flow so that moving
+   animations can be calculated correctly. */
+.list-leave-active {
+  position: absolute;
+}
+</style>
