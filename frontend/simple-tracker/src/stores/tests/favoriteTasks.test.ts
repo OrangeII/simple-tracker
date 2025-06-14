@@ -45,6 +45,10 @@ describe("favoriteTasks Store", () => {
     vi.mocked(getFavorites).mockResolvedValueOnce(mockTasks);
 
     const store = useFavoriteTasksStore();
+    const tasksStore = useTasksStore();
+    for (const t of mockTasks) {
+      tasksStore.put(t);
+    }
     await store.fetchFavorites();
 
     expect(getFavorites).toHaveBeenCalledTimes(1);
