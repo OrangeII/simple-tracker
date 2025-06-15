@@ -2,12 +2,13 @@
   <div
     ref="tagElement"
     @click="click"
-    class="relative cursor-pointer py-1 px-2 rounded-md border-1 border-text/30 flex gap-2 items-center justify-between"
+    class="relative cursor-pointer py-1 px-2 rounded-md border-1 border-text/30 flex items-center justify-between"
     :style="hex_color ? { borderColor: hex_color } : null"
+    :class="{ 'gap-2': showIcon }"
   >
-    <Transition name="slide-fade">
-      <slot v-if="showIcon" name="icon"> </slot>
-    </Transition>
+    <div :class="['icon-container', { 'icon-visible': showIcon }]">
+      <slot name="icon"></slot>
+    </div>
     <div>
       {{ name }}
     </div>
@@ -79,18 +80,17 @@ const click = () => {
 </script>
 
 <style scoped>
-.slide-fade-enter-active {
-  transition: all 0.1s ease;
-}
-
-.slide-fade-leave-active {
-  transition: all 0.1s ease;
-}
-
-.slide-fade-enter-from,
-.slide-fade-leave-to {
-  transform: translateX(100%);
+.icon-container {
+  transform: translateX(-100%);
   opacity: 0;
-  width: 0;
+  overflow: hidden;
+  max-width: 0;
+  transition: transform 0.1s ease, opacity 0.1s ease, max-width 0.1s ease;
+}
+
+.icon-container.icon-visible {
+  transform: translateX(0);
+  opacity: 1;
+  max-width: 3em;
 }
 </style>
