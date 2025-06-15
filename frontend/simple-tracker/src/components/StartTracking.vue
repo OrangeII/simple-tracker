@@ -36,7 +36,7 @@
       id="qr-modal"
       v-if="qrModalIsOpen"
       @click.self="closeQRModal"
-      class="fixed inset-0 flex items-center justify-center bg-black"
+      class="fixed inset-0 flex items-center justify-center bg-black/40"
     >
       <div class="bg-background rounded-lg shadow-lg max-w-lg w-full p-6">
         <div class="flex justify-between items-center border-b pb-2">

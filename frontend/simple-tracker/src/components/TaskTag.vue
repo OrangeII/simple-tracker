@@ -4,7 +4,7 @@
     @click="click"
     class="relative cursor-pointer py-1 px-2 rounded-md border-1 border-text/30 flex items-center justify-between"
     :style="hex_color ? { borderColor: hex_color } : null"
-    :class="{ 'gap-2': showIcon }"
+    :class="{ 'gap-2': hasIcon && showIcon }"
   >
     <div :class="['icon-container', { 'icon-visible': showIcon }]">
       <slot name="icon"></slot>
@@ -16,7 +16,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onUnmounted, ref, watch } from "vue";
+import { computed, onUnmounted, ref, useSlots, watch } from "vue";
+
+const slots = useSlots();
+const hasIcon = computed(() => {
+  return slots.icon && slots.icon().length > 0;
+});
 
 const props = defineProps<{
   name: string;

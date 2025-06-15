@@ -111,7 +111,7 @@
         id="qr-modal"
         v-if="qrModalIsOpen"
         @click.self="closeQRModal"
-        class="fixed inset-0 flex items-center justify-center bg-black"
+        class="fixed inset-0 flex items-center justify-center bg-black/40"
       >
         <img
           class="bg-background rounded-lg p-6"
