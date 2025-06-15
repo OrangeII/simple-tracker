@@ -1,7 +1,8 @@
 <template>
   <div
+    ref="tagElement"
     @click="click"
-    class="cursor-pointer py-1 px-2 rounded-md border-1 border-text/30 flex gap-2 items-center justify-between"
+    class="relative cursor-pointer py-1 px-2 rounded-md border-1 border-text/30 flex gap-2 items-center justify-between"
     :style="hex_color ? { borderColor: hex_color } : null"
   >
     <Transition name="slide-fade">
@@ -14,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, onUnmounted, ref, watch } from "vue";
 
 const props = defineProps<{
   name: string;
@@ -26,6 +27,8 @@ const emit = defineEmits<{
   click: [void];
 }>();
 
+const tagElement = ref<HTMLElement | null>(null);
+
 const clicked = ref(false);
 const showIcon = computed(() => {
   if (props.useConfirmClick) {
@@ -33,6 +36,32 @@ const showIcon = computed(() => {
   }
   return true;
 });
+const renderClickThrough = computed(() => {
+  return props.useConfirmClick && clicked.value;
+});
+watch(renderClickThrough, (isTrue) => {
+  if (isTrue) {
+    // use timeout to ensure the click-through div is rendered before adding the event listener
+    setTimeout(() => {
+      document.addEventListener("click", handleDocumentClick, {
+        capture: true,
+      });
+    }, 0);
+  } else {
+    document.removeEventListener("click", handleDocumentClick, {
+      capture: true,
+    });
+  }
+});
+onUnmounted(() => {
+  // Cleanup listener when component is unmounted
+  document.removeEventListener("click", handleDocumentClick, true);
+});
+const handleDocumentClick = (event: MouseEvent) => {
+  if (tagElement.value && !tagElement.value.contains(event.target as Node)) {
+    clicked.value = false;
+  }
+};
 
 const click = () => {
   if (props.useConfirmClick) {
