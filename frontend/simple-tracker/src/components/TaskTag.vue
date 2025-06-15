@@ -16,9 +16,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onUnmounted, ref, useSlots, watch } from "vue";
+import { computed, onUnmounted, ref, watch } from "vue";
 
-const slots = useSlots();
+const slots = defineSlots<{
+  icon?: () => any;
+}>();
 const hasIcon = computed(() => {
   return slots.icon && slots.icon().length > 0;
 });
