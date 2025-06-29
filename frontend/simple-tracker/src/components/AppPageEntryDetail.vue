@@ -7,8 +7,9 @@
       </div>
     </template>
     <template #main>
-      <div class="p-4">
-        <div class="pb-4">
+      <div class="p-4 flex flex-col gap-4">
+        <!-- task name -->
+        <div>
           <input
             required="true"
             type="text"
@@ -17,7 +18,8 @@
           />
         </div>
 
-        <div class="pb-4 flex flex-col gap-2">
+        <!-- entry times -->
+        <div class="flex flex-col gap-2">
           <div>
             <div class="flex gap-1 items-center pb-1">
               <PlayCircleIcon class="text-text/70 size-5"></PlayCircleIcon>
@@ -73,7 +75,7 @@
         </div>
 
         <!-- entry notes -->
-        <div class="mb-4">
+        <div>
           <div class="flex gap-1 items-center pb-1">
             <DocumentTextIcon class="text-text/70 size-5"></DocumentTextIcon>
             <h3 class="text-text/70">Notes</h3>
@@ -87,7 +89,7 @@
         </div>
 
         <!-- task tags -->
-        <div class="mb-4">
+        <div>
           <div class="flex gap-1 items-center pb-1">
             <TagIcon class="text-text/70 size-5"></TagIcon>
             <h3 class="text-text/70">Tags</h3>
@@ -96,7 +98,7 @@
         </div>
 
         <!-- task stats -->
-        <div class="mb-4">
+        <div>
           <div class="flex gap-1 items-center pb-1">
             <ChartBarIcon class="text-text/70 size-5"></ChartBarIcon>
             <h3 class="text-text/70">Stats</h3>
@@ -105,20 +107,20 @@
         </div>
 
         <!-- alt code -->
-        <div class="mb-4">
+        <div>
           <h3 class="text-text/70">Alt. code</h3>
           <h3>{{ tasksStore.get(entry.task_id)?.alt_code }}</h3>
         </div>
-      </div>
 
-      <!-- actions -->
-      <div class="flex items-center justify-around mb-4">
-        <div
-          class="flex gap-1 items-center cursor-pointer"
-          @click="openQRModal"
-        >
-          <QrCodeIcon class="size-8 text-primary"></QrCodeIcon>
-          <h3 class="uppercase text-primary">Get QR Code</h3>
+        <!-- actions -->
+        <div class="flex items-center justify-around">
+          <div
+            class="flex gap-1 items-center cursor-pointer"
+            @click="openQRModal"
+          >
+            <QrCodeIcon class="size-8 text-primary"></QrCodeIcon>
+            <h3 class="uppercase text-primary">Get QR Code</h3>
+          </div>
         </div>
       </div>
 
