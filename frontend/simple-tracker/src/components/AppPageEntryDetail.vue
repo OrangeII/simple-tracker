@@ -106,12 +106,6 @@
           <TaskStats v-if="task" :taskId="entry.task_id" />
         </div>
 
-        <!-- alt code -->
-        <div>
-          <h3 class="text-text/70">Alt. code</h3>
-          <h3>{{ tasksStore.get(entry.task_id)?.alt_code }}</h3>
-        </div>
-
         <!-- actions -->
         <div class="flex items-center justify-around">
           <div
@@ -131,11 +125,22 @@
         @click.self="closeQRModal"
         class="fixed inset-0 flex items-center justify-center bg-black/40"
       >
-        <img
-          class="bg-background rounded-lg p-6"
-          :src="qrCode"
-          alt="Task QR Code"
-        />
+        <div class="bg-background rounded-lg m-4 p-6 flex flex-col gap-4">
+          <!-- qrcode image -->
+          <img :src="qrCode" alt="Task QR Code" />
+
+          <!-- alt code -->
+          <div>
+            <h4 class="text-text/70">Alt. code</h4>
+            <div class="flex gap-2">
+              <h4>{{ tasksStore.get(entry.task_id)?.alt_code }}</h4>
+              <ClipboardIcon
+                class="size-5"
+                @click="copyAltcodeToClipBoard"
+              ></ClipboardIcon>
+            </div>
+          </div>
+        </div>
       </div>
     </template>
   </AppPage>
@@ -155,6 +160,7 @@ import {
   QrCodeIcon,
   DocumentTextIcon,
 } from "@heroicons/vue/24/solid";
+import { ClipboardIcon } from "@heroicons/vue/24/outline";
 import { useTimeEntriesStore } from "../stores/timeEntries";
 import { useTasksStore } from "../stores/tasks";
 import TaskTags from "./TaskTags.vue";
@@ -297,5 +303,12 @@ const onSaveClick = async () => {
     tasksStore.update({ ...task.value, name: taskName.value });
   }
   emit("close");
+};
+
+const copyAltcodeToClipBoard = () => {
+  const altCode = tasksStore.get(props.entry.task_id)?.alt_code;
+  if (altCode) {
+    navigator.clipboard.writeText(altCode);
+  }
 };
 </script>
