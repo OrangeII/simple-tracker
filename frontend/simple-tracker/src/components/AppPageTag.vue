@@ -13,6 +13,17 @@
     </template>
     <template #main>
       <div class="p-4 flex flex-col">
+        <!-- tag dot preview -->
+        <div class="pb-4 flex gap-1 items-center">
+          <TagDot v-if="!isNew" :tag="tag"></TagDot>
+          <ArrowRightIcon v-if="!isNew" class="size-4 text-text/70" />
+          <TagDot
+            :tag="{
+              name: tagName.toLowerCase() || 'new tag',
+              hex_color: tagColor,
+            }"
+          ></TagDot>
+        </div>
         <!-- tag preview -->
         <div class="pb-4">
           <div class="flex gap-1 items-center">
@@ -105,6 +116,7 @@ import TaskTag from "./TaskTag.vue";
 import { ArrowRightIcon, TrashIcon } from "@heroicons/vue/24/solid";
 import TagStats from "./TagStats.vue";
 import { generateRandomColor } from "../common/colorUtils";
+import TagDot from "./TagDot.vue";
 
 const props = defineProps<{
   title?: string;

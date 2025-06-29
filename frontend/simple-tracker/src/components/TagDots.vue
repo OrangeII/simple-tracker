@@ -2,6 +2,7 @@
   <div class="flex flex-row gap-1">
     <TagDot
       v-for="tag in task.tags"
+      :key="tag.id"
       :tag="tagsStore.getTagById(tag.id) ?? tag"
     />
   </div>
