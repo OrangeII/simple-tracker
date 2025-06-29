@@ -22,7 +22,7 @@
               :name="tag.name"
               :hex_color="tag.hex_color"
             />
-            <ArrowRightIcon v-if="!isNew" class="size-6 text-text/70" />
+            <ArrowRightIcon v-if="!isNew" class="size-4 text-text/70" />
             <TaskTag
               class="w-fit"
               :name="tagName.toLowerCase() || 'new tag'"
@@ -52,12 +52,16 @@
               <h3 class="text-text/70">{{ tagColor || "" }}</h3>
             </div>
           </div>
-          <div>
+          <div class="flex gap-2 items-center">
             <input
               type="color"
               v-model="tagColor"
               class="p-1 rounded-md grainy bg-background dark:bg-blend-overlay grow font-medium focus:outline-none focus:border-none w-full h-12"
             />
+            <CubeIcon
+              @click="randomizeColor"
+              class="size-8 text-primary cursor-pointer"
+            ></CubeIcon>
           </div>
         </div>
 
@@ -95,10 +99,12 @@ import {
   CheckCircleIcon,
   PaintBrushIcon,
   ChartBarIcon,
+  CubeIcon,
 } from "@heroicons/vue/24/solid";
 import TaskTag from "./TaskTag.vue";
 import { ArrowRightIcon, TrashIcon } from "@heroicons/vue/24/solid";
 import TagStats from "./TagStats.vue";
+import { generateRandomColor } from "../common/colorUtils";
 
 const props = defineProps<{
   title?: string;
@@ -117,6 +123,10 @@ const emit = defineEmits<{
 const tagsStore = useTagsStore();
 const tagName = ref(props.tag.name);
 const tagColor = ref(props.tag.hex_color || "#888888");
+
+const randomizeColor = () => {
+  tagColor.value = generateRandomColor();
+};
 
 const saveTag = async () => {
   if (!tagName.value.trim()) {
