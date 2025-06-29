@@ -1,20 +1,16 @@
 <template>
-  <div class="flex flex-row">
-    <div
+  <div class="flex flex-row gap-1">
+    <TagDot
       v-for="tag in task.tags"
-      :key="tag.id"
-      class="w-2 h-2 rounded-full mr-1"
-      :style="{
-        backgroundColor:
-          tagsStore.getTagById(tag.id)?.hex_color ?? tag.hex_color,
-      }"
-    ></div>
+      :tag="tagsStore.getTagById(tag.id) ?? tag"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import type { Task } from "../common/types";
 import { useTagsStore } from "../stores/tags";
+import TagDot from "./TagDot.vue";
 
 defineProps<{
   task: Task;
