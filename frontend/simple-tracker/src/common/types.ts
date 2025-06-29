@@ -16,6 +16,7 @@ export interface TimeEntry {
   end_time?: string;
   created_at: string;
   loading?: boolean;
+  notes?: string;
 }
 
 export interface TimeEntryRecord {
@@ -27,6 +28,7 @@ export interface TimeEntryRecord {
   created_at: string;
   loading?: boolean;
   tasks?: Task;
+  notes?: string;
 }
 
 export interface CurrentTask {

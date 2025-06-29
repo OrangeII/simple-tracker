@@ -5,7 +5,7 @@
     :exclude="taskTags"
     itemKey="id"
     searchBy="name"
-    placeholder="Add tags..."
+    placeholder="Add tags to this task..."
     @submit="onSubmit"
     @select="addTag"
     :showAddNew="true"

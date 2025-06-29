@@ -71,9 +71,19 @@
             </div>
           </div>
         </div>
+
+        <!-- entry notes -->
         <div class="mb-4">
-          <h3 class="text-text/70">Alt. code</h3>
-          <h3>{{ tasksStore.get(entry.task_id)?.alt_code }}</h3>
+          <div class="flex gap-1 items-center pb-1">
+            <DocumentTextIcon class="text-text/70 size-5"></DocumentTextIcon>
+            <h3 class="text-text/70">Notes</h3>
+          </div>
+          <textarea
+            v-model="entryNotes"
+            class="w-full p-2 rounded-md grainy bg-background dark:bg-blend-overlay font-medium text-lg focus:outline-none focus:border-none"
+            rows="3"
+            placeholder="Add notes to this entry..."
+          ></textarea>
         </div>
 
         <!-- task tags -->
@@ -94,15 +104,21 @@
           <TaskStats v-if="task" :taskId="entry.task_id" />
         </div>
 
-        <!-- actions -->
-        <div class="flex items-center justify-around">
-          <div
-            class="flex gap-1 items-center cursor-pointer"
-            @click="openQRModal"
-          >
-            <QrCodeIcon class="size-8 text-primary"></QrCodeIcon>
-            <h3 class="uppercase text-primary">Get QR Code</h3>
-          </div>
+        <!-- alt code -->
+        <div class="mb-4">
+          <h3 class="text-text/70">Alt. code</h3>
+          <h3>{{ tasksStore.get(entry.task_id)?.alt_code }}</h3>
+        </div>
+      </div>
+
+      <!-- actions -->
+      <div class="flex items-center justify-around mb-4">
+        <div
+          class="flex gap-1 items-center cursor-pointer"
+          @click="openQRModal"
+        >
+          <QrCodeIcon class="size-8 text-primary"></QrCodeIcon>
+          <h3 class="uppercase text-primary">Get QR Code</h3>
         </div>
       </div>
 
@@ -135,6 +151,7 @@ import {
   TagIcon,
   ChartBarIcon,
   QrCodeIcon,
+  DocumentTextIcon,
 } from "@heroicons/vue/24/solid";
 import { useTimeEntriesStore } from "../stores/timeEntries";
 import { useTasksStore } from "../stores/tasks";
@@ -158,6 +175,7 @@ const qrData = computed(() => {
 const qrCode = useQRCode(qrData);
 
 const taskName = ref(task.value?.name || "");
+const entryNotes = ref(props.entry.notes || "");
 const start = ref(new Date(props.entry.start_time));
 const stop = ref(props.entry.end_time ? new Date(props.entry.end_time) : null);
 const duration = computed(() => {
@@ -261,7 +279,7 @@ const onSaveClick = async () => {
     return;
   }
 
-  const newEntry = { ...props.entry };
+  const newEntry = { ...props.entry, notes: entryNotes.value };
 
   //update values on the clone
   newEntry.start_time = start.value.toISOString();

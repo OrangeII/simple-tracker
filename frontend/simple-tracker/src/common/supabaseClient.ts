@@ -373,6 +373,7 @@ export const updateEntry = async (entry: TimeEntry): Promise<boolean> => {
       .update({
         start_time: entry.start_time,
         end_time: entry.end_time,
+        notes: entry.notes?.trim(),
       })
       .eq("id", entry.id);
     if (error) {
