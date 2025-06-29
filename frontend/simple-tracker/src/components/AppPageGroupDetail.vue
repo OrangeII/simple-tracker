@@ -58,6 +58,18 @@
           >test</AppPageEntryDetail
         >
       </Transition>
+
+      <!-- task data -->
+      <div class="p-4">
+        <!-- task tags -->
+        <div class="mb-4">
+          <div class="flex gap-1 items-center pb-1">
+            <TagIcon class="text-text/70 size-5"></TagIcon>
+            <h3 class="text-text/70">Tags</h3>
+          </div>
+          <TaskTags v-if="task" :taskId="task.id" />
+        </div>
+      </div>
     </template>
   </AppPage>
 </template>
@@ -72,8 +84,9 @@ import { computed, ref, watch } from "vue";
 import { useTimeEntriesStore } from "../stores/timeEntries";
 import { useTimelineStore } from "../stores/timeline";
 import { useTasksStore } from "../stores/tasks";
-import { CheckCircleIcon } from "@heroicons/vue/24/solid";
+import { CheckCircleIcon, TagIcon } from "@heroicons/vue/24/solid";
 import { useBreakpoints } from "../common/breakpoints";
+import TaskTags from "./TaskTags.vue";
 
 const timeEntriesStore = useTimeEntriesStore();
 const timeLineStore = useTimelineStore();
