@@ -60,9 +60,9 @@
       </Transition>
 
       <!-- task data -->
-      <div class="p-4">
+      <div class="p-4 flex flex-col gap-4">
         <!-- task tags -->
-        <div class="mb-4">
+        <div>
           <div class="flex gap-1 items-center pb-1">
             <TagIcon class="text-text/70 size-5"></TagIcon>
             <h3 class="text-text/70">Tags</h3>
@@ -71,7 +71,7 @@
         </div>
 
         <!-- task stats -->
-        <div v-if="preferencesStore.preferences.diplayTaskStats" class="mb-4">
+        <div v-if="preferencesStore.preferences.diplayTaskStats">
           <div class="flex gap-1 items-center pb-1">
             <ChartBarIcon class="text-text/70 size-5"></ChartBarIcon>
             <h3 class="text-text/70">Stats</h3>
