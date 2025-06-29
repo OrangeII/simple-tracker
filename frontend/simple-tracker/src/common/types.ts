@@ -75,6 +75,7 @@ export interface Tag {
   user_id: string;
   name: string;
   hex_color?: string;
+  dot_text?: string;
 }
 
 export interface TaskStats {

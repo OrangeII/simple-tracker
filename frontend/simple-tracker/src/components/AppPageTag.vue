@@ -76,6 +76,22 @@
           </div>
         </div>
 
+        <!-- tag dot text -->
+        <div v-if="!isNew" class="mb-4">
+          <div class="flex gap-1 items-center pb-1">
+            <div class="size-5 flex items-center justify-center">
+              <div class="w-2 h-2 rounded-full bg-text/70"></div>
+            </div>
+            <h3 class="text-text/70">Icon</h3>
+          </div>
+          <input
+            type="text"
+            v-model="tagDotText"
+            class="w-full p-2 rounded-md bg-background caret-primary dark:bg-blend-overlay grainy font-medium text-lg focus:outline-none"
+            placeholder="optional icon text (example: '🍕')"
+          />
+        </div>
+
         <!-- tag stats -->
         <div v-if="!isNew" class="mb-4">
           <div class="flex gap-1 items-center pb-1">
@@ -135,6 +151,7 @@ const emit = defineEmits<{
 const tagsStore = useTagsStore();
 const tagName = ref(props.tag.name);
 const tagColor = ref(props.tag.hex_color || "#888888");
+const tagDotText = ref(props.tag.dot_text || "");
 
 const randomizeColor = () => {
   tagColor.value = generateRandomColor();
@@ -158,6 +175,7 @@ const saveTag = async () => {
       ...props.tag,
       name: tagName.value.trim(),
       hex_color: tagColor.value,
+      dot_text: tagDotText.value.trim(),
     };
 
     const success = await tagsStore.updateTag(updatedTag);

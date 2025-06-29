@@ -422,6 +422,7 @@ export const updateTag = async (tag: Tag): Promise<boolean> => {
       .update({
         name: tag.name.trim(),
         hex_color: tag.hex_color,
+        dot_text: tag.dot_text?.trim(),
       })
       .eq("id", tag.id);
 
