@@ -47,6 +47,27 @@
           </h3>
         </div>
 
+        <!-- show or hide individual task stats -->
+        <div
+          class="flex gap-4 items-center cursor-pointer"
+          @click="preferencesStore.toggle('diplayTaskStats')"
+        >
+          <ChartBarIcon
+            class="text-primary size-8"
+            :class="{
+              'border-2 rounded-md p-1':
+                preferencesStore.preferences.diplayTaskStats,
+            }"
+          />
+          <h3>
+            {{
+              preferencesStore.preferences.diplayTaskStats
+                ? "Show task stats"
+                : "Hide task stats"
+            }}
+          </h3>
+        </div>
+
         <div class="flex gap-4 items-center cursor-pointer" @click="signOut">
           <ArrowLeftStartOnRectangleIcon class="text-primary size-8" />
           <h3>Sign out</h3>
@@ -64,6 +85,7 @@ import {
   ArrowLeftStartOnRectangleIcon,
   MoonIcon,
   SunIcon,
+  ChartBarIcon,
 } from "@heroicons/vue/24/solid";
 import { useUserStore } from "../stores/user";
 import { usePreferencesStore } from "../stores/preferences";

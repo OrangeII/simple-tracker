@@ -23,6 +23,10 @@ export const PREFERENCES_CONFIG: Record<string, PreferenceConfig> = {
     key: "darkModeToolbar",
     defaultValue: false,
   },
+  diplayTaskStats: {
+    key: "diplayTaskStats",
+    defaultValue: false,
+  },
 };
 
 export const usePreferencesStore = defineStore("preferences", () => {

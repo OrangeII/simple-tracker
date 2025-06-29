@@ -71,7 +71,7 @@
         </div>
 
         <!-- task stats -->
-        <div class="mb-4">
+        <div v-if="preferencesStore.preferences.diplayTaskStats" class="mb-4">
           <div class="flex gap-1 items-center pb-1">
             <ChartBarIcon class="text-text/70 size-5"></ChartBarIcon>
             <h3 class="text-text/70">Stats</h3>
@@ -101,7 +101,9 @@ import {
 import { useBreakpoints } from "../common/breakpoints";
 import TaskTags from "./TaskTags.vue";
 import TaskStats from "./TaskStats.vue";
+import { usePreferencesStore } from "../stores/preferences";
 
+const preferencesStore = usePreferencesStore();
 const timeEntriesStore = useTimeEntriesStore();
 const timeLineStore = useTimelineStore();
 const tasksStore = useTasksStore();

@@ -98,7 +98,7 @@
         </div>
 
         <!-- task stats -->
-        <div>
+        <div v-if="preferencesStore.preferences.diplayTaskStats">
           <div class="flex gap-1 items-center pb-1">
             <ChartBarIcon class="text-text/70 size-5"></ChartBarIcon>
             <h3 class="text-text/70">Stats</h3>
@@ -161,10 +161,12 @@ import TaskTags from "./TaskTags.vue";
 import TaskStats from "./TaskStats.vue";
 import { useQRCodesStore } from "../stores/qrcodes";
 import { useQRCode } from "@vueuse/integrations/useQRCode";
+import { usePreferencesStore } from "../stores/preferences";
 
 const timeEntriesStore = useTimeEntriesStore();
 const tasksStore = useTasksStore();
 const qrcodesStore = useQRCodesStore();
+const preferencesStore = usePreferencesStore();
 
 const props = defineProps<{ entry: TimeEntry }>();
 const task = computed(() => {
