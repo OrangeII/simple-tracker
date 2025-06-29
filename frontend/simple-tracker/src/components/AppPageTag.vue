@@ -21,6 +21,7 @@
             :tag="{
               name: tagName.toLowerCase() || 'new tag',
               hex_color: tagColor,
+              dot_text: tagDotText,
             }"
           ></TagDot>
         </div>
@@ -82,7 +83,7 @@
             <div class="size-5 flex items-center justify-center">
               <div class="w-2 h-2 rounded-full bg-text/70"></div>
             </div>
-            <h3 class="text-text/70">Icon</h3>
+            <h3 class="text-text/70">Icon text</h3>
           </div>
           <input
             type="text"

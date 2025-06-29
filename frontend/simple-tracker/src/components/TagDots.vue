@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-row gap-1">
+  <div class="flex flex-row gap-1 items-center">
     <TagDot
       v-for="tag in task.tags"
       :key="tag.id"
