@@ -69,6 +69,15 @@
           </div>
           <TaskTags v-if="task" :taskId="task.id" />
         </div>
+
+        <!-- task stats -->
+        <div class="mb-4">
+          <div class="flex gap-1 items-center pb-1">
+            <ChartBarIcon class="text-text/70 size-5"></ChartBarIcon>
+            <h3 class="text-text/70">Stats</h3>
+          </div>
+          <TaskStats v-if="task" :taskId="task.id" />
+        </div>
       </div>
     </template>
   </AppPage>
@@ -84,9 +93,14 @@ import { computed, ref, watch } from "vue";
 import { useTimeEntriesStore } from "../stores/timeEntries";
 import { useTimelineStore } from "../stores/timeline";
 import { useTasksStore } from "../stores/tasks";
-import { CheckCircleIcon, TagIcon } from "@heroicons/vue/24/solid";
+import {
+  CheckCircleIcon,
+  TagIcon,
+  ChartBarIcon,
+} from "@heroicons/vue/24/solid";
 import { useBreakpoints } from "../common/breakpoints";
 import TaskTags from "./TaskTags.vue";
+import TaskStats from "./TaskStats.vue";
 
 const timeEntriesStore = useTimeEntriesStore();
 const timeLineStore = useTimelineStore();
