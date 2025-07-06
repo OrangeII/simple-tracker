@@ -78,6 +78,39 @@ export const useCurrentTaskStore = defineStore("currentTask", () => {
   }
 
   /**
+   * wrapper for tracking a task using a QR code.
+   * @param taskData qr code data in the form of:
+   * ```json
+   * {
+   *  "taskId": "optional-uuid",
+   *  "altCode": "optional-alternate-code"
+   *  "name": "optional-task-name",
+   * }
+   */
+  async function trackQR(taskData: {
+    taskId?: string;
+    altCode?: string;
+    name?: string;
+  }) {
+    //at least one of taskId, altCode or name must be provided
+    if (!taskData.taskId && !taskData.altCode && !taskData.name)
+      throw new Error(
+        "At least one of taskId, altCode or name must be provided"
+      );
+
+    //temporary task object to be used for tracking
+    const task: Task = {
+      id: taskData.taskId || "",
+      user_id: "",
+      name: taskData.name || "",
+      alt_code: taskData.altCode || "",
+      created_at: new Date().toISOString(),
+      is_favorite: false,
+    };
+    return await track(task);
+  }
+
+  /**
    * Start tracking a task.
    * If a task is already being tracked, the current time entry will be stopped and put to the timeEntries list.
    * Then a new time entry will be started on the provided task and put to the timeEntries list.
@@ -111,7 +144,12 @@ export const useCurrentTaskStore = defineStore("currentTask", () => {
       },
     });
 
-    const ret = await supabaseTrack({ taskId: taskToTrack.id, startTime });
+    const ret = await supabaseTrack({
+      taskId: taskToTrack.id,
+      altCode: taskToTrack.alt_code,
+      name: taskToTrack.name,
+      startTime,
+    });
     //update store with the actual task
     setCurrentTask(ret);
 
@@ -175,6 +213,7 @@ export const useCurrentTaskStore = defineStore("currentTask", () => {
     initializeSubscriptionToCurrentTask,
     cleanup,
     track,
+    trackQR,
     trackNew,
     stop,
   };

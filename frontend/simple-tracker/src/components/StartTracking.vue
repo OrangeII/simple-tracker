@@ -103,17 +103,6 @@ const onQRCodeCaptured = async (rawCode: string) => {
     return;
   }
 
-  if (code.taskId) {
-    //if it has taskId, we can track it directly
-    const task = taskStore.get(code.taskId);
-    if (!task) {
-      message.value = "Task not found!";
-      return;
-    }
-    await currentTaskStore.track(task);
-  } else {
-    //otherwise we create a new task with the name and altCode
-    await currentTaskStore.trackNew(code.name || "", code.altCode || "");
-  }
+  await currentTaskStore.trackQR(code);
 };
 </script>
