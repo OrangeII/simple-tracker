@@ -59,7 +59,7 @@
       <AppPageEntryDetail
         :key="detailPageEntry?.id"
         :anchor="isDesktop ? 'right' : ''"
-        :widthClass="isDesktop ? 'w-96' : ''"
+        :widthClass="isDesktop ? 'w-128' : ''"
         :class="[isDesktop ? 'border-l border-text/10' : '']"
         v-if="detailPageEntry !== null"
         @close="detailPageEntry = null"
@@ -70,7 +70,7 @@
       <AppPageGroupDetail
         :key="detailPageGroup?.id"
         :anchor="isDesktop ? 'right' : ''"
-        :widthClass="isDesktop ? 'w-96' : ''"
+        :widthClass="isDesktop ? 'w-128' : ''"
         :class="[isDesktop ? 'border-l border-text/10' : '']"
         v-if="detailPageGroup !== null"
         @close="detailPageGroup = null"
