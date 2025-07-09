@@ -6,6 +6,7 @@ export enum NavigationPages {
   ENTRIES = "entries",
   TAGS = "tags",
   DASHBOARD = "dashboard",
+  REPORTS = "reports",
 }
 
 export const useNavigationStore = defineStore("navigation", () => {

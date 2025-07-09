@@ -47,6 +47,14 @@
       @click="navigationStore.navigateTo(NavigationPages.DASHBOARD)"
     />
 
+    <!-- if feature flag is true, show reports button -->
+    <ToolbarNavigationButton
+      v-if="featureFlagsStore.enableReports"
+      :icon="ChartBarIcon"
+      :is-active="navigationStore.isCurrentPage(NavigationPages.REPORTS)"
+      @click="navigationStore.navigateTo(NavigationPages.REPORTS)"
+    />
+
     <Cog8ToothIcon
       class="text-primary size-8 cursor-pointer grow"
       @click="$emit('settingsClick')"
@@ -68,6 +76,9 @@ import {
 import { useBreakpoints } from "../common/breakpoints";
 import { useNavigationStore, NavigationPages } from "../stores/navigation";
 import ToolbarNavigationButton from "./ToolbarNavigationButton.vue";
+import { useFeatureFlagsStore } from "../stores/featureFlags";
+
+const featureFlagsStore = useFeatureFlagsStore();
 
 const navigationStore = useNavigationStore();
 const { isMobile } = useBreakpoints();

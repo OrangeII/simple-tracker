@@ -39,7 +39,7 @@
     ></div>
 
     <!-- Daily patterns chart - Conditionally displayed based on feature flag -->
-    <template v-if="showDailyPatterns">
+    <template v-if="featureFlagsStore.showDailyPatterns">
       <div
         class="rounded-sm grainy bg-background dark:bg-blend-overlay p-4"
         v-if="!loadingDailyChart"
@@ -67,10 +67,9 @@ import type {
   TaskTimeInfo,
 } from "../common/types";
 import AppInsightsTopTasksCard from "./AppInsightsTopTasksCard.vue";
+import { useFeatureFlagsStore } from "../stores/featureFlags";
 
-// Feature flag for daily patterns chart
-const showDailyPatterns =
-  import.meta.env.VITE_FF_SHOW_DAILY_PATTERNS === "true";
+const featureFlagsStore = useFeatureFlagsStore();
 
 // Stats for the summary cards
 const stats = ref<{
