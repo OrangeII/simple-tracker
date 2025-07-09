@@ -47,10 +47,9 @@
       @click="navigationStore.navigateTo(NavigationPages.DASHBOARD)"
     />
 
-    <!-- if feature flag is true, show reports button -->
     <ToolbarNavigationButton
-      v-if="featureFlagsStore.enableReports"
-      :icon="ChartBarIcon"
+      v-if="featureFlagsStore.enableReports && !isMobile"
+      :icon="DocumentChartBarIcon"
       :is-active="navigationStore.isCurrentPage(NavigationPages.REPORTS)"
       @click="navigationStore.navigateTo(NavigationPages.REPORTS)"
     />
@@ -72,6 +71,7 @@ import {
   HomeIcon,
   TagIcon,
   ChartBarIcon,
+  DocumentChartBarIcon,
 } from "@heroicons/vue/24/solid";
 import { useBreakpoints } from "../common/breakpoints";
 import { useNavigationStore, NavigationPages } from "../stores/navigation";
