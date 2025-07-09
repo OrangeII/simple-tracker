@@ -18,7 +18,7 @@
     :where(.dark) {
       --text: #e7e4c1;
       --background: #121c21;
-      --primary: #4db9d1;
+      --primary: #87ceeb;
       --secondary: #a67b3a;
       --accent: #ff8566;
     }
