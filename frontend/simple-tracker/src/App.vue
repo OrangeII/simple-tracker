@@ -65,6 +65,30 @@ import { useBreakpoints } from "./common/breakpoints.ts";
 import AppNavigation from "./components/AppNavigation.vue";
 import { useStyleStore } from "./stores/style.ts";
 import { useVisibility } from "./common/useVisibility.ts";
+import { useRegisterSW } from "virtual:pwa-register/vue";
+
+const intervalMS = 60 * 60 * 1000; // 1 hour
+useRegisterSW({
+  onRegisteredSW(swUrl, r) {
+    r &&
+      setInterval(async () => {
+        console.log("Checking for service worker updates... on ", swUrl);
+        if (r.installing || !navigator) return;
+
+        if ("connection" in navigator && !navigator.onLine) return;
+
+        const resp = await fetch(swUrl, {
+          cache: "no-store",
+          headers: {
+            cache: "no-store",
+            "cache-control": "no-cache",
+          },
+        });
+
+        if (resp?.status === 200) await r.update();
+      }, intervalMS);
+  },
+});
 
 const { onVisibilityChange } = useVisibility();
 const unregisterVisibilityChange = onVisibilityChange(
