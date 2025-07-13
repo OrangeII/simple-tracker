@@ -34,6 +34,16 @@
       </select>
     </div>
 
+    <!-- group by selector -->
+    <div class="mt-4">
+      <label for="groupBy">Group By</label>
+      <select id="groupBy" v-model="chartConfig.groupBy" multiple>
+        <option v-for="(value, key) in GroupKey" :key="value" :value="value">
+          {{ key }}
+        </option>
+      </select>
+    </div>
+
     <!-- chart content -->
     <div class="flex flex-col">
       <div class="flex-grow">
@@ -58,7 +68,11 @@ import {
 } from "chart.js";
 import { useStyleStore } from "../../stores/style";
 import { getChartData } from "../../common/charts/charts";
-import { PeriodType, type ChartConfig } from "../../common/charts/charts.types";
+import {
+  PeriodType,
+  type ChartConfig,
+  GroupKey,
+} from "../../common/charts/charts.types";
 
 ChartJS.register(
   Title,
@@ -71,6 +85,8 @@ ChartJS.register(
 const styleStore = useStyleStore();
 
 const chartData = computed(() => {
+  console.log("chartConfig.value.groupBy", chartConfig.value.groupBy);
+
   const data = getChartData(chartConfig.value);
 
   return {
