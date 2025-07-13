@@ -45,11 +45,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import {
-  getChartData,
-  PeriodType,
-  type ChartConfig,
-} from "../../common/charts";
+
 import { Bar } from "vue-chartjs";
 import {
   Chart as ChartJS,
@@ -61,6 +57,8 @@ import {
   LinearScale,
 } from "chart.js";
 import { useStyleStore } from "../../stores/style";
+import { getChartData } from "../../common/charts/charts";
+import { PeriodType, type ChartConfig } from "../../common/charts/charts.types";
 
 ChartJS.register(
   Title,
@@ -74,14 +72,12 @@ const styleStore = useStyleStore();
 
 const chartData = computed(() => {
   const data = getChartData(chartConfig.value);
-  const primaryColor = styleStore.getPrimaryColor();
 
   return {
     labels: data.points.x,
     datasets: data.points.ys.map((dataset) => ({
       ...dataset,
-      backgroundColor: primaryColor,
-      borderColor: primaryColor,
+      borderColor: dataset.backgroundColor,
       borderWidth: 1,
     })),
   };

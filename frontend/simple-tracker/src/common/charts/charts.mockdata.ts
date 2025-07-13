@@ -1,4 +1,4 @@
-import type { DataPoint } from "./charts";
+import type { DataPoint } from "./charts.types";
 
 export const data: DataPoint[] = [
   {
