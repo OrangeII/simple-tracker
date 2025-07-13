@@ -55,13 +55,45 @@ function groupData(config: ChartConfig, data: DataPoint[]): any {
   return groupedData;
 }
 
+function aggregateData(
+  _config: ChartConfig,
+  groupedData: Record<string, DataPointGroup>
+): Record<string, DataPointGroup> {
+  const aggregatedData: Record<string, DataPointGroup> = {};
+
+  for (const groupKey in groupedData) {
+    const group = groupedData[groupKey];
+
+    //compute total duration and count
+    group.values[DataPointValue.DURATION] = group.rawData.reduce(
+      (sum, item) => sum + item.duration,
+      0
+    );
+    group.values[DataPointValue.COUNT] = group.rawData.length;
+
+    aggregatedData[groupKey] = {
+      groupKeys: group.groupKeys,
+      rawData: group.rawData,
+      values: group.values,
+    };
+  }
+
+  return aggregatedData;
+}
+
 export function getChartData(config: ChartConfig): ChartData {
   const selectedData: DataPoint[] = selectData(config);
   const groupedData: Record<string, DataPointGroup> = groupData(
     config,
     selectedData
   );
-  console.log("groupedData", groupedData);
+  const aggregatedData: Record<string, DataPointGroup> = aggregateData(
+    config,
+    groupedData
+  );
+
+  console.log("aggregatedData", aggregatedData);
+
   const chartData: ChartData = {
     points: {
       x: [],
@@ -71,14 +103,16 @@ export function getChartData(config: ChartConfig): ChartData {
   };
 
   const xField: DataPointValue = DataPointValue.TASK_NAME;
-  const yFields: DataPointValue[] = [DataPointValue.DURATION];
+  const yFields: DataPointValue[] = [DataPointValue.COUNT];
 
-  const x = selectedData.map((item) => item[xField]);
+  const aggregatedDataValues = Object.values(aggregatedData);
+
+  const x = aggregatedDataValues.map((item) => item.values[xField]);
   const ys = yFields.map((yField) => ({
-    data: selectedData.map((item) => item[yField]),
+    data: aggregatedDataValues.map((item) => item.values[yField]),
     label: yField,
-    backgroundColor: selectedData.map((item) =>
-      item.tag_color ? item.tag_color : generateRandomColor()
+    backgroundColor: aggregatedDataValues.map((item) =>
+      String(item.values[DataPointValue.TAG_COLOR] ?? generateRandomColor())
     ),
   }));
 

@@ -85,8 +85,6 @@ ChartJS.register(
 const styleStore = useStyleStore();
 
 const chartData = computed(() => {
-  console.log("chartConfig.value.groupBy", chartConfig.value.groupBy);
-
   const data = getChartData(chartConfig.value);
 
   return {
@@ -103,7 +101,7 @@ const chartConfig = ref<ChartConfig>({
   title: "",
   description: "",
   periodType: PeriodType.THIS_WEEK,
-  groupBy: [],
+  groupBy: [GroupKey.TASK],
 });
 
 const chartOptions = {

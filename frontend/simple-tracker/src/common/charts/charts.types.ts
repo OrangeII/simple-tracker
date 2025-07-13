@@ -35,7 +35,8 @@ export const DataPointValue = {
   WEEKDAY: "weekday",
   MONTH: "month",
   YEAR: "year",
-} as const satisfies Record<string, keyof DataPoint>;
+  COUNT: "count",
+} as const satisfies Record<string, keyof DataPoint | "count">;
 export type DataPointValue =
   (typeof DataPointValue)[keyof typeof DataPointValue];
 
