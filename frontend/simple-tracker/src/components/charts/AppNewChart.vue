@@ -87,6 +87,7 @@ const chartConfig = ref<ChartConfig>({
   title: "",
   description: "",
   periodType: PeriodType.THIS_WEEK,
+  groupBy: [],
 });
 
 const chartOptions = {

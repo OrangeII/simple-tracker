@@ -13,7 +13,6 @@ export interface DataPoint {
   weekday: number;
   month: number;
   year: number;
-  [key: string]: string | number | null;
 }
 
 export enum PeriodType {
@@ -27,10 +26,20 @@ export enum PeriodType {
   LAST_YEAR = "last_year",
 }
 
+export const GroupType = {
+  TASK: "task_id",
+  TAG: "tag_id",
+  WEEKDAY: "weekday",
+  MONTH: "month",
+  YEAR: "year",
+} as const satisfies Record<string, keyof DataPoint>;
+export type GroupType = (typeof GroupType)[keyof typeof GroupType];
+
 export interface ChartConfig {
   title: string;
   description: string;
   periodType: PeriodType;
+  groupBy: GroupType[];
 }
 
 export interface ChartData {
