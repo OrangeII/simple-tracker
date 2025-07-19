@@ -83,6 +83,8 @@ export interface ChartConfig {
   description: string;
   periodType: PeriodType;
   groupBy: GroupKey[];
+  xAxisField: DataPointValue;
+  yAxisField: DataPointValue;
 }
 
 export interface ChartData {

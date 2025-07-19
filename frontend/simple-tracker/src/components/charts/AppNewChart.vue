@@ -44,6 +44,34 @@
       </select>
     </div>
 
+    <!-- x-axis field selector -->
+    <div class="mt-4">
+      <label for="xAxisField">X-Axis Field</label>
+      <select id="xAxisField" v-model="chartConfig.xAxisField">
+        <option
+          v-for="(value, key) in DataPointValue"
+          :key="value"
+          :value="value"
+        >
+          {{ key }}
+        </option>
+      </select>
+    </div>
+
+    <!-- y-axis field selector -->
+    <div class="mt-4">
+      <label for="yAxisField">Y-Axis Field</label>
+      <select id="yAxisField" v-model="chartConfig.yAxisField">
+        <option
+          v-for="(value, key) in DataPointValue"
+          :key="value"
+          :value="value"
+        >
+          {{ key }}
+        </option>
+      </select>
+    </div>
+
     <!-- chart content -->
     <div class="flex flex-col">
       <div class="flex-grow">
@@ -72,6 +100,7 @@ import {
   PeriodType,
   type ChartConfig,
   GroupKey,
+  DataPointValue,
 } from "../../common/charts/charts.types";
 
 ChartJS.register(
@@ -102,6 +131,8 @@ const chartConfig = ref<ChartConfig>({
   description: "",
   periodType: PeriodType.THIS_WEEK,
   groupBy: [GroupKey.TASK],
+  xAxisField: DataPointValue.TASK_NAME,
+  yAxisField: DataPointValue.DURATION,
 });
 
 const chartOptions = {

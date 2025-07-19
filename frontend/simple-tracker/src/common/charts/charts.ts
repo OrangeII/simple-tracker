@@ -93,6 +93,7 @@ export function getChartData(config: ChartConfig): ChartData {
   );
 
   console.log("aggregatedData", aggregatedData);
+  console.log("config", config);
 
   const chartData: ChartData = {
     points: {
@@ -102,8 +103,8 @@ export function getChartData(config: ChartConfig): ChartData {
     config,
   };
 
-  const xField: DataPointValue = DataPointValue.TASK_NAME;
-  const yFields: DataPointValue[] = [DataPointValue.COUNT];
+  const xField: DataPointValue = config.xAxisField;
+  const yFields: DataPointValue[] = [config.yAxisField];
 
   const aggregatedDataValues = Object.values(aggregatedData);
 
