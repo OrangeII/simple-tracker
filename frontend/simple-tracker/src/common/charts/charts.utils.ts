@@ -1,4 +1,10 @@
-import { PeriodType } from "./charts.types";
+import {
+  GroupKey,
+  PeriodType,
+  GroupValueSettersConfig,
+  DataPointValue,
+  NumericDataPointValues,
+} from "./charts.types";
 
 export function getDateIntevealFromPeriodType(periodType: PeriodType): {
   start: Date;
@@ -52,4 +58,30 @@ export function getDateIntevealFromPeriodType(periodType: PeriodType): {
   }
 
   return { start, end };
+}
+
+export function getAllowedXFields(GroupKeys: GroupKey[]): DataPointValue[] {
+  // allowed x fields are the ones that are brought in by the group keys
+  const allowedXFields: DataPointValue[] = [];
+
+  GroupKeys.forEach((key) => {
+    const fields = GroupValueSettersConfig[key];
+    //merge the fields into the allowedXFields array
+    fields.forEach((field) => {
+      if (!allowedXFields.includes(field)) {
+        allowedXFields.push(field);
+      }
+    });
+  });
+
+  return allowedXFields;
+}
+
+export function getAllowedYFields(GroupKeys: GroupKey[]): DataPointValue[] {
+  // allowed y fields are the subset of numeric fields allowed in the X axis
+  const allowedXFields = getAllowedXFields(GroupKeys);
+  return allowedXFields.filter((field) =>
+    //check if field is allowed as a numeric data point value
+    (NumericDataPointValues as readonly DataPointValue[]).includes(field)
+  );
 }

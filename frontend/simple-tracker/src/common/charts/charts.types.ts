@@ -13,7 +13,24 @@ export interface DataPoint {
   weekday: number;
   month: number;
   year: number;
+  count: 1;
 }
+// Helper type to extract keys of T whose property values are assignable to `number`.
+type NumericKeys<T> = {
+  [K in keyof T]: T[K] extends number ? K : never;
+}[keyof T];
+// This creates a type that is a union of all property names in DataPoint that are numbers.
+type NumericDataPointKeys = NumericKeys<DataPoint>;
+export const NumericDataPointValues: NumericDataPointKeys[] = [
+  "time_entry_id",
+  "duration",
+  "weekday",
+  "month",
+  "year",
+  "count",
+  "start_time",
+  "end_time",
+];
 
 export enum PeriodType {
   TODAY = "today",
@@ -36,11 +53,14 @@ export const DataPointValue = {
   MONTH: "month",
   YEAR: "year",
   COUNT: "count",
-} as const satisfies Record<string, keyof DataPoint | "count">;
+  START_TIME: "start_time",
+  END_TIME: "end_time",
+} as const satisfies Record<string, keyof DataPoint>;
 export type DataPointValue =
   (typeof DataPointValue)[keyof typeof DataPointValue];
 
 export const GroupKey = {
+  ENTRY: "time_entry_id",
   TASK: "task_id",
   TAG: "tag_id",
   WEEKDAY: "weekday",
@@ -59,15 +79,43 @@ export type GroupKeys = {
  * for the TAG group key, we want to set the tag name, tag color, ...
  */
 export const GroupValueSettersConfig = {
-  [GroupKey.TASK]: [DataPointValue.TASK_NAME],
+  [GroupKey.ENTRY]: [
+    DataPointValue.TASK_NAME,
+    DataPointValue.WEEKDAY,
+    DataPointValue.MONTH,
+    DataPointValue.YEAR,
+    DataPointValue.START_TIME,
+    DataPointValue.END_TIME,
+    DataPointValue.DURATION,
+    DataPointValue.COUNT,
+  ],
+  [GroupKey.TASK]: [
+    DataPointValue.TASK_NAME,
+    DataPointValue.DURATION,
+    DataPointValue.COUNT,
+  ],
   [GroupKey.TAG]: [
     DataPointValue.TAG_NAME,
     DataPointValue.TAG_COLOR,
     DataPointValue.TAG_DOT_TEXT,
+    DataPointValue.DURATION,
+    DataPointValue.COUNT,
   ],
-  [GroupKey.WEEKDAY]: [DataPointValue.WEEKDAY],
-  [GroupKey.MONTH]: [DataPointValue.MONTH],
-  [GroupKey.YEAR]: [DataPointValue.YEAR],
+  [GroupKey.WEEKDAY]: [
+    DataPointValue.WEEKDAY,
+    DataPointValue.DURATION,
+    DataPointValue.COUNT,
+  ],
+  [GroupKey.MONTH]: [
+    DataPointValue.MONTH,
+    DataPointValue.DURATION,
+    DataPointValue.COUNT,
+  ],
+  [GroupKey.YEAR]: [
+    DataPointValue.YEAR,
+    DataPointValue.DURATION,
+    DataPointValue.COUNT,
+  ],
 } as const satisfies Record<GroupKey, readonly DataPointValue[]>;
 
 export interface DataPointGroup {
