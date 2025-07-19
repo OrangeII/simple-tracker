@@ -32,6 +32,7 @@
 
   <!-- Reports page -->
   <div
+    class="h-full"
     v-else-if="navigationStore.isCurrentPage(NavigationPages.REPORTS)"
     :key="NavigationPages.REPORTS"
   >

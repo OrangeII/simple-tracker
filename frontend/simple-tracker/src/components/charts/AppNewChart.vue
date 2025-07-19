@@ -1,97 +1,100 @@
 <template>
   <!-- page content -->
-  <div class="p-4">
-    <!-- chart title -->
-    <input
-      type="text"
-      name="title"
-      id="title"
-      v-model="chartConfig.title"
-      placeholder="Title"
-      class="w-full focus:outline-none focus:border-none text-2xl font-bold caret-primary"
-    />
+  <div class="p-4 flex flex-col h-full">
+    <!-- chart configuration -->
+    <div id="chartConfiguration">
+      <!-- chart title -->
+      <input
+        type="text"
+        name="title"
+        id="title"
+        v-model="chartConfig.title"
+        placeholder="Title"
+        class="w-full focus:outline-none focus:border-none text-2xl font-bold caret-primary"
+      />
 
-    <!-- chart description -->
-    <input
-      type="text"
-      name="description"
-      id="description"
-      v-model="chartConfig.description"
-      placeholder="Description"
-      class="w-full focus:outline-none focus:border-none text-xl caret-primary"
-    />
+      <!-- chart description -->
+      <input
+        type="text"
+        name="description"
+        id="description"
+        v-model="chartConfig.description"
+        placeholder="Description"
+        class="w-full focus:outline-none focus:border-none text-xl caret-primary"
+      />
 
-    <!-- chart type selector -->
-    <div class="mt-4">
-      <label for="chartType">Chart Type</label>
-      <select id="chartType" v-model="chartConfig.chartType">
-        <option v-for="(value, key) in ChartType" :key="value" :value="value">
-          {{ key }}
-        </option>
-      </select>
-    </div>
+      <!-- chart type selector -->
+      <div class="mt-4">
+        <label for="chartType">Chart Type</label>
+        <select id="chartType" v-model="chartConfig.chartType">
+          <option v-for="(value, key) in ChartType" :key="value" :value="value">
+            {{ key }}
+          </option>
+        </select>
+      </div>
 
-    <!-- period type selector -->
-    <div class="mt-4">
-      <label for="periodType">Period Type</label>
-      <select id="periodType" v-model="chartConfig.periodType">
-        <option :value="PeriodType.THIS_WEEK">This Week</option>
-        <option :value="PeriodType.LAST_WEEK">Last Week</option>
-        <option :value="PeriodType.THIS_MONTH">This Month</option>
-        <option :value="PeriodType.LAST_MONTH">Last Month</option>
-        <option :value="PeriodType.THIS_YEAR">This Year</option>
-        <option :value="PeriodType.LAST_YEAR">Last Year</option>
-      </select>
-    </div>
+      <!-- period type selector -->
+      <div class="mt-4">
+        <label for="periodType">Period Type</label>
+        <select id="periodType" v-model="chartConfig.periodType">
+          <option :value="PeriodType.THIS_WEEK">This Week</option>
+          <option :value="PeriodType.LAST_WEEK">Last Week</option>
+          <option :value="PeriodType.THIS_MONTH">This Month</option>
+          <option :value="PeriodType.LAST_MONTH">Last Month</option>
+          <option :value="PeriodType.THIS_YEAR">This Year</option>
+          <option :value="PeriodType.LAST_YEAR">Last Year</option>
+        </select>
+      </div>
 
-    <!-- group by selector -->
-    <div class="mt-4">
-      <label for="groupBy">Group By</label>
-      <select id="groupBy" v-model="chartConfig.groupBy" multiple>
-        <option v-for="(value, key) in GroupKey" :key="value" :value="value">
-          {{ key }}
-        </option>
-      </select>
-    </div>
+      <!-- group by selector -->
+      <div class="mt-4">
+        <label for="groupBy">Group By</label>
+        <select id="groupBy" v-model="chartConfig.groupBy" multiple>
+          <option v-for="(value, key) in GroupKey" :key="value" :value="value">
+            {{ key }}
+          </option>
+        </select>
+      </div>
 
-    <!-- x-axis field selector -->
-    <div class="mt-4">
-      <label for="xAxisField">X-Axis Field</label>
-      <select id="xAxisField" v-model="chartConfig.xAxisField">
-        <option v-for="value in allowedXFields" :key="value" :value="value">
-          {{ getDataPointValueKey(value) }}
-        </option>
-      </select>
-    </div>
+      <!-- x-axis field selector -->
+      <div class="mt-4">
+        <label for="xAxisField">X-Axis Field</label>
+        <select id="xAxisField" v-model="chartConfig.xAxisField">
+          <option v-for="value in allowedXFields" :key="value" :value="value">
+            {{ getDataPointValueKey(value) }}
+          </option>
+        </select>
+      </div>
 
-    <!-- y-axis field selector -->
-    <div class="mt-4">
-      <label for="yAxisField">Y-Axis Field</label>
-      <select id="yAxisField" v-model="chartConfig.yAxisField">
-        <option v-for="value in allowedYFields" :key="value" :value="value">
-          {{ getDataPointValueKey(value) }}
-        </option>
-      </select>
+      <!-- y-axis field selector -->
+      <div class="mt-4">
+        <label for="yAxisField">Y-Axis Field</label>
+        <select id="yAxisField" v-model="chartConfig.yAxisField">
+          <option v-for="value in allowedYFields" :key="value" :value="value">
+            {{ getDataPointValueKey(value) }}
+          </option>
+        </select>
+      </div>
     </div>
 
     <!-- chart content -->
-    <div class="flex flex-col">
-      <div class="flex-grow">
-        <AppBarChart
-          :chartConfig="chartConfig"
-          :chartData="chartData"
-        ></AppBarChart>
-      </div>
-      <div class="flex-grow">
-        <AppDoughnutChart :chartConfig="chartConfig" :chartData="chartData">
-        </AppDoughnutChart>
-      </div>
-      <div class="flex-grow">
-        <AppLineChart
-          :chartConfig="chartConfig"
-          :chartData="chartData"
-        ></AppLineChart>
-      </div>
+    <div class="my-8 basis-48 grow">
+      <AppBarChart
+        v-if="chartConfig.chartType === ChartType.BAR"
+        :chartConfig="chartConfig"
+        :chartData="chartData"
+      ></AppBarChart>
+      <AppDoughnutChart
+        v-else-if="chartConfig.chartType === ChartType.DOUGHNUT"
+        :chartConfig="chartConfig"
+        :chartData="chartData"
+      >
+      </AppDoughnutChart>
+      <AppLineChart
+        v-else-if="chartConfig.chartType === ChartType.LINE"
+        :chartConfig="chartConfig"
+        :chartData="chartData"
+      ></AppLineChart>
     </div>
   </div>
 </template>
