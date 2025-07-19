@@ -1,3 +1,4 @@
+import { toDurationString } from "../timeUtils";
 import { getMonthName, getWeekdayName } from "./charts.utils";
 
 export interface DataPoint {
@@ -159,6 +160,7 @@ export interface ChartData {
 export interface DataPointValueAesthetic {
   getLabelX: (dataPointGroup: DataPointGroup) => string;
   getLabelY: (dataPointGroup: DataPointGroup) => string;
+  getTickLabel: (value: any) => string;
   description: string;
 }
 
@@ -168,6 +170,7 @@ export const DataPointValueAesthetics = {
       String(dataPointGroup.values[DataPointValue.COUNT]),
     getLabelY: (dataPointGroup: DataPointGroup) =>
       String(dataPointGroup.values[DataPointValue.COUNT]),
+    getTickLabel: (value: any) => String(value),
     description: "Count",
   },
   [DataPointValue.DURATION]: {
@@ -175,6 +178,7 @@ export const DataPointValueAesthetics = {
       String(dataPointGroup.values[DataPointValue.DURATION]),
     getLabelY: (dataPointGroup: DataPointGroup) =>
       String(dataPointGroup.values[DataPointValue.DURATION]),
+    getTickLabel: (value: any) => toDurationString(value),
     description: "Duration",
   },
   [DataPointValue.TASK_NAME]: {
@@ -182,6 +186,7 @@ export const DataPointValueAesthetics = {
       String(dataPointGroup.values[DataPointValue.TASK_NAME]),
     getLabelY: (dataPointGroup: DataPointGroup) =>
       String(dataPointGroup.values[DataPointValue.TASK_NAME]),
+    getTickLabel: (value: any) => String(value),
     description: "Task Name",
   },
   [DataPointValue.TAG_NAME]: {
@@ -189,6 +194,7 @@ export const DataPointValueAesthetics = {
       String(dataPointGroup.values[DataPointValue.TAG_NAME]),
     getLabelY: (dataPointGroup: DataPointGroup) =>
       String(dataPointGroup.values[DataPointValue.TAG_NAME]),
+    getTickLabel: (value: any) => String(value),
     description: "Tag Name",
   },
   [DataPointValue.TAG_COLOR]: {
@@ -196,6 +202,7 @@ export const DataPointValueAesthetics = {
       String(dataPointGroup.values[DataPointValue.TAG_COLOR]),
     getLabelY: (dataPointGroup: DataPointGroup) =>
       String(dataPointGroup.values[DataPointValue.TAG_COLOR]),
+    getTickLabel: (value: any) => String(value),
     description: "Tag Color",
   },
   [DataPointValue.TAG_DOT_TEXT]: {
@@ -203,6 +210,7 @@ export const DataPointValueAesthetics = {
       String(dataPointGroup.values[DataPointValue.TAG_DOT_TEXT]),
     getLabelY: (dataPointGroup: DataPointGroup) =>
       String(dataPointGroup.values[DataPointValue.TAG_DOT_TEXT]),
+    getTickLabel: (value: any) => String(value),
     description: "Tag Dot Text",
   },
   [DataPointValue.WEEKDAY]: {
@@ -210,6 +218,7 @@ export const DataPointValueAesthetics = {
       getWeekdayName(Number(dataPointGroup.values[DataPointValue.WEEKDAY])),
     getLabelY: (dataPointGroup: DataPointGroup) =>
       getWeekdayName(Number(dataPointGroup.values[DataPointValue.WEEKDAY])),
+    getTickLabel: (value: any) => getWeekdayName(Number(value)),
     description: "Weekday",
   },
   [DataPointValue.MONTH]: {
@@ -217,6 +226,7 @@ export const DataPointValueAesthetics = {
       getMonthName(Number(dataPointGroup.values[DataPointValue.MONTH])),
     getLabelY: (dataPointGroup: DataPointGroup) =>
       getMonthName(Number(dataPointGroup.values[DataPointValue.MONTH])),
+    getTickLabel: (value: any) => getMonthName(Number(value)),
     description: "Month",
   },
   [DataPointValue.YEAR]: {
@@ -224,6 +234,7 @@ export const DataPointValueAesthetics = {
       String(dataPointGroup.values[DataPointValue.YEAR]),
     getLabelY: (dataPointGroup: DataPointGroup) =>
       String(dataPointGroup.values[DataPointValue.YEAR]),
+    getTickLabel: (value: any) => String(value),
     description: "Year",
   },
   [DataPointValue.START_TIME]: {
@@ -231,6 +242,7 @@ export const DataPointValueAesthetics = {
       String(dataPointGroup.values[DataPointValue.START_TIME]),
     getLabelY: (dataPointGroup: DataPointGroup) =>
       String(dataPointGroup.values[DataPointValue.START_TIME]),
+    getTickLabel: (value: any) => new Date(value).toLocaleString(),
     description: "Start Time",
   },
   [DataPointValue.END_TIME]: {
@@ -238,6 +250,7 @@ export const DataPointValueAesthetics = {
       String(dataPointGroup.values[DataPointValue.END_TIME]),
     getLabelY: (dataPointGroup: DataPointGroup) =>
       String(dataPointGroup.values[DataPointValue.END_TIME]),
+    getTickLabel: (value: any) => new Date(value).toLocaleString(),
     description: "End Time",
   },
 } as const satisfies Record<DataPointValue, DataPointValueAesthetic>;

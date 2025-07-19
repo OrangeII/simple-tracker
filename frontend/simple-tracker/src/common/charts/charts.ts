@@ -93,9 +93,6 @@ export function getChartData(config: ChartConfig): ChartData {
     groupedData
   );
 
-  console.log("aggregatedData", aggregatedData);
-  console.log("config", config);
-
   const chartData: ChartData = {
     points: {
       x: [],
@@ -122,6 +119,8 @@ export function getChartData(config: ChartConfig): ChartData {
 
   chartData.points.x = x;
   chartData.points.ys = ys;
+
+  console.log("chartData", chartData);
 
   return chartData;
 }

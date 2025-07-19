@@ -77,13 +77,13 @@
     <!-- chart content -->
     <div class="flex flex-col">
       <div class="flex-grow">
-        <Bar :data="chartData" :options="chartOptions"> </Bar>
+        <Bar :data="chartjsData" :options="chartOptions"> </Bar>
       </div>
       <div class="flex-grow">
-        <Doughnut :data="chartData" :options="chartOptions"> </Doughnut>
+        <Doughnut :data="chartjsData" :options="chartOptions"> </Doughnut>
       </div>
       <div class="flex-grow">
-        <Line :data="chartData" :options="chartOptions"> </Line>
+        <Line :data="chartjsData" :options="chartOptions"> </Line>
       </div>
     </div>
   </div>
@@ -113,6 +113,7 @@ import {
   GroupKey,
   DataPointValue,
   ChartType,
+  DataPointValueAesthetics,
 } from "../../common/charts/charts.types";
 import {
   getAllowedXFields,
@@ -133,11 +134,13 @@ ChartJS.register(
 const styleStore = useStyleStore();
 
 const chartData = computed(() => {
-  const data = getChartData(chartConfig.value);
+  return getChartData(chartConfig.value);
+});
 
+const chartjsData = computed(() => {
   return {
-    labels: data.points.x,
-    datasets: data.points.ys.map((dataset) => ({
+    labels: chartData.value.points.x,
+    datasets: chartData.value.points.ys.map((dataset) => ({
       ...dataset,
       borderColor: dataset.backgroundColor,
       borderWidth: 1,
@@ -190,6 +193,17 @@ const chartOptions = {
     legend: {
       display: false,
     },
+    tooltip: {
+      callbacks: {
+        label: (context: any) => {
+          const label = context.dataset.label || "";
+          const value = context.raw;
+          return `${label}: ${DataPointValueAesthetics[
+            chartConfig.value.yAxisField
+          ].getTickLabel(value)}`;
+        },
+      },
+    },
   },
   scales: {
     y: {
@@ -200,6 +214,13 @@ const chartOptions = {
       },
       ticks: {
         color: styleStore.getPrimaryColor(),
+        callback: (value: any) => {
+          return chartConfig.value.yAxisField
+            ? DataPointValueAesthetics[
+                chartConfig.value.yAxisField
+              ].getTickLabel(value)
+            : value.toString();
+        },
       },
       grid: {
         color: styleStore.getPrimaryColor() + "40", // Add transparency
