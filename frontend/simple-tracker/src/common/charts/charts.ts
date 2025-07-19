@@ -8,6 +8,7 @@ import {
   type GroupKeys,
   DataPointValue,
   GroupValueSettersConfig,
+  DataPointValueAesthetics,
 } from "./charts.types";
 import { getDateIntevealFromPeriodType } from "./charts.utils";
 
@@ -108,10 +109,12 @@ export function getChartData(config: ChartConfig): ChartData {
 
   const aggregatedDataValues = Object.values(aggregatedData);
 
-  const x = aggregatedDataValues.map((item) => item.values[xField]);
+  const x = aggregatedDataValues.map((item) =>
+    DataPointValueAesthetics[xField].getLabelX(item)
+  );
   const ys = yFields.map((yField) => ({
     data: aggregatedDataValues.map((item) => item.values[yField]),
-    label: yField,
+    label: DataPointValueAesthetics[yField].description,
     backgroundColor: aggregatedDataValues.map((item) =>
       String(item.values[DataPointValue.TAG_COLOR] ?? generateRandomColor())
     ),

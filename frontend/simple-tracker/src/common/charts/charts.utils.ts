@@ -85,3 +85,34 @@ export function getAllowedYFields(GroupKeys: GroupKey[]): DataPointValue[] {
     (NumericDataPointValues as readonly DataPointValue[]).includes(field)
   );
 }
+
+export function getWeekdayName(weekday: number): string {
+  const weekdays = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  return weekdays[weekday] || "";
+}
+
+export function getMonthName(month: number): string {
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  return months[month] || "";
+}
