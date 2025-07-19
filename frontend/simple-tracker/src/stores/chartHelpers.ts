@@ -10,7 +10,7 @@ export const useChartHelpersStore = defineStore("chartHelpers", () => {
   const styleStore = useStyleStore();
 
   const chartTextColor = computed(() => {
-    return styleStore.getPrimaryColor();
+    return styleStore.getTextColor();
   });
   const chartGridColor = computed(() => {
     return chartTextColor.value + "40";
