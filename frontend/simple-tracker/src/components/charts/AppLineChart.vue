@@ -8,6 +8,7 @@ import { useChartHelpersStore } from "../../stores/chartHelpers";
 import type { ChartConfig, ChartData } from "../../common/charts/charts.types";
 import { Line } from "vue-chartjs";
 import { Chart as ChartJS, LineElement, PointElement } from "chart.js";
+import { useStyleStore } from "../../stores/style";
 ChartJS.register(LineElement, PointElement);
 
 const props = defineProps<{
@@ -16,13 +17,14 @@ const props = defineProps<{
 }>();
 
 const chartHelpers = useChartHelpersStore();
+const styleStore = useStyleStore();
 
 const chartjsData = computed(() => {
   return {
     labels: props.chartData.points.x,
     datasets: props.chartData.points.ys.map((dataset) => ({
       ...dataset,
-      borderColor: dataset.backgroundColor,
+      borderColor: styleStore.getPrimaryColor(),
       borderWidth: 2,
       borderRadius: 2,
       lineTension: 0.4,

@@ -22,10 +22,7 @@ const chartjsData = computed(() => {
     labels: props.chartData.points.x,
     datasets: props.chartData.points.ys.map((dataset) => ({
       ...dataset,
-      borderColor: dataset.backgroundColor,
-      borderWidth: 2,
       borderRadius: 2,
-      lineTension: 0.4,
     })),
   };
 });
