@@ -77,14 +77,20 @@
     <!-- chart content -->
     <div class="flex flex-col">
       <div class="flex-grow">
-        <Bar :data="chartjsData" :options="barChartOptions"> </Bar>
+        <AppBarChart
+          :chartConfig="chartConfig"
+          :chartData="chartData"
+        ></AppBarChart>
       </div>
       <div class="flex-grow">
-        <Doughnut :data="chartjsData" :options="doughnutChartOptions">
-        </Doughnut>
+        <AppDoughnutChart :chartConfig="chartConfig" :chartData="chartData">
+        </AppDoughnutChart>
       </div>
       <div class="flex-grow">
-        <Line :data="chartjsData" :options="lineChartOptions"> </Line>
+        <AppLineChart
+          :chartConfig="chartConfig"
+          :chartData="chartData"
+        ></AppLineChart>
       </div>
     </div>
   </div>
@@ -92,21 +98,6 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
-
-import { Bar, Doughnut, Line } from "vue-chartjs";
-import {
-  Chart as ChartJS,
-  Title,
-  Tooltip,
-  Legend,
-  BarElement,
-  ArcElement,
-  PointElement,
-  LineElement,
-  CategoryScale,
-  LinearScale,
-} from "chart.js";
-import { useStyleStore } from "../../stores/style";
 import { getChartData } from "../../common/charts/charts";
 import {
   PeriodType,
@@ -114,41 +105,17 @@ import {
   GroupKey,
   DataPointValue,
   ChartType,
-  DataPointValueAesthetics,
 } from "../../common/charts/charts.types";
 import {
   getAllowedXFields,
   getAllowedYFields,
 } from "../../common/charts/charts.utils";
-
-ChartJS.register(
-  Title,
-  Tooltip,
-  Legend,
-  BarElement,
-  CategoryScale,
-  ArcElement,
-  PointElement,
-  LineElement,
-  LinearScale
-);
-const styleStore = useStyleStore();
+import AppBarChart from "./AppBarChart.vue";
+import AppDoughnutChart from "./AppDoughnutChart.vue";
+import AppLineChart from "./AppLineChart.vue";
 
 const chartData = computed(() => {
   return getChartData(chartConfig.value);
-});
-
-const chartjsData = computed(() => {
-  return {
-    labels: chartData.value.points.x,
-    datasets: chartData.value.points.ys.map((dataset) => ({
-      ...dataset,
-      borderColor: dataset.backgroundColor,
-      borderWidth: 2,
-      borderRadius: 2,
-      lineTension: 0.4,
-    })),
-  };
 });
 
 const chartConfig = ref<ChartConfig>({
@@ -188,74 +155,4 @@ const getDataPointValueKey = (value: DataPointValue) => {
     (key) => DataPointValue[key as keyof typeof DataPointValue] === value
   );
 };
-
-const chartTextColor = computed(() => {
-  return styleStore.getPrimaryColor();
-});
-const chartGridColor = computed(() => {
-  return chartTextColor.value + "40";
-});
-
-const chartTooltipConfig = {
-  callbacks: {
-    label: (context: any) => {
-      const label = context.dataset.label || "";
-      const value = context.raw;
-      return `${label}: ${DataPointValueAesthetics[
-        chartConfig.value.yAxisField
-      ].getTickLabel(value)}`;
-    },
-  },
-};
-const chartTicksConfigY = {
-  color: chartTextColor.value,
-  callback: (value: any) => {
-    return chartConfig.value.yAxisField
-      ? DataPointValueAesthetics[chartConfig.value.yAxisField].getTickLabel(
-          value
-        )
-      : value.toString();
-  },
-};
-
-const barChartOptions = {
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    legend: {
-      display: false,
-    },
-    tooltip: chartTooltipConfig,
-  },
-  scales: {
-    y: {
-      beginAtZero: false,
-      ticks: chartTicksConfigY,
-      grid: {
-        color: chartGridColor.value,
-      },
-    },
-    x: {
-      ticks: {
-        color: chartTextColor.value,
-      },
-      grid: {
-        color: chartGridColor.value,
-      },
-    },
-  },
-};
-
-const doughnutChartOptions = {
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    legend: {
-      display: true,
-    },
-    tooltip: chartTooltipConfig,
-  },
-};
-
-const lineChartOptions = barChartOptions;
 </script>
