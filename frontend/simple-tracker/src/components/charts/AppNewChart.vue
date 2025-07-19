@@ -21,6 +21,16 @@
       class="w-full focus:outline-none focus:border-none text-xl caret-primary"
     />
 
+    <!-- chart type selector -->
+    <div class="mt-4">
+      <label for="chartType">Chart Type</label>
+      <select id="chartType" v-model="chartConfig.chartType">
+        <option v-for="(value, key) in ChartType" :key="value" :value="value">
+          {{ key }}
+        </option>
+      </select>
+    </div>
+
     <!-- period type selector -->
     <div class="mt-4">
       <label for="periodType">Period Type</label>
@@ -77,6 +87,12 @@
       <div class="flex-grow">
         <Bar :data="chartData" :options="chartOptions"> </Bar>
       </div>
+      <div class="flex-grow">
+        <Doughnut :data="chartData" :options="chartOptions"> </Doughnut>
+      </div>
+      <div class="flex-grow">
+        <Line :data="chartData" :options="chartOptions"> </Line>
+      </div>
     </div>
   </div>
 </template>
@@ -84,13 +100,16 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 
-import { Bar } from "vue-chartjs";
+import { Bar, Doughnut, Line } from "vue-chartjs";
 import {
   Chart as ChartJS,
   Title,
   Tooltip,
   Legend,
   BarElement,
+  ArcElement,
+  PointElement,
+  LineElement,
   CategoryScale,
   LinearScale,
 } from "chart.js";
@@ -101,6 +120,7 @@ import {
   type ChartConfig,
   GroupKey,
   DataPointValue,
+  ChartType,
 } from "../../common/charts/charts.types";
 
 ChartJS.register(
@@ -109,6 +129,9 @@ ChartJS.register(
   Legend,
   BarElement,
   CategoryScale,
+  ArcElement,
+  PointElement,
+  LineElement,
   LinearScale
 );
 const styleStore = useStyleStore();
@@ -129,6 +152,7 @@ const chartData = computed(() => {
 const chartConfig = ref<ChartConfig>({
   title: "",
   description: "",
+  chartType: ChartType.BAR,
   periodType: PeriodType.THIS_WEEK,
   groupBy: [GroupKey.TASK],
   xAxisField: DataPointValue.TASK_NAME,

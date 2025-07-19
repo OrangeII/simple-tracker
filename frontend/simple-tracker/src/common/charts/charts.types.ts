@@ -78,9 +78,16 @@ export interface DataPointGroup {
   };
 }
 
+export enum ChartType {
+  BAR = "bar",
+  LINE = "line",
+  DOUGHNUT = "doughnut",
+}
+
 export interface ChartConfig {
   title: string;
   description: string;
+  chartType: ChartType;
   periodType: PeriodType;
   groupBy: GroupKey[];
   xAxisField: DataPointValue;
