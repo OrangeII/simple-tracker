@@ -77,13 +77,14 @@
     <!-- chart content -->
     <div class="flex flex-col">
       <div class="flex-grow">
-        <Bar :data="chartjsData" :options="chartOptions"> </Bar>
+        <Bar :data="chartjsData" :options="barChartOptions"> </Bar>
       </div>
       <div class="flex-grow">
-        <Doughnut :data="chartjsData" :options="chartOptions"> </Doughnut>
+        <Doughnut :data="chartjsData" :options="doughnutChartOptions">
+        </Doughnut>
       </div>
       <div class="flex-grow">
-        <Line :data="chartjsData" :options="chartOptions"> </Line>
+        <Line :data="chartjsData" :options="lineChartOptions"> </Line>
       </div>
     </div>
   </div>
@@ -143,7 +144,9 @@ const chartjsData = computed(() => {
     datasets: chartData.value.points.ys.map((dataset) => ({
       ...dataset,
       borderColor: dataset.backgroundColor,
-      borderWidth: 1,
+      borderWidth: 2,
+      borderRadius: 2,
+      lineTension: 0.4,
     })),
   };
 });
@@ -186,58 +189,73 @@ const getDataPointValueKey = (value: DataPointValue) => {
   );
 };
 
-const chartOptions = {
+const chartTextColor = computed(() => {
+  return styleStore.getPrimaryColor();
+});
+const chartGridColor = computed(() => {
+  return chartTextColor.value + "40";
+});
+
+const chartTooltipConfig = {
+  callbacks: {
+    label: (context: any) => {
+      const label = context.dataset.label || "";
+      const value = context.raw;
+      return `${label}: ${DataPointValueAesthetics[
+        chartConfig.value.yAxisField
+      ].getTickLabel(value)}`;
+    },
+  },
+};
+const chartTicksConfigY = {
+  color: chartTextColor.value,
+  callback: (value: any) => {
+    return chartConfig.value.yAxisField
+      ? DataPointValueAesthetics[chartConfig.value.yAxisField].getTickLabel(
+          value
+        )
+      : value.toString();
+  },
+};
+
+const barChartOptions = {
   responsive: true,
   maintainAspectRatio: false,
   plugins: {
     legend: {
       display: false,
     },
-    tooltip: {
-      callbacks: {
-        label: (context: any) => {
-          const label = context.dataset.label || "";
-          const value = context.raw;
-          return `${label}: ${DataPointValueAesthetics[
-            chartConfig.value.yAxisField
-          ].getTickLabel(value)}`;
-        },
-      },
-    },
+    tooltip: chartTooltipConfig,
   },
   scales: {
     y: {
-      beginAtZero: true,
-      title: {
-        display: true,
-        text: "y-axis",
-      },
-      ticks: {
-        color: styleStore.getPrimaryColor(),
-        callback: (value: any) => {
-          return chartConfig.value.yAxisField
-            ? DataPointValueAesthetics[
-                chartConfig.value.yAxisField
-              ].getTickLabel(value)
-            : value.toString();
-        },
-      },
+      beginAtZero: false,
+      ticks: chartTicksConfigY,
       grid: {
-        color: styleStore.getPrimaryColor() + "40", // Add transparency
+        color: chartGridColor.value,
       },
     },
     x: {
-      title: {
-        display: true,
-        text: "x-axis",
-      },
       ticks: {
-        color: styleStore.getPrimaryColor(),
+        color: chartTextColor.value,
       },
       grid: {
-        color: styleStore.getPrimaryColor() + "40", // Add transparency
+        color: chartGridColor.value,
       },
     },
   },
 };
+
+const doughnutChartOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      display: true,
+    },
+    tooltip: chartTooltipConfig,
+  },
+};
+
+const lineChartOptions = barChartOptions;
 </script>
