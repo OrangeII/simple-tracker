@@ -21,7 +21,9 @@
     >
       <div class="pt-4 px-4 font-bold uppercase flex flex-row justify-between">
         <div>{{ toEntriesDateString(new Date(date)) }}</div>
-        <div>{{ toDurationString(new Date(dateEntries.totalTime)) }}</div>
+        <div class="pr-2">
+          {{ toDurationString(new Date(dateEntries.totalTime)) }}
+        </div>
       </div>
 
       <div v-if="!grouped">
