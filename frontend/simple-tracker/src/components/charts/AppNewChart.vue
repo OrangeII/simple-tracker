@@ -37,12 +37,13 @@
       <div class="mt-4">
         <label for="periodType">Period Type</label>
         <select id="periodType" v-model="chartConfig.periodType">
-          <option :value="PeriodType.THIS_WEEK">This Week</option>
-          <option :value="PeriodType.LAST_WEEK">Last Week</option>
-          <option :value="PeriodType.THIS_MONTH">This Month</option>
-          <option :value="PeriodType.LAST_MONTH">Last Month</option>
-          <option :value="PeriodType.THIS_YEAR">This Year</option>
-          <option :value="PeriodType.LAST_YEAR">Last Year</option>
+          <option
+            v-for="(value, key) in PeriodType"
+            :key="value"
+            :value="value"
+          >
+            {{ key }}
+          </option>
         </select>
       </div>
 
@@ -61,7 +62,7 @@
         <label for="xAxisField">X-Axis Field</label>
         <select id="xAxisField" v-model="chartConfig.xAxisField">
           <option v-for="value in allowedXFields" :key="value" :value="value">
-            {{ getDataPointValueKey(value) }}
+            {{ DataPointValueAesthetics[value].description }}
           </option>
         </select>
       </div>
@@ -71,14 +72,17 @@
         <label for="yAxisField">Y-Axis Field</label>
         <select id="yAxisField" v-model="chartConfig.yAxisField">
           <option v-for="value in allowedYFields" :key="value" :value="value">
-            {{ getDataPointValueKey(value) }}
+            {{ DataPointValueAesthetics[value].description }}
           </option>
         </select>
       </div>
     </div>
 
     <!-- chart content -->
-    <div class="my-8 basis-48 grow">
+    <div
+      v-if="chartData.points.x.length > 0"
+      class="my-4 basis-48 grow rounded-sm grainy bg-background dark:bg-blend-overlay p-4"
+    >
       <AppBarChart
         v-if="chartConfig.chartType === ChartType.BAR"
         :chartConfig="chartConfig"
@@ -96,6 +100,14 @@
         :chartData="chartData"
       ></AppLineChart>
     </div>
+    <div
+      v-else
+      class="my-4 basis-48 grow rounded-sm grainy bg-background dark:bg-blend-overlay p-4 flex items-center justify-center h-full"
+    >
+      <p class="text-text/70">
+        No data available for the selected configuration.
+      </p>
+    </div>
   </div>
 </template>
 
@@ -108,6 +120,7 @@ import {
   GroupKey,
   DataPointValue,
   ChartType,
+  DataPointValueAesthetics,
 } from "../../common/charts/charts.types";
 import {
   getAllowedXFields,
@@ -152,10 +165,4 @@ watch(
     }
   }
 );
-
-const getDataPointValueKey = (value: DataPointValue) => {
-  return Object.keys(DataPointValue).find(
-    (key) => DataPointValue[key as keyof typeof DataPointValue] === value
-  );
-};
 </script>
