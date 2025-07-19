@@ -7,8 +7,8 @@ import { computed } from "vue";
 import { useChartHelpersStore } from "../../stores/chartHelpers";
 import type { ChartConfig, ChartData } from "../../common/charts/charts.types";
 import { Bar } from "vue-chartjs";
-import { Chart as ChartJS, BarElement } from "chart.js";
-ChartJS.register(BarElement);
+import { Chart as ChartJS, registerables } from "chart.js";
+ChartJS.register(...registerables);
 
 const props = defineProps<{
   chartConfig: ChartConfig;

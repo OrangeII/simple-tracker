@@ -7,9 +7,9 @@ import { computed } from "vue";
 import { useChartHelpersStore } from "../../stores/chartHelpers";
 import type { ChartConfig, ChartData } from "../../common/charts/charts.types";
 import { Line } from "vue-chartjs";
-import { Chart as ChartJS, LineElement, PointElement } from "chart.js";
 import { useStyleStore } from "../../stores/style";
-ChartJS.register(LineElement, PointElement);
+import { Chart as ChartJS, registerables } from "chart.js";
+ChartJS.register(...registerables);
 
 const props = defineProps<{
   chartConfig: ChartConfig;
@@ -24,10 +24,48 @@ const chartjsData = computed(() => {
     labels: props.chartData.points.x,
     datasets: props.chartData.points.ys.map((dataset) => ({
       ...dataset,
-      borderColor: styleStore.getPrimaryColor(),
+      borderColor: (context: any) => {
+        const chart = context.chart;
+        const { ctx, chartArea } = chart;
+
+        if (!chartArea) {
+          // This case happens on initial chart load
+          return;
+        }
+
+        const gradient = ctx.createLinearGradient(
+          0,
+          chartArea.top,
+          0,
+          chartArea.bottom
+        );
+        gradient.addColorStop(0, styleStore.getPrimaryColor());
+        gradient.addColorStop(1, styleStore.getPrimaryColor() + "40");
+        return gradient;
+      },
+      backgroundColor: (context: any) => {
+        const chart = context.chart;
+        const { ctx, chartArea } = chart;
+
+        if (!chartArea) {
+          // This case happens on initial chart load
+          return;
+        }
+
+        const gradient = ctx.createLinearGradient(
+          0,
+          chartArea.top,
+          0,
+          chartArea.bottom
+        );
+        gradient.addColorStop(0, styleStore.getPrimaryColor() + "80");
+        gradient.addColorStop(1, styleStore.getPrimaryColor() + "00");
+        return gradient;
+      },
       borderWidth: 2,
       borderRadius: 2,
       lineTension: 0.4,
+      fill: true,
     })),
   };
 });
@@ -40,31 +78,33 @@ const chartTicksConfigY = computed(() => {
   return chartHelpers.chartTicksConfigY(props.chartConfig);
 });
 
-const barChartOptions = {
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    legend: {
-      display: false,
+const barChartOptions = computed(() => {
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false,
+      },
+      tooltip: chartTooltipConfig.value,
     },
-    tooltip: chartTooltipConfig.value,
-  },
-  scales: {
-    y: {
-      beginAtZero: false,
-      ticks: chartTicksConfigY.value,
-      grid: {
-        color: chartHelpers.chartGridColor,
+    scales: {
+      y: {
+        beginAtZero: false,
+        ticks: chartTicksConfigY.value,
+        grid: {
+          color: chartHelpers.chartGridColor,
+        },
+      },
+      x: {
+        ticks: {
+          color: chartHelpers.chartTextColor,
+        },
+        grid: {
+          color: chartHelpers.chartGridColor,
+        },
       },
     },
-    x: {
-      ticks: {
-        color: chartHelpers.chartTextColor,
-      },
-      grid: {
-        color: chartHelpers.chartGridColor,
-      },
-    },
-  },
-};
+  };
+});
 </script>
