@@ -28,8 +28,18 @@
         </div>
       </div>
       <div id="chartActions" class="flex gap-2 items-center">
-        <button class="cursor-pointer">SAVE</button>
-        <button class="cursor-pointer">DELETE</button>
+        <AppButton class="cursor-pointer">
+          <template #icon>
+            <CheckCircleIcon />
+          </template>
+          SAVE
+        </AppButton>
+        <AppButton class="cursor-pointer" variant="accent">
+          <template #icon>
+            <TrashIcon />
+          </template>
+          DELETE
+        </AppButton>
       </div>
     </div>
 
@@ -159,6 +169,8 @@ import AppDoughnutChart from "./AppDoughnutChart.vue";
 import AppLineChart from "./AppLineChart.vue";
 import { useChartDataStore } from "../../stores/chartData";
 import AppSelect from "../AppSelect.vue";
+import AppButton from "../AppButton.vue";
+import { CheckCircleIcon, TrashIcon } from "@heroicons/vue/24/solid";
 
 const chartDataStore = useChartDataStore();
 onMounted(async () => {
