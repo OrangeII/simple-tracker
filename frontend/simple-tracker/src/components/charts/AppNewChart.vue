@@ -37,7 +37,7 @@
 
         <!-- chart type selector -->
         <tr>
-          <td><label>Type</label></td>
+          <td><h3 class="text-text/70">Type</h3></td>
           <td>
             <AppSelect
               id="chartType"
@@ -51,7 +51,7 @@
 
         <!-- period type selector -->
         <tr>
-          <td><label>Period</label></td>
+          <td><h3 class="text-text/70">Period</h3></td>
           <td>
             <AppSelect
               id="periodType"
@@ -64,7 +64,7 @@
 
         <!-- group by selector -->
         <tr>
-          <td><label>Group</label></td>
+          <td><h3 class="text-text/70">Group</h3></td>
           <td>
             <AppSelect
               id="groupBy"
@@ -83,7 +83,7 @@
 
         <!-- y-axis field selector -->
         <tr>
-          <td><label>Y Axis</label></td>
+          <td><h3 class="text-text/70">Y Axis</h3></td>
           <td>
             <AppSelect
               id="yAxisField"
