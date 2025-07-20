@@ -110,6 +110,8 @@ onMounted(async () => {
   ChartJS.register(...registerables);
   ChartJS.defaults.font.size = styleStore.getFontSizePx();
   ChartJS.defaults.color = styleStore.getTextColor();
+  ChartJS.defaults.backgroundColor = styleStore.getPrimaryColor();
+  ChartJS.defaults.borderColor = "black";
 
   const { data } = await supabase.auth.getSession();
   userStore.user = data?.session?.user || null;

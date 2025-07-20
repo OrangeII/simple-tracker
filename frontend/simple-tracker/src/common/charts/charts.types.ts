@@ -175,9 +175,13 @@ export const DataPointValueAesthetics = {
   },
   [DataPointValue.DURATION]: {
     getLabelX: (dataPointGroup: DataPointGroup) =>
-      String(dataPointGroup.values[DataPointValue.DURATION]),
+      toDurationString(
+        new Date(dataPointGroup.values[DataPointValue.DURATION] as number)
+      ),
     getLabelY: (dataPointGroup: DataPointGroup) =>
-      String(dataPointGroup.values[DataPointValue.DURATION]),
+      toDurationString(
+        new Date(dataPointGroup.values[DataPointValue.DURATION] as number)
+      ),
     getTickLabel: (value: any) => toDurationString(value),
     description: "Duration",
   },

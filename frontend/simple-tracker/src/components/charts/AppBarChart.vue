@@ -23,7 +23,6 @@ const chartjsData = computed(() => {
     datasets: props.chartData.points.ys.map((dataset) => ({
       ...dataset,
       borderRadius: 2,
-      borderColor: "black",
       borderWidth: 3,
       borderSkipped: false,
       backgroundColor: dataset.backgroundColor.map((color) => {
