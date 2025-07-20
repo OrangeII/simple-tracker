@@ -54,12 +54,13 @@ const isSelected = (choice: any) => {
   return props.modelValue === choice;
 };
 
-const toggleSelection = (choice: any) => {
-  if (!props.multiple && props.modelValue !== choice) {
+const toggleSelectionSingle = (choice: any) => {
+  if (props.modelValue !== choice) {
     selected.value = choice;
-    return;
   }
+};
 
+const toggleSelectionMultiple = (choice: any) => {
   const selection = [...((props.modelValue as any[]) || [])];
   const index = selection.indexOf(choice);
 
@@ -73,6 +74,14 @@ const toggleSelection = (choice: any) => {
     // It's not selected, add it
     selection.push(choice);
     selected.value = selection;
+  }
+};
+
+const toggleSelection = (choice: any) => {
+  if (!props.multiple) {
+    toggleSelectionSingle(choice);
+  } else {
+    toggleSelectionMultiple(choice);
   }
 };
 </script>
