@@ -1,5 +1,5 @@
 <template>
-  <Doughnut :data="chartjsData" :options="barChartOptions"> </Doughnut>
+  <Doughnut :data="chartjsData" :options="chartOptions"> </Doughnut>
 </template>
 
 <script setup lang="ts">
@@ -37,14 +37,16 @@ const chartTooltipConfig = computed(() => {
   return chartHelpers.chartTooltipConfig(props.chartConfig);
 });
 
-const barChartOptions = {
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    legend: {
-      display: true,
+const chartOptions = computed(() => {
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: true,
+      },
+      tooltip: chartTooltipConfig.value,
     },
-    tooltip: chartTooltipConfig.value,
-  },
-};
+  };
+});
 </script>

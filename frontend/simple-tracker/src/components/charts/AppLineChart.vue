@@ -1,5 +1,5 @@
 <template>
-  <Line :data="chartjsData" :options="barChartOptions"> </Line>
+  <Line :data="chartjsData" :options="chartOptions"> </Line>
 </template>
 
 <script setup lang="ts">
@@ -79,7 +79,7 @@ const chartTicksConfigX = computed(() => {
   return chartHelpers.chartTicksConfigX(props.chartConfig);
 });
 
-const barChartOptions = computed(() => {
+const chartOptions = computed(() => {
   return {
     responsive: true,
     maintainAspectRatio: false,

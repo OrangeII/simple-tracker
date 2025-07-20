@@ -43,31 +43,37 @@ const chartTicksConfigY = computed(() => {
   return chartHelpers.chartTicksConfigY(props.chartConfig);
 });
 
-const barChartOptions = {
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    legend: {
-      display: false,
+const barChartOptions = computed(() => {
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false,
+      },
+      tooltip: chartTooltipConfig.value,
     },
-    tooltip: chartTooltipConfig.value,
-  },
-  scales: {
-    y: {
-      beginAtZero: false,
-      ticks: chartTicksConfigY.value,
-      grid: {
-        color: chartHelpers.chartGridColor,
+    scales: {
+      y: {
+        title: {
+          display: true,
+          text: props.chartConfig.yAxisField,
+        },
+        beginAtZero: false,
+        ticks: chartTicksConfigY.value,
+        grid: {
+          color: chartHelpers.chartGridColor,
+        },
+      },
+      x: {
+        ticks: {
+          color: chartHelpers.chartTextColor,
+        },
+        grid: {
+          color: chartHelpers.chartGridColor,
+        },
       },
     },
-    x: {
-      ticks: {
-        color: chartHelpers.chartTextColor,
-      },
-      grid: {
-        color: chartHelpers.chartGridColor,
-      },
-    },
-  },
-};
+  };
+});
 </script>
