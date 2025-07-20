@@ -7,8 +7,7 @@ import { computed } from "vue";
 import { useChartHelpersStore } from "../../stores/chartHelpers";
 import type { ChartConfig, ChartData } from "../../common/charts/charts.types";
 import { Bar } from "vue-chartjs";
-import { Chart as ChartJS, registerables } from "chart.js";
-ChartJS.register(...registerables);
+import { useStyleStore } from "../../stores/style";
 
 const props = defineProps<{
   chartConfig: ChartConfig;
@@ -16,6 +15,7 @@ const props = defineProps<{
 }>();
 
 const chartHelpers = useChartHelpersStore();
+const styleStore = useStyleStore();
 
 const chartjsData = computed(() => {
   return {
@@ -23,6 +23,15 @@ const chartjsData = computed(() => {
     datasets: props.chartData.points.ys.map((dataset) => ({
       ...dataset,
       borderRadius: 2,
+      borderColor: "black",
+      borderWidth: 3,
+      borderSkipped: false,
+      backgroundColor: dataset.backgroundColor.map((color) => {
+        if (!color) {
+          return styleStore.getPrimaryColor();
+        }
+        return color;
+      }),
     })),
   };
 });

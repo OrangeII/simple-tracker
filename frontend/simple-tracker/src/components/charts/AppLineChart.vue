@@ -8,8 +8,6 @@ import { useChartHelpersStore } from "../../stores/chartHelpers";
 import type { ChartConfig, ChartData } from "../../common/charts/charts.types";
 import { Line } from "vue-chartjs";
 import { useStyleStore } from "../../stores/style";
-import { Chart as ChartJS, registerables } from "chart.js";
-ChartJS.register(...registerables);
 
 const props = defineProps<{
   chartConfig: ChartConfig;
@@ -62,8 +60,7 @@ const chartjsData = computed(() => {
         gradient.addColorStop(1, styleStore.getPrimaryColor() + "00");
         return gradient;
       },
-      borderWidth: 2,
-      borderRadius: 2,
+      borderWidth: 3,
       lineTension: 0.4,
       fill: true,
     })),
@@ -76,6 +73,10 @@ const chartTooltipConfig = computed(() => {
 
 const chartTicksConfigY = computed(() => {
   return chartHelpers.chartTicksConfigY(props.chartConfig);
+});
+
+const chartTicksConfigX = computed(() => {
+  return chartHelpers.chartTicksConfigX(props.chartConfig);
 });
 
 const barChartOptions = computed(() => {
@@ -97,9 +98,7 @@ const barChartOptions = computed(() => {
         },
       },
       x: {
-        ticks: {
-          color: chartHelpers.chartTextColor,
-        },
+        ticks: chartTicksConfigX.value,
         grid: {
           color: chartHelpers.chartGridColor,
         },

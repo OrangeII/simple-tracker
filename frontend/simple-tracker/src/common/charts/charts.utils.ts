@@ -115,5 +115,5 @@ export function getMonthName(month: number): string {
     "November",
     "December",
   ];
-  return months[month] || "";
+  return months[month - 1] || "";
 }

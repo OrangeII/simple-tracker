@@ -37,10 +37,15 @@ export const useChartHelpersStore = defineStore("chartHelpers", () => {
     },
   });
 
+  const chartTicksConfigX = (_chartConfig: ChartConfig) => ({
+    color: chartTextColor.value,
+  });
+
   return {
     chartTextColor,
     chartGridColor,
     chartTooltipConfig,
     chartTicksConfigY,
+    chartTicksConfigX,
   };
 });

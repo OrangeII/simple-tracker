@@ -49,9 +49,30 @@ export const useStyleStore = defineStore("style", () => {
     return textColor;
   }
 
+  function getFontSizePx(): number {
+    //find the div with the id "main-div"
+    const appDiv = document.getElementById(MAIN_DIV_ID);
+    if (!appDiv) {
+      throw new Error("app main-div not found");
+    }
+    //create a div with the id "probe" and append it to the app div
+    const probeDiv = document.createElement("div");
+    probeDiv.id = PROBE_DIV_ID;
+    appDiv.appendChild(probeDiv);
+    const computedStyle = getComputedStyle(probeDiv);
+    const fontSize = computedStyle.getPropertyValue("font-size");
+    //remove the probe div
+    appDiv.removeChild(probeDiv);
+    //remove the probe div
+    probeDiv.remove();
+    //return the font size in pixels
+    return parseFloat(fontSize);
+  }
+
   return {
     MAIN_DIV_ID,
     getPrimaryColor,
     getTextColor,
+    getFontSizePx,
   };
 });

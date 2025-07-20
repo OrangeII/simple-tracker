@@ -1,4 +1,3 @@
-import { generateRandomColor } from "../colorUtils";
 import {
   type ChartConfig,
   type DataPoint,
@@ -115,7 +114,7 @@ export function getChartData(
     data: aggregatedDataValues.map((item) => item.values[yField]),
     label: DataPointValueAesthetics[yField].description,
     backgroundColor: aggregatedDataValues.map((item) =>
-      String(item.values[DataPointValue.TAG_COLOR] ?? generateRandomColor())
+      String(item.values[DataPointValue.TAG_COLOR] ?? "")
     ),
   }));
 

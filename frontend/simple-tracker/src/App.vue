@@ -66,6 +66,7 @@ import AppNavigation from "./components/AppNavigation.vue";
 import { useStyleStore } from "./stores/style.ts";
 import { useVisibility } from "./common/useVisibility.ts";
 import { useRegisterSW } from "virtual:pwa-register/vue";
+import { Chart as ChartJS, registerables } from "chart.js";
 
 const intervalMS = 60 * 60 * 1000; // 1 hour
 useRegisterSW({
@@ -106,6 +107,10 @@ const { isMobile, isDesktop } = useBreakpoints();
 let authStateChangeSub: Subscription | null = null;
 
 onMounted(async () => {
+  ChartJS.register(...registerables);
+  ChartJS.defaults.font.size = styleStore.getFontSizePx();
+  ChartJS.defaults.color = styleStore.getTextColor();
+
   const { data } = await supabase.auth.getSession();
   userStore.user = data?.session?.user || null;
 

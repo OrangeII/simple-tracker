@@ -7,8 +7,7 @@ import { computed } from "vue";
 import { useChartHelpersStore } from "../../stores/chartHelpers";
 import type { ChartConfig, ChartData } from "../../common/charts/charts.types";
 import { Doughnut } from "vue-chartjs";
-import { Chart as ChartJS, registerables } from "chart.js";
-ChartJS.register(...registerables);
+import { generateRandomColor } from "../../common/colorUtils";
 
 const props = defineProps<{
   chartConfig: ChartConfig;
@@ -22,8 +21,14 @@ const chartjsData = computed(() => {
     labels: props.chartData.points.x,
     datasets: props.chartData.points.ys.map((dataset) => ({
       ...dataset,
-      borderColor: dataset.backgroundColor,
-      lineTension: 0.4,
+      borderWidth: 2,
+      borderColor: "black",
+      backgroundColor: dataset.backgroundColor.map((color) => {
+        if (!color) {
+          return generateRandomColor();
+        }
+        return color;
+      }),
     })),
   };
 });
