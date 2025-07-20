@@ -63,21 +63,6 @@
         </AppSelect>
       </div>
 
-      <!-- x-axis field selector -->
-      <div class="flex gap-2 items-center">
-        <label>X Axis</label>
-        <AppSelect
-          :choices="allowedXFields"
-          v-model="chartConfig.xAxisField"
-          :descriptions="
-            allowedXFields.map(
-              (field) => DataPointValueAesthetics[field].description
-            )
-          "
-          :multiple="false"
-        />
-      </div>
-
       <!-- y-axis field selector -->
       <div class="flex gap-2 items-center">
         <label>Y Axis</label>

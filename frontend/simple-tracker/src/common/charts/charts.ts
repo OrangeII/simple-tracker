@@ -7,6 +7,7 @@ import {
   DataPointValue,
   GroupValueSettersConfig,
   DataPointValueAesthetics,
+  GroupKeysAesthetics,
 } from "./charts.types";
 import { getDateIntevealFromPeriodType } from "./charts.utils";
 
@@ -102,14 +103,19 @@ export function getChartData(
     config,
   };
 
-  const xField: DataPointValue = config.xAxisField;
   const yFields: DataPointValue[] = [config.yAxisField];
 
   const aggregatedDataValues = Object.values(aggregatedData);
 
-  const x = aggregatedDataValues.map((item) =>
-    DataPointValueAesthetics[xField].getLabelX(item)
-  );
+  const x = aggregatedDataValues.map((item) => {
+    const labels = config.groupBy.map((key) => {
+      const aesthetic = GroupKeysAesthetics[key];
+      return aesthetic.getLabelX(item);
+    });
+    // keep unique labels
+    const uniqueLabels = new Set(labels);
+    return Array.from(uniqueLabels).join(" - ");
+  });
   const ys = yFields.map((yField) => ({
     data: aggregatedDataValues.map((item) => item.values[yField]),
     label: DataPointValueAesthetics[yField].description,

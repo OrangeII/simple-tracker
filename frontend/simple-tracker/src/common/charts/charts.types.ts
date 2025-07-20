@@ -262,25 +262,38 @@ export const DataPointValueAesthetics = {
 export const GroupKeysAesthetics = {
   [GroupKey.ENTRY]: {
     description: "Time entry",
+    getLabelX: (dataPointGroup: DataPointGroup) =>
+      String(dataPointGroup.values[DataPointValue.TASK_NAME]),
   },
   [GroupKey.TASK]: {
     description: "Task",
+    getLabelX: (dataPointGroup: DataPointGroup) =>
+      String(dataPointGroup.values[DataPointValue.TASK_NAME]),
   },
   [GroupKey.TAG]: {
     description: "Tag",
+    getLabelX: (dataPointGroup: DataPointGroup) =>
+      String(dataPointGroup.values[DataPointValue.TAG_NAME] ?? "untagged"),
   },
   [GroupKey.WEEKDAY]: {
     description: "Weekday",
+    getLabelX: (dataPointGroup: DataPointGroup) =>
+      getWeekdayName(Number(dataPointGroup.values[DataPointValue.WEEKDAY])),
   },
   [GroupKey.MONTH]: {
     description: "Month",
+    getLabelX: (dataPointGroup: DataPointGroup) =>
+      getMonthName(Number(dataPointGroup.values[DataPointValue.MONTH])),
   },
   [GroupKey.YEAR]: {
     description: "Year",
+    getLabelX: (dataPointGroup: DataPointGroup) =>
+      String(dataPointGroup.values[DataPointValue.YEAR]),
   },
 } as const satisfies Record<
   GroupKey,
   {
     description: string;
+    getLabelX: (dataPointGroup: DataPointGroup) => string;
   }
 >;
