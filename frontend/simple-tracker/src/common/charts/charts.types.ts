@@ -263,7 +263,9 @@ export const GroupKeysAesthetics = {
   [GroupKey.ENTRY]: {
     description: "Time entry",
     getLabelX: (dataPointGroup: DataPointGroup) =>
-      String(dataPointGroup.values[DataPointValue.TASK_NAME]),
+      new Date(
+        Number(dataPointGroup.values[DataPointValue.START_TIME])
+      ).toLocaleString(),
   },
   [GroupKey.TASK]: {
     description: "Task",

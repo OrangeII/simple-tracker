@@ -15,6 +15,17 @@ export async function fetchRawData(
       .lt("end_time", endPeriod?.toISOString() || "9999-12-31T23:59:59Z")
       .order("start_time", { ascending: true });
     if (error) throw error;
+    if (!data) {
+      console.warn("No data found in fetchRawData");
+      return [];
+    }
+
+    data.forEach((item) => {
+      item.start_time = new Date(item.start_time).getTime();
+      item.end_time = new Date(item.end_time).getTime();
+    });
+    console.log("Fetched raw data:", data);
+
     return data as DataPoint[];
   } catch (error) {
     console.error("Error in fetchRawData:", error);
