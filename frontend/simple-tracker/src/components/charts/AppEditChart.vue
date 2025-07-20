@@ -51,7 +51,7 @@
       <tbody>
         <!-- chart type selector -->
         <tr>
-          <td class="w-1/24"><h3 class="text-text/70">Type</h3></td>
+          <td class="w-[80px]"><h3 class="text-text/70">Type</h3></td>
           <td>
             <AppSelect
               id="chartType"
