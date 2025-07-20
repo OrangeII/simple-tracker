@@ -2,7 +2,7 @@
   <!-- page content -->
   <div class="p-4 flex flex-col h-full">
     <!-- chart configuration -->
-    <div id="chartConfiguration">
+    <div id="chartConfiguration" class="flex flex-col gap-2">
       <!-- chart title -->
       <input
         type="text"
@@ -24,13 +24,8 @@
       />
 
       <!-- chart type selector -->
-      <div class="mt-4">
-        <label for="chartType">Chart Type</label>
-        <!-- <select id="chartType" v-model="chartConfig.chartType">
-          <option v-for="value in ChartType" :key="value" :value="value">
-            {{ value }}
-          </option>
-        </select> -->
+      <div class="flex gap-2 items-center">
+        <label>Type</label>
         <AppSelect
           id="chartType"
           :choices="Object.values(ChartType)"
@@ -41,8 +36,8 @@
       </div>
 
       <!-- period type selector -->
-      <div class="mt-4">
-        <label for="periodType">Period Type</label>
+      <div class="flex gap-2 items-center">
+        <label>Period</label>
         <AppSelect
           id="periodType"
           :choices="Object.values(PeriodType)"
@@ -52,8 +47,8 @@
       </div>
 
       <!-- group by selector -->
-      <div class="mt-4">
-        <label for="groupBy">Group By</label>
+      <div class="flex gap-2 items-center">
+        <label>Group</label>
         <AppSelect
           id="groupBy"
           :choices="Object.values(GroupKey)"
@@ -69,8 +64,8 @@
       </div>
 
       <!-- x-axis field selector -->
-      <div class="mt-4">
-        <label for="xAxisField">X-Axis Field</label>
+      <div class="flex gap-2 items-center">
+        <label>X Axis</label>
         <AppSelect
           :choices="allowedXFields"
           v-model="chartConfig.xAxisField"
@@ -84,8 +79,8 @@
       </div>
 
       <!-- y-axis field selector -->
-      <div class="mt-4">
-        <label for="yAxisField">Y-Axis Field</label>
+      <div class="flex gap-2 items-center">
+        <label>Y Axis</label>
         <AppSelect
           id="yAxisField"
           :choices="allowedYFields"

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex gap-1">
+  <div class="flex gap-1 flex-wrap">
     <div
       v-for="(choice, index) in props.choices"
       :key="index"
