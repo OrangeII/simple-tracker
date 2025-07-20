@@ -24,7 +24,6 @@ export async function fetchRawData(
       item.start_time = new Date(item.start_time).getTime();
       item.end_time = new Date(item.end_time).getTime();
     });
-    console.log("Fetched raw data:", data);
 
     return data as DataPoint[];
   } catch (error) {

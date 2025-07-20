@@ -48,7 +48,7 @@ import TagsManager from "./TagsManager.vue";
 import { usePreferencesStore } from "../stores/preferences";
 import { useFavoriteTasksStore } from "../stores/favoriteTasks.ts";
 import InsightsDashboard from "./InsightsDashboard.vue";
-import AppNewChart from "./charts/AppNewChart.vue";
+import AppNewChart from "./charts/AppEditChart.vue";
 
 const preferencesStore = usePreferencesStore();
 const favoriteTasksStore = useFavoriteTasksStore();
