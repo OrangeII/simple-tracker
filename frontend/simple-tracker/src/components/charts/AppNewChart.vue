@@ -27,8 +27,8 @@
       <div class="mt-4">
         <label for="chartType">Chart Type</label>
         <select id="chartType" v-model="chartConfig.chartType">
-          <option v-for="(value, key) in ChartType" :key="value" :value="value">
-            {{ key }}
+          <option v-for="value in ChartType" :key="value" :value="value">
+            {{ value }}
           </option>
         </select>
       </div>
@@ -38,7 +38,7 @@
         <label for="periodType">Period Type</label>
         <select id="periodType" v-model="chartConfig.periodType">
           <option v-for="value in PeriodType" :key="value" :value="value">
-            {{ PeriodTypeAesthetics[value].description }}
+            {{ value }}
           </option>
         </select>
       </div>
@@ -118,7 +118,6 @@ import {
   ChartType,
   DataPointValueAesthetics,
   GroupKeysAesthetics,
-  PeriodTypeAesthetics,
 } from "../../common/charts/charts.types";
 import {
   getAllowedXFields,

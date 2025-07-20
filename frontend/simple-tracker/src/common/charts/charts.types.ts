@@ -36,14 +36,14 @@ export const NumericDataPointValues: NumericDataPointKeys[] = [
 ];
 
 export enum PeriodType {
-  TODAY = "today",
-  YESTERDAY = "yesterday",
-  THIS_WEEK = "this_week",
-  LAST_WEEK = "last_week",
-  THIS_MONTH = "this_month",
-  LAST_MONTH = "last_month",
-  THIS_YEAR = "this_year",
-  LAST_YEAR = "last_year",
+  TODAY = "Today",
+  YESTERDAY = "Yesterday",
+  THIS_WEEK = "This week",
+  LAST_WEEK = "Last week",
+  THIS_MONTH = "This month",
+  LAST_MONTH = "Last month",
+  THIS_YEAR = "This year",
+  LAST_YEAR = "Last year",
 }
 
 export const DataPointValue = {
@@ -130,9 +130,9 @@ export interface DataPointGroup {
 }
 
 export enum ChartType {
-  BAR = "bar",
-  LINE = "line",
-  DOUGHNUT = "doughnut",
+  BAR = "Bar",
+  LINE = "Line",
+  DOUGHNUT = "Doughnut",
 }
 
 export interface ChartConfig {
@@ -191,9 +191,9 @@ export const DataPointValueAesthetics = {
   },
   [DataPointValue.TAG_NAME]: {
     getLabelX: (dataPointGroup: DataPointGroup) =>
-      String(dataPointGroup.values[DataPointValue.TAG_NAME]),
+      String(dataPointGroup.values[DataPointValue.TAG_NAME] ?? "untagged"),
     getLabelY: (dataPointGroup: DataPointGroup) =>
-      String(dataPointGroup.values[DataPointValue.TAG_NAME]),
+      String(dataPointGroup.values[DataPointValue.TAG_NAME] ?? "untagged"),
     getTickLabel: (value: any) => String(value),
     description: "Tag Name",
   },
@@ -276,38 +276,6 @@ export const GroupKeysAesthetics = {
   },
 } as const satisfies Record<
   GroupKey,
-  {
-    description: string;
-  }
->;
-
-export const PeriodTypeAesthetics = {
-  [PeriodType.TODAY]: {
-    description: "Today",
-  },
-  [PeriodType.YESTERDAY]: {
-    description: "Yesterday",
-  },
-  [PeriodType.THIS_WEEK]: {
-    description: "This week",
-  },
-  [PeriodType.LAST_WEEK]: {
-    description: "Last week",
-  },
-  [PeriodType.THIS_MONTH]: {
-    description: "This month",
-  },
-  [PeriodType.LAST_MONTH]: {
-    description: "Last month",
-  },
-  [PeriodType.THIS_YEAR]: {
-    description: "This year",
-  },
-  [PeriodType.LAST_YEAR]: {
-    description: "Last year",
-  },
-} as const satisfies Record<
-  PeriodType,
   {
     description: string;
   }
