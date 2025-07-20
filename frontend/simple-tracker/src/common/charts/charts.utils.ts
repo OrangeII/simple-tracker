@@ -10,13 +10,14 @@ export function getDateIntevealFromPeriodType(periodType: PeriodType): {
   start: Date;
   end: Date;
 } {
-  const now = new Date();
+  let now = new Date();
+  now = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   let start: Date;
   let end: Date;
 
   switch (periodType) {
     case PeriodType.TODAY:
-      start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      start = now;
       end = new Date(start);
       end.setDate(end.getDate() + 1);
       break;

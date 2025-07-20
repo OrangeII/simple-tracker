@@ -121,8 +121,5 @@ export function getChartData(
 
   chartData.points.x = x;
   chartData.points.ys = ys;
-
-  console.log("chartData", chartData);
-
   return chartData;
 }
