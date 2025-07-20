@@ -2,83 +2,104 @@
   <!-- page content -->
   <div class="p-4 flex flex-col h-full">
     <!-- chart configuration -->
-    <div id="chartConfiguration" class="flex flex-col gap-2">
-      <!-- chart title -->
-      <input
-        type="text"
-        name="title"
-        id="title"
-        v-model="chartConfig.title"
-        placeholder="Title"
-        class="w-full focus:outline-none focus:border-none text-2xl font-bold caret-primary"
-      />
+    <table
+      id="chartConfiguration"
+      class="table-auto border-separate border-spacing-2"
+    >
+      <tbody>
+        <!-- chart title -->
+        <tr>
+          <td colspan="2">
+            <input
+              type="text"
+              name="title"
+              id="title"
+              v-model="chartConfig.title"
+              placeholder="Title"
+              class="w-full focus:outline-none focus:border-none text-2xl font-bold caret-primary"
+            />
+          </td>
+        </tr>
 
-      <!-- chart description -->
-      <input
-        type="text"
-        name="description"
-        id="description"
-        v-model="chartConfig.description"
-        placeholder="Description"
-        class="w-full focus:outline-none focus:border-none text-xl caret-primary"
-      />
+        <!-- chart description -->
+        <tr>
+          <td colspan="2">
+            <input
+              type="text"
+              name="description"
+              id="description"
+              v-model="chartConfig.description"
+              placeholder="Description"
+              class="w-full focus:outline-none focus:border-none text-xl caret-primary"
+            />
+          </td>
+        </tr>
 
-      <!-- chart type selector -->
-      <div class="flex gap-2 items-center">
-        <label>Type</label>
-        <AppSelect
-          id="chartType"
-          :choices="Object.values(ChartType)"
-          v-model="chartConfig.chartType"
-          :multiple="false"
-        >
-        </AppSelect>
-      </div>
+        <!-- chart type selector -->
+        <tr>
+          <td><label>Type</label></td>
+          <td>
+            <AppSelect
+              id="chartType"
+              :choices="Object.values(ChartType)"
+              v-model="chartConfig.chartType"
+              :multiple="false"
+            >
+            </AppSelect>
+          </td>
+        </tr>
 
-      <!-- period type selector -->
-      <div class="flex gap-2 items-center">
-        <label>Period</label>
-        <AppSelect
-          id="periodType"
-          :choices="Object.values(PeriodType)"
-          v-model="chartConfig.periodType"
-          :multiple="false"
-        />
-      </div>
+        <!-- period type selector -->
+        <tr>
+          <td><label>Period</label></td>
+          <td>
+            <AppSelect
+              id="periodType"
+              :choices="Object.values(PeriodType)"
+              v-model="chartConfig.periodType"
+              :multiple="false"
+            />
+          </td>
+        </tr>
 
-      <!-- group by selector -->
-      <div class="flex gap-2 items-center">
-        <label>Group</label>
-        <AppSelect
-          id="groupBy"
-          :choices="Object.values(GroupKey)"
-          :descriptions="
-            Object.values(GroupKey).map(
-              (key) => GroupKeysAesthetics[key].description
-            )
-          "
-          v-model="chartConfig.groupBy"
-          :multiple="true"
-        >
-        </AppSelect>
-      </div>
+        <!-- group by selector -->
+        <tr>
+          <td><label>Group</label></td>
+          <td>
+            <AppSelect
+              id="groupBy"
+              :choices="Object.values(GroupKey)"
+              :descriptions="
+                Object.values(GroupKey).map(
+                  (key) => GroupKeysAesthetics[key].description
+                )
+              "
+              v-model="chartConfig.groupBy"
+              :multiple="true"
+            >
+            </AppSelect>
+          </td>
+        </tr>
 
-      <!-- y-axis field selector -->
-      <div class="flex gap-2 items-center">
-        <label>Y Axis</label>
-        <AppSelect
-          id="yAxisField"
-          :choices="allowedYFields"
-          v-model="chartConfig.yAxisField"
-          :descriptions="
-            allowedYFields.map(
-              (field) => DataPointValueAesthetics[field].description
-            )
-          "
-          :multiple="false"
-        />
-      </div>
-    </div>
+        <!-- y-axis field selector -->
+        <tr>
+          <td><label>Y Axis</label></td>
+          <td>
+            <AppSelect
+              id="yAxisField"
+              :choices="allowedYFields"
+              v-model="chartConfig.yAxisField"
+              :descriptions="
+                allowedYFields.map(
+                  (field) => DataPointValueAesthetics[field].description
+                )
+              "
+              :multiple="false"
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
 
     <!-- chart content -->
     <div
