@@ -1,4 +1,3 @@
-import { data as rawData } from "./charts.mockdata";
 import { generateRandomColor } from "../colorUtils";
 import {
   type ChartConfig,
@@ -12,7 +11,7 @@ import {
 } from "./charts.types";
 import { getDateIntevealFromPeriodType } from "./charts.utils";
 
-function selectData(config: ChartConfig): DataPoint[] {
+function filterData(config: ChartConfig, rawData: DataPoint[]): DataPoint[] {
   const { start, end } = getDateIntevealFromPeriodType(config.periodType);
   return rawData.filter(
     (item) =>
@@ -82,8 +81,11 @@ function aggregateData(
   return aggregatedData;
 }
 
-export function getChartData(config: ChartConfig): ChartData {
-  const selectedData: DataPoint[] = selectData(config);
+export function getChartData(
+  config: ChartConfig,
+  rawData: DataPoint[]
+): ChartData {
+  const selectedData: DataPoint[] = filterData(config, rawData);
   const groupedData: Record<string, DataPointGroup> = groupData(
     config,
     selectedData

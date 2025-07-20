@@ -112,7 +112,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { getChartData } from "../../common/charts/charts";
 import {
   PeriodType,
@@ -129,9 +129,15 @@ import {
 import AppBarChart from "./AppBarChart.vue";
 import AppDoughnutChart from "./AppDoughnutChart.vue";
 import AppLineChart from "./AppLineChart.vue";
+import { useChartDataStore } from "../../stores/chartData";
+
+const chartDataStore = useChartDataStore();
+onMounted(async () => {
+  await chartDataStore.refreshChartData();
+});
 
 const chartData = computed(() => {
-  return getChartData(chartConfig.value);
+  return getChartData(chartConfig.value, chartDataStore.rawChartData);
 });
 
 const chartConfig = ref<ChartConfig>({
