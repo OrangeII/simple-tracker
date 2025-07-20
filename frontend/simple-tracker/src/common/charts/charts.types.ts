@@ -280,3 +280,35 @@ export const GroupKeysAesthetics = {
     description: string;
   }
 >;
+
+export const PeriodTypeAesthetics = {
+  [PeriodType.TODAY]: {
+    description: "Today",
+  },
+  [PeriodType.YESTERDAY]: {
+    description: "Yesterday",
+  },
+  [PeriodType.THIS_WEEK]: {
+    description: "This week",
+  },
+  [PeriodType.LAST_WEEK]: {
+    description: "Last week",
+  },
+  [PeriodType.THIS_MONTH]: {
+    description: "This month",
+  },
+  [PeriodType.LAST_MONTH]: {
+    description: "Last month",
+  },
+  [PeriodType.THIS_YEAR]: {
+    description: "This year",
+  },
+  [PeriodType.LAST_YEAR]: {
+    description: "Last year",
+  },
+} as const satisfies Record<
+  PeriodType,
+  {
+    description: string;
+  }
+>;
