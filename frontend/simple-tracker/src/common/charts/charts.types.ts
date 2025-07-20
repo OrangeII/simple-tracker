@@ -254,3 +254,29 @@ export const DataPointValueAesthetics = {
     description: "End Time",
   },
 } as const satisfies Record<DataPointValue, DataPointValueAesthetic>;
+
+export const GroupKeysAesthetics = {
+  [GroupKey.ENTRY]: {
+    description: "Time entry",
+  },
+  [GroupKey.TASK]: {
+    description: "Task",
+  },
+  [GroupKey.TAG]: {
+    description: "Tag",
+  },
+  [GroupKey.WEEKDAY]: {
+    description: "Weekday",
+  },
+  [GroupKey.MONTH]: {
+    description: "Month",
+  },
+  [GroupKey.YEAR]: {
+    description: "Year",
+  },
+} as const satisfies Record<
+  GroupKey,
+  {
+    description: string;
+  }
+>;

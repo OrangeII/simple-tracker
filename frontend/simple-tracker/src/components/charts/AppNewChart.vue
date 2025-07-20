@@ -51,8 +51,8 @@
       <div class="mt-4">
         <label for="groupBy">Group By</label>
         <select id="groupBy" v-model="chartConfig.groupBy" multiple>
-          <option v-for="(value, key) in GroupKey" :key="value" :value="value">
-            {{ key }}
+          <option v-for="value in GroupKey" :key="value" :value="value">
+            {{ GroupKeysAesthetics[value].description }}
           </option>
         </select>
       </div>
@@ -121,6 +121,7 @@ import {
   DataPointValue,
   ChartType,
   DataPointValueAesthetics,
+  GroupKeysAesthetics,
 } from "../../common/charts/charts.types";
 import {
   getAllowedXFields,
