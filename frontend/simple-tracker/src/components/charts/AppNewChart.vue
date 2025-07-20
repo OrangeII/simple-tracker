@@ -26,51 +26,77 @@
       <!-- chart type selector -->
       <div class="mt-4">
         <label for="chartType">Chart Type</label>
-        <select id="chartType" v-model="chartConfig.chartType">
+        <!-- <select id="chartType" v-model="chartConfig.chartType">
           <option v-for="value in ChartType" :key="value" :value="value">
             {{ value }}
           </option>
-        </select>
+        </select> -->
+        <AppSelect
+          id="chartType"
+          :choices="Object.values(ChartType)"
+          v-model="chartConfig.chartType"
+          :multiple="false"
+        >
+        </AppSelect>
       </div>
 
       <!-- period type selector -->
       <div class="mt-4">
         <label for="periodType">Period Type</label>
-        <select id="periodType" v-model="chartConfig.periodType">
-          <option v-for="value in PeriodType" :key="value" :value="value">
-            {{ value }}
-          </option>
-        </select>
+        <AppSelect
+          id="periodType"
+          :choices="Object.values(PeriodType)"
+          v-model="chartConfig.periodType"
+          :multiple="false"
+        />
       </div>
 
       <!-- group by selector -->
       <div class="mt-4">
         <label for="groupBy">Group By</label>
-        <select id="groupBy" v-model="chartConfig.groupBy" multiple>
-          <option v-for="value in GroupKey" :key="value" :value="value">
-            {{ GroupKeysAesthetics[value].description }}
-          </option>
-        </select>
+        <AppSelect
+          id="groupBy"
+          :choices="Object.values(GroupKey)"
+          :descriptions="
+            Object.values(GroupKey).map(
+              (key) => GroupKeysAesthetics[key].description
+            )
+          "
+          v-model="chartConfig.groupBy"
+          :multiple="true"
+        >
+        </AppSelect>
       </div>
 
       <!-- x-axis field selector -->
       <div class="mt-4">
         <label for="xAxisField">X-Axis Field</label>
-        <select id="xAxisField" v-model="chartConfig.xAxisField">
-          <option v-for="value in allowedXFields" :key="value" :value="value">
-            {{ DataPointValueAesthetics[value].description }}
-          </option>
-        </select>
+        <AppSelect
+          :choices="allowedXFields"
+          v-model="chartConfig.xAxisField"
+          :descriptions="
+            allowedXFields.map(
+              (field) => DataPointValueAesthetics[field].description
+            )
+          "
+          :multiple="false"
+        />
       </div>
 
       <!-- y-axis field selector -->
       <div class="mt-4">
         <label for="yAxisField">Y-Axis Field</label>
-        <select id="yAxisField" v-model="chartConfig.yAxisField">
-          <option v-for="value in allowedYFields" :key="value" :value="value">
-            {{ DataPointValueAesthetics[value].description }}
-          </option>
-        </select>
+        <AppSelect
+          id="yAxisField"
+          :choices="allowedYFields"
+          v-model="chartConfig.yAxisField"
+          :descriptions="
+            allowedYFields.map(
+              (field) => DataPointValueAesthetics[field].description
+            )
+          "
+          :multiple="false"
+        />
       </div>
     </div>
 
@@ -127,6 +153,7 @@ import AppBarChart from "./AppBarChart.vue";
 import AppDoughnutChart from "./AppDoughnutChart.vue";
 import AppLineChart from "./AppLineChart.vue";
 import { useChartDataStore } from "../../stores/chartData";
+import AppSelect from "../AppSelect.vue";
 
 const chartDataStore = useChartDataStore();
 onMounted(async () => {
