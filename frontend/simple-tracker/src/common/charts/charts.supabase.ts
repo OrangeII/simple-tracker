@@ -4,9 +4,9 @@ import type { ChartConfig, DataPoint } from "./charts.types";
 const DATA_TABLE_NAME = "time_entry_report";
 
 export interface ChartConfigRecord {
-  id: string;
-  user_id: string;
-  created_at: string;
+  id: string | null;
+  user_id: string | null;
+  created_at: string | null;
   chart_config: ChartConfig;
 }
 
@@ -42,7 +42,7 @@ export async function fetchRawData(
 export async function fetchChartConfigs(): Promise<ChartConfigRecord[]> {
   try {
     const { data, error } = await supabase
-      .from("chart_config")
+      .from("charts")
       .select("*")
       .order("created_at", { ascending: false });
     if (error) throw error;
@@ -53,15 +53,32 @@ export async function fetchChartConfigs(): Promise<ChartConfigRecord[]> {
   }
 }
 
+/**
+ * Saves a chart configuration to the database. and returns the saved record.
+ * If the chart configuration already exists, it will be updated.
+ * @param chartConfig the chart configuration to save
+ * @returns the saved chart configuration record
+ */
 export async function saveChartConfig(
   chartConfig: ChartConfigRecord
-): Promise<boolean> {
+): Promise<ChartConfigRecord> {
   try {
-    const { error } = await supabase
-      .from("chart_config")
-      .upsert(chartConfig, { onConflict: "id" });
+    if (!chartConfig.id) {
+      chartConfig.id = null;
+    }
+    if (!chartConfig.user_id) {
+      chartConfig.user_id = null;
+    }
+    if (!chartConfig.created_at) {
+      chartConfig.created_at = null;
+    }
+    const { data, error } = await supabase
+      .from("charts")
+      .upsert(chartConfig, { onConflict: "id" })
+      .select()
+      .single();
     if (error) throw error;
-    return true;
+    return data as ChartConfigRecord;
   } catch (error) {
     console.error("Error in saveChartConfig:", error);
     throw error;

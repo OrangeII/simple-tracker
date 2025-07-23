@@ -28,13 +28,13 @@
         </div>
       </div>
       <div id="chartActions" class="flex gap-2 items-center">
-        <AppButton class="cursor-pointer">
+        <AppButton @click="saveChartConfig">
           <template #icon>
             <CheckCircleIcon />
           </template>
           SAVE
         </AppButton>
-        <AppButton class="cursor-pointer" variant="accent">
+        <AppButton variant="accent">
           <template #icon>
             <TrashIcon />
           </template>
@@ -155,7 +155,6 @@ import {
   PeriodType,
   type ChartConfig,
   GroupKey,
-  DataPointValue,
   ChartType,
   DataPointValueAesthetics,
   GroupKeysAesthetics,
@@ -171,10 +170,28 @@ import { useChartDataStore } from "../../stores/chartData";
 import AppSelect from "../AppSelect.vue";
 import AppButton from "../AppButton.vue";
 import { CheckCircleIcon, TrashIcon } from "@heroicons/vue/24/solid";
+import type { ChartConfigRecord } from "../../common/charts/charts.supabase";
+import { useChartsStore } from "../../stores/charts";
 
+const chartsStore = useChartsStore();
 const chartDataStore = useChartDataStore();
 onMounted(async () => {
-  await chartDataStore.refreshChartData();
+  if (!chartDataStore.rawChartData) {
+    await chartDataStore.refreshChartData();
+  }
+});
+
+const props = defineProps<{
+  chartConfigRecord: ChartConfigRecord;
+}>();
+const emit = defineEmits<{
+  close: [];
+  "chart-created": [chartConfigRecord: ChartConfigRecord];
+  "chart-updated": [chartConfigRecord: ChartConfigRecord];
+}>();
+
+const isNew = computed(() => {
+  return !props.chartConfigRecord.id;
 });
 
 const chartData = computed(() => {
@@ -182,13 +199,7 @@ const chartData = computed(() => {
 });
 
 const chartConfig = ref<ChartConfig>({
-  title: "",
-  description: "",
-  chartType: ChartType.BAR,
-  periodType: PeriodType.THIS_WEEK,
-  groupBy: [GroupKey.TASK],
-  xAxisField: DataPointValue.TASK_NAME,
-  yAxisField: DataPointValue.DURATION,
+  ...props.chartConfigRecord.chart_config,
 });
 
 const allowedXFields = computed(() => {
@@ -212,4 +223,22 @@ watch(
     }
   }
 );
+
+const saveChartConfig = async () => {
+  const chartConfigRecord: ChartConfigRecord = {
+    ...props.chartConfigRecord,
+    chart_config: chartConfig.value,
+  };
+  const success = await chartsStore.saveConfig(chartConfigRecord);
+  if (!success) {
+    return;
+  }
+  props.chartConfigRecord.chart_config = chartConfig.value;
+  if (isNew.value) {
+    emit("chart-created", chartConfigRecord);
+  } else {
+    emit("chart-updated", chartConfigRecord);
+  }
+  emit("close");
+};
 </script>

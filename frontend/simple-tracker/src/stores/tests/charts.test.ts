@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { createPinia, setActivePinia } from "pinia";
-import { useChartStore } from "../charts";
+import { useChartsStore } from "../charts";
 import * as chartsSupabase from "../../common/charts/charts.supabase";
 import type { ChartConfigRecord } from "../../common/charts/charts.supabase";
 import {
@@ -37,7 +37,7 @@ describe("useChartStore", () => {
   });
 
   it("should initialize with an empty chartConfigs array", () => {
-    const store = useChartStore();
+    const store = useChartsStore();
     expect(store.chartConfigs).toEqual([]);
   });
 
@@ -51,7 +51,7 @@ describe("useChartStore", () => {
         mockConfigs
       );
 
-      const store = useChartStore();
+      const store = useChartsStore();
       await store.fetchConfigs();
 
       expect(chartsSupabase.fetchChartConfigs).toHaveBeenCalledTimes(1);
@@ -61,7 +61,7 @@ describe("useChartStore", () => {
     it("should handle an empty array from fetchChartConfigs", async () => {
       vi.mocked(chartsSupabase.fetchChartConfigs).mockResolvedValue([]);
 
-      const store = useChartStore();
+      const store = useChartsStore();
       await store.fetchConfigs();
 
       expect(store.chartConfigs).toEqual([]);
@@ -71,13 +71,17 @@ describe("useChartStore", () => {
   describe("saveConfig", () => {
     it("should add a new config when saveChartConfig succeeds", async () => {
       const newConfig = createMockChartConfig("1");
-      vi.mocked(chartsSupabase.saveChartConfig).mockResolvedValue(true);
+      const mockResponse = {
+        ...newConfig,
+        created_at: new Date().toISOString(),
+      };
+      vi.mocked(chartsSupabase.saveChartConfig).mockResolvedValue(mockResponse);
 
-      const store = useChartStore();
+      const store = useChartsStore();
       await store.saveConfig(newConfig);
 
       expect(chartsSupabase.saveChartConfig).toHaveBeenCalledWith(newConfig);
-      expect(store.chartConfigs).toContainEqual(newConfig);
+      expect(store.chartConfigs).toContainEqual(mockResponse);
       expect(store.chartConfigs).toHaveLength(1);
     });
 
@@ -90,9 +94,11 @@ describe("useChartStore", () => {
           title: "Updated Chart",
         },
       };
-      vi.mocked(chartsSupabase.saveChartConfig).mockResolvedValue(true);
+      vi.mocked(chartsSupabase.saveChartConfig).mockResolvedValue(
+        updatedConfig
+      );
 
-      const store = useChartStore();
+      const store = useChartsStore();
       store.chartConfigs = [existingConfig];
 
       await store.saveConfig(updatedConfig);
@@ -107,11 +113,11 @@ describe("useChartStore", () => {
 
     it("should not modify the store if saveChartConfig fails", async () => {
       const newConfig = createMockChartConfig("1");
-      vi.mocked(chartsSupabase.saveChartConfig).mockResolvedValue(false);
-
-      const store = useChartStore();
-      await store.saveConfig(newConfig);
-
+      vi.mocked(chartsSupabase.saveChartConfig).mockRejectedValue(
+        new Error("Save failed")
+      );
+      const store = useChartsStore();
+      await expect(store.saveConfig(newConfig)).rejects.toThrow("Save failed");
       expect(chartsSupabase.saveChartConfig).toHaveBeenCalledWith(newConfig);
       expect(store.chartConfigs).toEqual([]);
     });

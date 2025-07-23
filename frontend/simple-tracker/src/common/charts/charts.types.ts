@@ -145,6 +145,18 @@ export interface ChartConfig {
   yAxisField: DataPointValue;
 }
 
+export function getDefaultChartConfig(): ChartConfig {
+  return {
+    title: "",
+    description: "",
+    chartType: ChartType.BAR,
+    periodType: PeriodType.THIS_WEEK,
+    groupBy: [GroupKey.TASK],
+    xAxisField: DataPointValue.TASK_NAME,
+    yAxisField: DataPointValue.DURATION,
+  };
+}
+
 export interface ChartData {
   points: {
     x: any[];
