@@ -5,7 +5,7 @@
       class="cursor-pointer h-full flex flex-col items-center"
     >
       <TrashIcon class="size-8 text-accent"></TrashIcon>
-      <h4>Delete</h4>
+      <h4 class="text-accent">Delete</h4>
     </div>
   </div>
 </template>

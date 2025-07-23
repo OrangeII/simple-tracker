@@ -8,7 +8,7 @@
         <StarIcon v-if="isFavorite"></StarIcon>
         <StarIconOutline v-else="isFavorite"></StarIconOutline>
       </div>
-      <h4>{{ text }}</h4>
+      <h4 class="text-primary">{{ text }}</h4>
     </div>
   </div>
 </template>
