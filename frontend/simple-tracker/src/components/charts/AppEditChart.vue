@@ -34,7 +34,7 @@
           </template>
           SAVE
         </AppButton>
-        <AppButton variant="accent">
+        <AppButton v-if="!isNew" variant="accent">
           <template #icon>
             <TrashIcon />
           </template>

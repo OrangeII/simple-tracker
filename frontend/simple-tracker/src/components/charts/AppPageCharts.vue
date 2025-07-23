@@ -3,14 +3,18 @@
     <!-- breadcrumbs ui -->
     <div class="flex gap-2 text-text/70 text-xl mb-4">
       <div
-        class="cursor-pointer border-b-2 border-transparent hover:border-primary"
+        class="cursor-pointer border-b-2 hover:border-primary"
+        :class="{
+          'border-primary': !selectedChart,
+          'border-transparent': selectedChart,
+        }"
         @click="selectedChart = null"
       >
         Charts
       </div>
       <template v-if="selectedChart">
         <div>/</div>
-        <div>
+        <div class="border-b-2 border-primary">
           {{
             selectedChart.id
               ? selectedChart.chart_config.title || "untitled chart"
