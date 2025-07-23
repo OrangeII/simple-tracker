@@ -73,6 +73,21 @@
           <h3>Sign out</h3>
         </div>
       </div>
+
+      <!-- credits -->
+      <div
+        class="fixed bottom-0 left-0 text-text/70 text-xs p-4 flex justify-between items-center"
+      >
+        <div class="flex-1">
+          made on wednesdays by
+          <a
+            class="text-primary hover:underline"
+            href="https://github.com/OrangeII"
+          >
+            OrangeII
+          </a>
+        </div>
+      </div>
     </template>
   </AppPage>
 </template>

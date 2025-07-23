@@ -48,7 +48,7 @@
     />
 
     <ToolbarNavigationButton
-      v-if="featureFlagsStore.enableReports && !isMobile"
+      v-if="!isMobile"
       :icon="DocumentChartBarIcon"
       :is-active="navigationStore.isCurrentPage(NavigationPages.REPORTS)"
       @click="navigationStore.navigateTo(NavigationPages.REPORTS)"
@@ -76,9 +76,6 @@ import {
 import { useBreakpoints } from "../common/breakpoints";
 import { useNavigationStore, NavigationPages } from "../stores/navigation";
 import ToolbarNavigationButton from "./ToolbarNavigationButton.vue";
-import { useFeatureFlagsStore } from "../stores/featureFlags";
-
-const featureFlagsStore = useFeatureFlagsStore();
 
 const navigationStore = useNavigationStore();
 const { isMobile } = useBreakpoints();
