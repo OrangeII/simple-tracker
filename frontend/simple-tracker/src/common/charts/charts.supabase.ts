@@ -1,7 +1,14 @@
 import { supabase } from "../../main";
-import type { DataPoint } from "./charts.types";
+import type { ChartConfig, DataPoint } from "./charts.types";
 
 const DATA_TABLE_NAME = "time_entry_report";
+
+export interface ChartConfigRecord {
+  id: string;
+  user_id: string;
+  created_at: string;
+  chart_config: ChartConfig;
+}
 
 export async function fetchRawData(
   startPeriod?: Date,
@@ -28,6 +35,35 @@ export async function fetchRawData(
     return data as DataPoint[];
   } catch (error) {
     console.error("Error in fetchRawData:", error);
+    throw error;
+  }
+}
+
+export async function fetchChartConfigs(): Promise<ChartConfigRecord[]> {
+  try {
+    const { data, error } = await supabase
+      .from("chart_config")
+      .select("*")
+      .order("created_at", { ascending: false });
+    if (error) throw error;
+    return data as ChartConfigRecord[];
+  } catch (error) {
+    console.error("Error in fetchChartConfigs:", error);
+    throw error;
+  }
+}
+
+export async function saveChartConfig(
+  chartConfig: ChartConfigRecord
+): Promise<boolean> {
+  try {
+    const { error } = await supabase
+      .from("chart_config")
+      .upsert(chartConfig, { onConflict: "id" });
+    if (error) throw error;
+    return true;
+  } catch (error) {
+    console.error("Error in saveChartConfig:", error);
     throw error;
   }
 }
