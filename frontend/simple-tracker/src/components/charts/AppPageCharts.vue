@@ -35,7 +35,7 @@
     <div v-else>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <div
-          class="h-full w-full rounded-sm border-4 border-dashed border-text/10 hover:border-primary/40 p-4 flex flex-col gap-4 justify-center items-center cursor-pointer text-text hover:text-primary"
+          class="h-96 w-full rounded-sm border-4 border-dashed border-text/10 hover:border-primary/40 p-4 flex flex-col gap-4 justify-center items-center cursor-pointer text-text hover:text-primary"
           @click="addChart"
         >
           <ChartBarIcon class="size-10" />

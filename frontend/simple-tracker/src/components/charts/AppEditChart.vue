@@ -34,7 +34,7 @@
           </template>
           SAVE
         </AppButton>
-        <AppButton v-if="!isNew" variant="accent">
+        <AppButton v-if="!isNew" @click="deleteChartConfig" variant="accent">
           <template #icon>
             <TrashIcon />
           </template>
@@ -215,5 +215,23 @@ const saveChartConfig = async () => {
     emit("chart-updated", chartConfigRecord);
   }
   emit("close");
+};
+
+const deleteChartConfig = async () => {
+  if (isNew.value) {
+    return;
+  }
+  if (!props.chartConfigRecord.id) {
+    return;
+  }
+
+  if (!confirm("Are you sure you want to delete this chart? ")) {
+    return;
+  }
+
+  const success = await chartsStore.deleteConfig(props.chartConfigRecord.id);
+  if (success) {
+    emit("close");
+  }
 };
 </script>

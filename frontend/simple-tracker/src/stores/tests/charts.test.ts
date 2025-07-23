@@ -13,6 +13,7 @@ import {
 vi.mock("../../common/charts/charts.supabase", () => ({
   fetchChartConfigs: vi.fn(),
   saveChartConfig: vi.fn(),
+  deleteChartConfig: vi.fn(),
 }));
 
 const createMockChartConfig = (id: string): ChartConfigRecord => ({
@@ -120,6 +121,40 @@ describe("useChartStore", () => {
       await expect(store.saveConfig(newConfig)).rejects.toThrow("Save failed");
       expect(chartsSupabase.saveChartConfig).toHaveBeenCalledWith(newConfig);
       expect(store.chartConfigs).toEqual([]);
+    });
+
+    describe("deleteConfig", () => {
+      it("should remove a config when deleteChartConfig succeeds", async () => {
+        const existingConfig = createMockChartConfig("1");
+        vi.mocked(chartsSupabase.deleteChartConfig).mockResolvedValue(true);
+
+        const store = useChartsStore();
+        store.chartConfigs = [existingConfig];
+
+        const success = await store.deleteConfig(existingConfig.id!);
+
+        expect(chartsSupabase.deleteChartConfig).toHaveBeenCalledWith(
+          existingConfig.id
+        );
+        expect(success).toBe(true);
+        expect(store.chartConfigs).toEqual([]);
+      });
+
+      it("should not modify the store if deleteChartConfig fails", async () => {
+        const existingConfig = createMockChartConfig("1");
+        vi.mocked(chartsSupabase.deleteChartConfig).mockResolvedValue(false);
+
+        const store = useChartsStore();
+        store.chartConfigs = [existingConfig];
+
+        const success = await store.deleteConfig(existingConfig.id!);
+
+        expect(chartsSupabase.deleteChartConfig).toHaveBeenCalledWith(
+          existingConfig.id
+        );
+        expect(success).toBe(false);
+        expect(store.chartConfigs).toEqual([existingConfig]);
+      });
     });
   });
 });

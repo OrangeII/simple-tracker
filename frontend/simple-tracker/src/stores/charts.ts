@@ -4,6 +4,7 @@ import {
   type ChartConfigRecord,
   saveChartConfig,
   fetchChartConfigs,
+  deleteChartConfig,
 } from "../common/charts/charts.supabase";
 
 /**
@@ -35,9 +36,21 @@ export const useChartsStore = defineStore("charts", () => {
     return updatedRecord;
   }
 
+  async function deleteConfig(id: string): Promise<boolean> {
+    const success = await deleteChartConfig(id);
+    if (success) {
+      const index = chartConfigs.value.findIndex((config) => config.id === id);
+      if (index !== -1) {
+        chartConfigs.value.splice(index, 1);
+      }
+    }
+    return success;
+  }
+
   return {
     chartConfigs,
     fetchConfigs,
+    deleteConfig,
     saveConfig,
   };
 });

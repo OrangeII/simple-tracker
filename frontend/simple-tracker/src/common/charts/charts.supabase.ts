@@ -82,3 +82,27 @@ export async function saveChartConfig(
     throw error;
   }
 }
+
+/**
+ * Deletes a chart configuration from the database.
+ * @param id the id of the chart configuration to delete
+ * @returns true if the chart configuration was deleted successfully, false otherwise
+ */
+export async function deleteChartConfig(id: string): Promise<boolean> {
+  try {
+    const { data, error } = await supabase
+      .from("charts")
+      .delete()
+      .eq("id", id)
+      .select();
+    if (error) throw error;
+    if (!data || data.length === 0) {
+      console.warn(`No chart config found to delete with id: ${id}`);
+      return false;
+    }
+    return true;
+  } catch (error) {
+    console.error("Error in deleteChartConfig:", error);
+    throw error;
+  }
+}
