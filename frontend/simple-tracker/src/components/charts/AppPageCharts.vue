@@ -12,7 +12,9 @@
         <div>/</div>
         <div>
           {{
-            selectedChart.id ? selectedChart.chart_config.title : "new chart"
+            selectedChart.id
+              ? selectedChart.chart_config.title || "untitled chart"
+              : "new chart"
           }}
         </div>
       </template>
