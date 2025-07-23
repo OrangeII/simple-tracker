@@ -29,6 +29,15 @@
   >
     <InsightsDashboard />
   </div>
+
+  <!-- Reports page -->
+  <div
+    class="h-full"
+    v-else-if="navigationStore.isCurrentPage(NavigationPages.REPORTS)"
+    :key="NavigationPages.REPORTS"
+  >
+    <AppPageCharts />
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -39,6 +48,7 @@ import TagsManager from "./TagsManager.vue";
 import { usePreferencesStore } from "../stores/preferences";
 import { useFavoriteTasksStore } from "../stores/favoriteTasks.ts";
 import InsightsDashboard from "./InsightsDashboard.vue";
+import AppPageCharts from "./charts/AppPageCharts.vue";
 
 const preferencesStore = usePreferencesStore();
 const favoriteTasksStore = useFavoriteTasksStore();
