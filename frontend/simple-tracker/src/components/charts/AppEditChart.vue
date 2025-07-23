@@ -117,7 +117,7 @@
 
     <!-- chart content -->
     <AppChart
-      class="p-4 mt-2 grow"
+      class="p-4 mt-2 grow rounded-sm border-text/10 border-1"
       :chartConfig="chartConfig"
       :chartData="chartData"
     >
