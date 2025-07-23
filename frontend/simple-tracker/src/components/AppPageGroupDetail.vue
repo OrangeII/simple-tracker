@@ -50,7 +50,7 @@
       <Transition :name="isDesktop ? 'list-slide-right' : 'page-slide'">
         <AppPageEntryDetail
           :anchor="isDesktop ? 'right' : ''"
-          :widthClass="isDesktop ? 'w-96' : ''"
+          :widthClass="isDesktop ? 'w-128' : ''"
           :class="[isDesktop ? 'border-l border-text/10' : '']"
           v-if="detailPageEntry !== null"
           @close="detailPageEntry = null"
