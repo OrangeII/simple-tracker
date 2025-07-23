@@ -1,6 +1,6 @@
 <template>
   <!-- page content -->
-  <div class="p-4 flex flex-col h-full">
+  <div class="flex flex-col h-full">
     <div id="chartHeader" class="flex">
       <div id="chartTitle" class="flex-1">
         <!-- chart title -->

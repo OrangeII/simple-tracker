@@ -1,11 +1,20 @@
 <template>
-  <div class="h-full flex flex-col">
+  <div class="p-4 h-full flex flex-col">
     <!-- breadcrumbs ui -->
-    <div class="flex gap-2 text-text/70 text-xl">
+    <div class="flex gap-2 text-text/70 text-xl pb-4">
+      <div
+        class="cursor-pointer border-b-2 border-transparent hover:border-primary"
+        @click="selectedChart = null"
+      >
+        Charts
+      </div>
       <template v-if="selectedChart">
-        <div>Charts</div>
         <div>/</div>
-        <div>{{ selectedChart.id || "new chart" }}</div>
+        <div>
+          {{
+            selectedChart.id ? selectedChart.chart_config.title : "new chart"
+          }}
+        </div>
       </template>
     </div>
 
@@ -20,7 +29,12 @@
     <div v-else>
       <AppButton @click="addChart">Add Chart</AppButton>
       <div class="flex flex-col gap-2">
-        <div v-for="(chart, index) in chartsStore.chartConfigs" :key="index">
+        <div
+          v-for="(chart, index) in chartsStore.chartConfigs"
+          :key="index"
+          @click="selectedChart = chart"
+          class="cursor-pointer"
+        >
           {{ chart.chart_config.title }}
         </div>
       </div>
