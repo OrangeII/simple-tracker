@@ -4,9 +4,9 @@ import type { ChartConfig, DataPoint } from "./charts.types";
 const DATA_TABLE_NAME = "time_entry_report";
 
 export interface ChartConfigRecord {
-  id: string | null;
-  user_id: string | null;
-  created_at: string | null;
+  id?: string;
+  user_id?: string;
+  created_at?: string;
   chart_config: ChartConfig;
 }
 
@@ -63,15 +63,13 @@ export async function saveChartConfig(
   chartConfig: ChartConfigRecord
 ): Promise<ChartConfigRecord> {
   try {
+    // If the chartConfig does not have an id, it means it's a new chart.
+    // I clear everything except the chart_config field so that a new record will use default values.
     if (!chartConfig.id) {
-      chartConfig.id = null;
+      chartConfig = { chart_config: chartConfig.chart_config };
     }
-    if (!chartConfig.user_id) {
-      chartConfig.user_id = null;
-    }
-    if (!chartConfig.created_at) {
-      chartConfig.created_at = null;
-    }
+
+    console.log("Saving chart config:", chartConfig);
     const { data, error } = await supabase
       .from("charts")
       .upsert(chartConfig, { onConflict: "id" })
