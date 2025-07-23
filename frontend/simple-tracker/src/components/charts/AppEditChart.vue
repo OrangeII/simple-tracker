@@ -116,35 +116,12 @@
     </table>
 
     <!-- chart content -->
-    <div
-      v-if="chartData.points.x.length > 0"
-      class="p-4 mt-2 grow rounded-sm grainy bg-background dark:bg-blend-overlay border-text/10 border-1"
+    <AppChart
+      class="p-4 mt-2 grow"
+      :chartConfig="chartConfig"
+      :chartData="chartData"
     >
-      <AppBarChart
-        v-if="chartConfig.chartType === ChartType.BAR"
-        :chartConfig="chartConfig"
-        :chartData="chartData"
-      ></AppBarChart>
-      <AppDoughnutChart
-        v-else-if="chartConfig.chartType === ChartType.DOUGHNUT"
-        :chartConfig="chartConfig"
-        :chartData="chartData"
-      >
-      </AppDoughnutChart>
-      <AppLineChart
-        v-else-if="chartConfig.chartType === ChartType.LINE"
-        :chartConfig="chartConfig"
-        :chartData="chartData"
-      ></AppLineChart>
-    </div>
-    <div
-      v-else
-      class="my-4 basis-48 grow rounded-sm grainy bg-background dark:bg-blend-overlay p-4 flex items-center justify-center h-full"
-    >
-      <p class="text-text/70">
-        No data available for the selected configuration.
-      </p>
-    </div>
+    </AppChart>
   </div>
 </template>
 
@@ -163,15 +140,13 @@ import {
   getAllowedXFields,
   getAllowedYFields,
 } from "../../common/charts/charts.utils";
-import AppBarChart from "./AppBarChart.vue";
-import AppDoughnutChart from "./AppDoughnutChart.vue";
-import AppLineChart from "./AppLineChart.vue";
 import { useChartDataStore } from "../../stores/chartData";
 import AppSelect from "../AppSelect.vue";
 import AppButton from "../AppButton.vue";
 import { CheckCircleIcon, TrashIcon } from "@heroicons/vue/24/solid";
 import type { ChartConfigRecord } from "../../common/charts/charts.supabase";
 import { useChartsStore } from "../../stores/charts";
+import AppChart from "./AppChart.vue";
 
 const chartsStore = useChartsStore();
 const chartDataStore = useChartDataStore();
