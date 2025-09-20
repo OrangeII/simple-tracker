@@ -64,6 +64,40 @@
   .list-slide-right-leave-to {
     transform: translateX(+100%);
   }
+
+  /** tables style */
+  table {
+    border-collapse: collapse;
+  }
+  .table tr {
+    border-style: solid;
+    border-width: 1px 0;
+    border-color: color-mix(in oklab, var(--text) 10%, transparent);
+    height: calc(var(--spacing) * 12);
+  }
+  .table td,
+  .table th {
+    padding: 0 calc(var(--spacing) * 2);
+    text-align: left;
+  }
+  .table tr:first-child {
+    border-top: none;
+  }
+  .table tr:last-child {
+    border-bottom: none;
+  }
+  .table tr:hover {
+    background-color: var(--standout-bg);
+    transition: background-color 0.1s ease-in-out;
+  }
+  .table tr.header:hover {
+    background-color: transparent;
+  }
+  .table tbody::after {
+    content: "";
+    height: calc(var(--spacing) * 4);
+    display: block;
+  }
 }
 
 @layer components {

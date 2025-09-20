@@ -1,59 +1,61 @@
 <template>
   <!-- table -->
-  <table class="w-full table-auto">
-    <tbody
-      v-for="(dateEntries, date) in timeLineStore.timeEntriesByDate"
-      :key="date"
-    >
-      <tr class="font-bold uppercase">
-        <td>{{ toEntriesDateString(new Date(date)) }}</td>
-        <td>
-          {{ toDurationString(new Date(dateEntries.totalTime)) }}
-        </td>
-      </tr>
-
-      <tr
-        v-if="!grouped"
-        v-for="entry in dateEntries.entries"
-        :key="entry.id"
-      ></tr>
-      <tr
-        v-else
-        v-for="group in dateEntries.entiresById"
-        :key="group.id"
-        @click="$emit('onGroupClick', group)"
+  <div class="px-4 pt-6">
+    <table class="table table-auto w-full">
+      <tbody
+        v-for="(dateEntries, date) in timeLineStore.timeEntriesByDate"
+        :key="date"
+        class="pb-12"
       >
-        <td>{{ tasks[group.id].name }}</td>
-        <td>{{ toDurationString(new Date(group.totalTime)) }}</td>
-        <td>
-          <div class="flex flex-wrap gap-2 mb-2">
-            <TaskTag
-              v-for="tag in tasks[group.id].tags"
-              :key="tag.id"
-              :name="tag.name"
-              :hex_color="tag.hex_color"
+        <tr class="header font-bold uppercase">
+          <td>{{ toEntriesDateString(new Date(date)) }}</td>
+          <td>
+            {{ toDurationString(new Date(dateEntries.totalTime)) }}
+          </td>
+        </tr>
+        <tr
+          v-if="!grouped"
+          v-for="entry in dateEntries.entries"
+          :key="entry.id"
+        ></tr>
+        <tr
+          v-else
+          v-for="group in dateEntries.entiresById"
+          :key="group.id"
+          @click="$emit('onGroupClick', group)"
+        >
+          <td>{{ tasks[group.id].name }}</td>
+          <td>{{ toDurationString(new Date(group.totalTime)) }}</td>
+          <td>
+            <div class="flex flex-wrap gap-2 mb-2">
+              <TaskTag
+                v-for="tag in tasks[group.id].tags"
+                :key="tag.id"
+                :name="tag.name"
+                :hex_color="tag.hex_color"
+              />
+            </div>
+          </td>
+          <td>
+            <AppButtonDelete
+              :hideCaption="true"
+              @onDelete="$emit('onDeleteGroup', group)"
             />
-          </div>
-        </td>
-        <td>
-          <AppButtonDelete
-            :hideCaption="true"
-            @onDelete="$emit('onDeleteGroup', group)"
-          />
-        </td>
-        <td>
-          <AppButtonFavorite
-            :hideCaption="true"
-            :isFavorite="tasks[group.id]?.is_favorite"
-            @onFavoriteClick="$emit('onFavoriteClicked', group.entries[0])"
-          />
-        </td>
-        <td>
-          <AppButtonResume @on-resume="$emit('onResume', group.entries[0])" />
-        </td>
-      </tr>
-    </tbody>
-  </table>
+          </td>
+          <td>
+            <AppButtonFavorite
+              :hideCaption="true"
+              :isFavorite="tasks[group.id]?.is_favorite"
+              @onFavoriteClick="$emit('onFavoriteClicked', group.entries[0])"
+            />
+          </td>
+          <td>
+            <AppButtonResume @on-resume="$emit('onResume', group.entries[0])" />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </template>
 
 <script setup lang="ts">
