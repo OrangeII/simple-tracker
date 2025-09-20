@@ -5,7 +5,7 @@
       class="cursor-pointer h-full flex flex-col items-center"
     >
       <TrashIcon class="size-8 text-accent"></TrashIcon>
-      <h4 class="text-accent">Delete</h4>
+      <h4 v-if="!hideCaption" class="text-accent">Delete</h4>
     </div>
   </div>
 </template>
@@ -16,9 +16,11 @@ import { TrashIcon } from "@heroicons/vue/24/solid";
 withDefaults(
   defineProps<{
     text?: string;
+    hideCaption?: boolean;
   }>(),
   {
     text: "Delete",
+    hideCaption: false,
   }
 );
 

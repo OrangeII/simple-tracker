@@ -15,7 +15,18 @@
 
   <!-- Entries list -->
   <div v-else>
+    <EntriesListDesktop
+      v-if="isDesktop"
+      :grouped="grouped"
+      @onResume="onResume"
+      @onDeleteEntry="onDeleteEntry"
+      @onEntryClick="onEntryClick"
+      @onFavoriteClicked="onFavoriteClicked"
+      @onDeleteGroup="onDeleteGroup"
+      @onGroupClick="onGroupClick"
+    />
     <EntriesListMobile
+      v-else
       :grouped="grouped"
       @onResume="onResume"
       @onDeleteEntry="onDeleteEntry"
@@ -74,6 +85,7 @@ import EntriesListSkeleton from "./EntriesListSkeleton.vue";
 import { useBreakpoints } from "../common/breakpoints.ts";
 import { useTasksStore } from "../stores/tasks.ts";
 import EntriesListMobile from "./EntriesListMobile.vue";
+import EntriesListDesktop from "./EntriesListDesktop.vue";
 
 const { isDesktop } = useBreakpoints();
 const observer = ref<IntersectionObserver | null>(null);

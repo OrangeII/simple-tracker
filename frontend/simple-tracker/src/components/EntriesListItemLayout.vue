@@ -49,29 +49,25 @@
         <slot name="left"></slot>
       </div>
 
-      <div
-        @click.stop="$emit('onResume')"
-        class="flex flex-col items-end cursor-pointer flex-none"
+      <AppButtonResume
+        @on-resume="$emit('onResume')"
+        :hidePlay="hidePlay"
+        :loading="loading"
       >
-        <div>
+        <template #duration>
           <slot name="duration"></slot>
-        </div>
-        <div color="flex flex-col items-center">
-          <PlayIcon v-if="!hidePlay && !loading" class="size-8 text-primary" />
-          <Spinner v-if="loading" class="size-8" />
-        </div>
-      </div>
+        </template>
+      </AppButtonResume>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, useTemplateRef } from "vue";
-import Spinner from "./Spinner.vue";
-import { PlayIcon } from "@heroicons/vue/24/solid";
 import AppButtonFavorite from "./AppButtonFavorite.vue";
 import AppButtonDelete from "./AppButtonDelete.vue";
 import { useBreakpoints } from "../common/breakpoints";
+import AppButtonResume from "./AppButtonResume.vue";
 
 withDefaults(
   defineProps<{

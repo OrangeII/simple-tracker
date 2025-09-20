@@ -9,7 +9,7 @@
     <div :class="['icon-container', { 'icon-visible': showIcon }]">
       <slot name="icon"></slot>
     </div>
-    <div>
+    <div class="text-nowrap">
       {{ name }}
     </div>
   </div>
