@@ -42,7 +42,7 @@
           <h3>Add a new chart</h3>
         </div>
         <div
-          class="cursor-pointer h-96 grainy rounded-sm border-1 border-text/10 hover:border-primary/40 p-4 flex flex-col gap-4"
+          class="cursor-pointer h-96 standout rounded-sm border-1 border-text/10 hover:border-primary/40 p-4 flex flex-col gap-4"
           v-for="(chart, index) in chartsStore.chartConfigs"
           :key="index"
           @click="selectedChart = chart"

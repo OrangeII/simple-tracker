@@ -2,9 +2,9 @@
   <!-- skeleton loader -->
   <div v-if="loading" class="animate-pulse">
     <div class="flex flex-col gap-2">
-      <div class="grainy rounded-sm size-6 w-22"></div>
-      <div class="grainy rounded-sm size-6 w-24"></div>
-      <div class="grainy rounded-sm size-6 w-18"></div>
+      <div class="standout rounded-sm size-6 w-22"></div>
+      <div class="standout rounded-sm size-6 w-24"></div>
+      <div class="standout rounded-sm size-6 w-18"></div>
     </div>
   </div>
   <div v-else>

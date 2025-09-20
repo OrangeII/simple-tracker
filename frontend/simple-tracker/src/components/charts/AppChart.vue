@@ -1,5 +1,5 @@
 <template>
-  <div v-if="chartData.points.x.length > 0" class="grainy">
+  <div v-if="chartData.points.x.length > 0" class="standout">
     <AppBarChart
       v-if="chartConfig.chartType === ChartType.BAR"
       :chartConfig="chartConfig"
@@ -17,7 +17,7 @@
       :chartData="chartData"
     ></AppLineChart>
   </div>
-  <div v-else class="grainy p-4 flex items-center justify-center h-full">
+  <div v-else class="standout p-4 flex items-center justify-center h-full">
     <p class="text-text/70">
       No data available for the selected configuration.
     </p>

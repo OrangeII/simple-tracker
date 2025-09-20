@@ -16,7 +16,7 @@
       <div
         v-for="n in 3"
         :key="n"
-        class="py-1 px-2 rounded-md flex gap-2 items-center justify-between animate-pulse grainy"
+        class="py-1 px-2 rounded-md flex gap-2 items-center justify-between animate-pulse standout"
       >
         <div class="size-6"></div>
         <div class="w-16 h-4"></div>

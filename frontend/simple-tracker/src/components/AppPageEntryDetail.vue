@@ -33,7 +33,7 @@
                 id="start-date"
                 :value="formatDate(start)"
                 @change="onStartDateChange"
-                class="p-2 rounded-md grainy grow font-medium text-lg focus:outline-none focus:border-none"
+                class="p-2 rounded-md standout grow font-medium text-lg focus:outline-none focus:border-none"
               />
               <input
                 required="true"
@@ -42,7 +42,7 @@
                 id="start-time"
                 :value="formatTime(start)"
                 @change="onStartTimeChange"
-                class="p-2 rounded-md grainy grow font-medium text-lg focus:outline-none focus:border-none"
+                class="p-2 rounded-md standout grow font-medium text-lg focus:outline-none focus:border-none"
               />
             </div>
           </div>
@@ -59,7 +59,7 @@
                 id="stop-date"
                 :value="formatDate(stop)"
                 @change="onStopDateChange"
-                class="p-2 rounded-md grainy grow font-medium text-lg focus:outline-none focus:border-none"
+                class="p-2 rounded-md standout grow font-medium text-lg focus:outline-none focus:border-none"
               />
               <input
                 required="true"
@@ -68,7 +68,7 @@
                 id="end-time"
                 :value="formatTime(stop)"
                 @change="onEndTimeChange"
-                class="p-2 rounded-md grainy grow font-medium text-lg focus:outline-none focus:border-none"
+                class="p-2 rounded-md standout grow font-medium text-lg focus:outline-none focus:border-none"
               />
             </div>
           </div>
@@ -82,7 +82,7 @@
           </div>
           <textarea
             v-model="entryNotes"
-            class="w-full p-2 rounded-md grainy font-medium text-lg focus:outline-none focus:border-none"
+            class="w-full p-2 rounded-md standout font-medium text-lg focus:outline-none focus:border-none"
             rows="3"
             placeholder="Add notes to this entry..."
           ></textarea>

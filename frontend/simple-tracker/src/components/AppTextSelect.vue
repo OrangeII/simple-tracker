@@ -2,7 +2,7 @@
   <div class="relative">
     <input
       type="text"
-      class="w-full p-2 grainy font-medium text-lg focus:outline-none"
+      class="w-full p-2 standout font-medium text-lg focus:outline-none"
       :class="[
         showDropdown
           ? dropdownPosition === 'above'
@@ -22,7 +22,7 @@
       ]"
     >
       <div
-        class="max-h-48 overflow-y-auto grainy flex flex-wrap gap-y-2 py-2 px-1"
+        class="max-h-48 overflow-y-auto standout flex flex-wrap gap-y-2 py-2 px-1"
         :class="[
           dropdownPosition === 'above' ? 'rounded-t-md' : 'rounded-b-md',
         ]"

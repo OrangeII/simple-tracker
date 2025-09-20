@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen min-w-screen flex flex-row justify-center">
     <div class="flex flex-col items-center absolute top-32 gap-2">
-      <div class="grainy w-fit rounded mb-6">
+      <div class="standout w-fit rounded mb-6">
         <img
           v-if="!preferencesStore.preferences.darkMode"
           src="../assets/logo-no-bg.svg"
@@ -18,7 +18,7 @@
 
       <button
         @click="signInWithGitHub"
-        class="w-full flex items-center justify-center gap-2 bg-primary text-background grainy bg-blend-overlay"
+        class="w-full flex items-center justify-center gap-2 bg-primary text-background standout bg-blend-overlay"
       >
         <Spinner v-if="gitHubLoading" class="size-5"></Spinner>
         <!-- github logo -->
@@ -31,7 +31,7 @@
       </button>
       <button
         @click="signInAsGuest"
-        class="w-full flex items-center justify-center gap-2 bg-primary text-background grainy bg-blend-overlay"
+        class="w-full flex items-center justify-center gap-2 bg-primary text-background standout bg-blend-overlay"
       >
         <Spinner v-if="guestLoading" class="size-5"></Spinner>
         <p v-else>👽</p>
