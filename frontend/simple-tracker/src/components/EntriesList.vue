@@ -62,10 +62,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { toDurationString, toEntriesDateString } from "../common/timeUtils.ts";
 import Spinner from "./Spinner.vue";
-import EntriesListItem from "./EntriesListItem.vue";
-import EntriesListGroupedItem from "./EntriesListGroupedItem.vue";
 import { useCurrentTaskStore } from "../stores/currentTask.ts";
 import { useTimelineStore } from "../stores/timeline.ts";
 import { useTimeEntriesStore } from "../stores/timeEntries.ts";
