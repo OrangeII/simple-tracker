@@ -1,9 +1,7 @@
 <template>
   <div class="min-h-screen min-w-screen flex flex-row justify-center">
     <div class="flex flex-col items-center absolute top-32 gap-2">
-      <div
-        class="grainy bg-background dark:bg-blend-overlay w-fit rounded mb-6"
-      >
+      <div class="grainy dark:bg-blend-overlay w-fit rounded mb-6">
         <img
           v-if="!preferencesStore.preferences.darkMode"
           src="../assets/logo-no-bg.svg"

@@ -14,7 +14,7 @@
       </slot>
     </div>
     <div
-      class="hover:outline-1 hover:outline-text/30 rounded-sm p-2 my-1.5 flex flex-row justify-between items-center bg-background grainy dark:bg-blend-overlay min-h-18 overflow-hidden"
+      class="hover:outline-1 hover:outline-text/30 rounded-sm p-2 my-1.5 flex flex-row justify-between items-center grainy dark:bg-blend-overlay min-h-18 overflow-hidden"
       :style="{ transform: `translateX(${offset}px)` }"
       :class="{ 'transition-transform': !isSwiping }"
       @click="$emit('onClick')"

@@ -3,15 +3,13 @@
     <!-- skeleton when loading -->
     <div v-if="isLoading">
       <div class="animate-pulse mb-2">
-        <div
-          class="h-10 w-full rounded-md bg-background grainy dark:bg-blend-overlay"
-        ></div>
+        <div class="h-10 w-full rounded-md grainy dark:bg-blend-overlay"></div>
       </div>
       <div class="flex flex-wrap gap-2 mt-4">
         <div
           v-for="i in 6"
           :key="i"
-          class="py-1 px-2 rounded-md flex gap-2 items-center justify-between animate-pulse bg-background grainy dark:bg-blend-overlay"
+          class="py-1 px-2 rounded-md flex gap-2 items-center justify-between animate-pulse grainy dark:bg-blend-overlay"
         >
           <div class="size-6"></div>
           <div class="w-16 h-4"></div>
@@ -25,13 +23,13 @@
         <input
           v-model="searchQuery"
           type="text"
-          class="flex-grow rounded-md p-2 bg-background dark:bg-blend-overlay grainy font-medium text-lg focus:outline-none"
+          class="flex-grow rounded-md p-2 dark:bg-blend-overlay grainy font-medium text-lg focus:outline-none"
           placeholder="Search tags..."
         />
 
         <button
           @click="createNewTag"
-          class="bg-background text-primary rounded-md border-primary border-1 p-2 flex items-center gap-1 hover:opacity-90"
+          class="text-primary rounded-md border-primary border-1 p-2 flex items-center gap-1 hover:opacity-90"
         >
           <PlusCircleIcon class="size-6" />
           New Tag

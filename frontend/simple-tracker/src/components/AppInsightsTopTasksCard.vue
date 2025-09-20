@@ -2,16 +2,13 @@
   <!-- skeleton loader -->
   <div
     v-if="loading"
-    class="animate-pulse h-36 rounded-sm grainy bg-background dark:bg-blend-overlay p-4 flex-1"
+    class="animate-pulse h-36 rounded-sm grainy dark:bg-blend-overlay p-4 flex-1"
   >
     <h3 class="text-text/70">{{ title || "" }}</h3>
   </div>
 
   <!-- actual content -->
-  <div
-    v-else
-    class="rounded-sm grainy bg-background dark:bg-blend-overlay p-4 flex-1"
-  >
+  <div v-else class="rounded-sm grainy dark:bg-blend-overlay p-4 flex-1">
     <h3 class="text-text/70">{{ title || "" }}</h3>
     <div class="flex gap-2 items-center">
       <ClockIcon class="size-4 text-text/70"></ClockIcon>

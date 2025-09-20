@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="chartData.points.x.length > 0"
-    class="grainy bg-background dark:bg-blend-overlay"
+    class="grainy dark:bg-blend-overlay"
   >
     <AppBarChart
       v-if="chartConfig.chartType === ChartType.BAR"
@@ -22,7 +22,7 @@
   </div>
   <div
     v-else
-    class="grainy bg-background dark:bg-blend-overlay p-4 flex items-center justify-center h-full"
+    class="grainy dark:bg-blend-overlay p-4 flex items-center justify-center h-full"
   >
     <p class="text-text/70">
       No data available for the selected configuration.

@@ -68,7 +68,7 @@
             <input
               type="color"
               v-model="tagColor"
-              class="p-1 rounded-md grainy bg-background dark:bg-blend-overlay grow font-medium focus:outline-none focus:border-none w-full h-12"
+              class="p-1 rounded-md grainy dark:bg-blend-overlay grow font-medium focus:outline-none focus:border-none w-full h-12"
             />
             <CubeIcon
               @click="randomizeColor"
