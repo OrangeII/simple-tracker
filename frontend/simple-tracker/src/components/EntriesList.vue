@@ -15,48 +15,17 @@
 
   <!-- Entries list -->
   <div v-else>
-    <div
-      v-for="(dateEntries, date) in timeLineStore.timeEntriesByDate"
-      :key="date"
-    >
-      <div class="pt-4 px-4 font-bold uppercase flex flex-row justify-between">
-        <div>{{ toEntriesDateString(new Date(date)) }}</div>
-        <div class="pr-2">
-          {{ toDurationString(new Date(dateEntries.totalTime)) }}
-        </div>
-      </div>
+    <EntriesListMobile
+      :grouped="grouped"
+      @onResume="onResume"
+      @onDeleteEntry="onDeleteEntry"
+      @onEntryClick="onEntryClick"
+      @onFavoriteClicked="onFavoriteClicked"
+      @onDeleteGroup="onDeleteGroup"
+      @onGroupClick="onGroupClick"
+    />
 
-      <div v-if="!grouped">
-        <TransitionGroup name="list-slide-left">
-          <EntriesListItem
-            v-for="entry in dateEntries.entries"
-            :key="entry.id"
-            :entry="entry"
-            class="px-4"
-            @onResumeClicked="onResume"
-            @onDeleteClicked="onDeleteEntry"
-            @onClick="onEntryClick(entry)"
-            @onFavoriteClicked="onFavoriteClicked"
-          >
-          </EntriesListItem>
-        </TransitionGroup>
-      </div>
-      <div v-else>
-        <TransitionGroup name="list-slide-left">
-          <EntriesListGroupedItem
-            v-for="group in dateEntries.entiresById"
-            :key="group.id"
-            :group="group"
-            class="px-4"
-            @onResumeClicked="onResume"
-            @onDeleteClicked="onDeleteGroup"
-            @onClick="onGroupClick(group)"
-            @onFavoriteClicked="onFavoriteClicked"
-          />
-        </TransitionGroup>
-      </div>
-    </div>
-
+    <!-- Detail pages -->
     <Transition :name="isDesktop ? 'list-slide-right' : 'page-slide'">
       <AppPageEntryDetail
         :key="detailPageEntry?.id"
@@ -107,6 +76,7 @@ import { useFavoriteTasksStore } from "../stores/favoriteTasks.ts";
 import EntriesListSkeleton from "./EntriesListSkeleton.vue";
 import { useBreakpoints } from "../common/breakpoints.ts";
 import { useTasksStore } from "../stores/tasks.ts";
+import EntriesListMobile from "./EntriesListMobile.vue";
 
 const { isDesktop } = useBreakpoints();
 const observer = ref<IntersectionObserver | null>(null);
