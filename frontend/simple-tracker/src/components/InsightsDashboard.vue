@@ -26,31 +26,19 @@
     </div>
 
     <!-- Weekly time chart -->
-    <div
-      class="rounded-sm grainy dark:bg-blend-overlay p-4"
-      v-if="!loadingWeeklyChart"
-    >
+    <div class="rounded-sm grainy p-4" v-if="!loadingWeeklyChart">
       <h2 class="text-xl font-bold mb-2">Weekly Activity</h2>
       <WeeklyActivityChart :weekly-data="weeklyChartData" />
     </div>
-    <div
-      v-else
-      class="animate-pulse h-64 rounded-sm grainy dark:bg-blend-overlay"
-    ></div>
+    <div v-else class="animate-pulse h-64 rounded-sm grainy"></div>
 
     <!-- Daily patterns chart - Conditionally displayed based on feature flag -->
     <template v-if="featureFlagsStore.showDailyPatterns">
-      <div
-        class="rounded-sm grainy dark:bg-blend-overlay p-4"
-        v-if="!loadingDailyChart"
-      >
+      <div class="rounded-sm grainy p-4" v-if="!loadingDailyChart">
         <h2 class="text-xl font-bold mb-2">Daily Patterns</h2>
         <DailyPatternsChart :daily-data="dailyChartData" />
       </div>
-      <div
-        v-else
-        class="animate-pulse h-64 rounded-sm grainy dark:bg-blend-overlay"
-      ></div>
+      <div v-else class="animate-pulse h-64 rounded-sm grainy"></div>
     </template>
   </div>
 </template>

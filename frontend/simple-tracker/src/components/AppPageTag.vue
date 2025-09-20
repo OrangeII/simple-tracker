@@ -68,7 +68,7 @@
             <input
               type="color"
               v-model="tagColor"
-              class="p-1 rounded-md grainy dark:bg-blend-overlay grow font-medium focus:outline-none focus:border-none w-full h-12"
+              class="p-1 rounded-md grainy grow font-medium focus:outline-none focus:border-none w-full h-12"
             />
             <CubeIcon
               @click="randomizeColor"
@@ -88,7 +88,7 @@
           <input
             type="text"
             v-model="tagDotText"
-            class="w-full p-2 rounded-md bg-background caret-primary dark:bg-blend-overlay grainy font-medium text-lg focus:outline-none"
+            class="w-full p-2 rounded-md bg-background caret-primary grainy font-medium text-lg focus:outline-none"
             placeholder="optional icon text (example: '🍕')"
           />
         </div>
