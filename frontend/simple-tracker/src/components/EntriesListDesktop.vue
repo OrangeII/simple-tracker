@@ -27,7 +27,7 @@
           <td>{{ tasks[group.id].name }}</td>
           <td>{{ toDurationString(new Date(group.totalTime)) }}</td>
           <td>
-            <div class="flex flex-wrap gap-2 mb-2">
+            <div class="flex flex-wrap gap-2">
               <TaskTag
                 v-for="tag in tasks[group.id].tags"
                 :key="tag.id"
@@ -37,20 +37,21 @@
             </div>
           </td>
           <td>
-            <AppButtonDelete
-              :hideCaption="true"
-              @onDelete="$emit('onDeleteGroup', group)"
-            />
-          </td>
-          <td>
-            <AppButtonFavorite
-              :hideCaption="true"
-              :isFavorite="tasks[group.id]?.is_favorite"
-              @onFavoriteClick="$emit('onFavoriteClicked', group.entries[0])"
-            />
-          </td>
-          <td>
-            <AppButtonResume @on-resume="$emit('onResume', group.entries[0])" />
+            <div class="flex flex-row gap-2">
+              <AppButtonDelete
+                :hideCaption="true"
+                @onDelete="$emit('onDeleteGroup', group)"
+              />
+              <AppButtonFavorite
+                :hideCaption="true"
+                :isFavorite="tasks[group.id]?.is_favorite"
+                @onFavoriteClick="$emit('onFavoriteClicked', group.entries[0])"
+              />
+              <AppButtonResume
+                :suppress-flex-end="true"
+                @on-resume="$emit('onResume', group.entries[0])"
+              />
+            </div>
           </td>
         </tr>
       </tbody>

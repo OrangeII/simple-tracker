@@ -77,7 +77,7 @@
   }
   .table td,
   .table th {
-    padding: 0 calc(var(--spacing) * 2);
+    padding: calc(var(--spacing) * 2);
     text-align: left;
   }
   .table tr:first-child {

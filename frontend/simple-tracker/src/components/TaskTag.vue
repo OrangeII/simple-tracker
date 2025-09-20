@@ -3,7 +3,14 @@
     ref="tagElement"
     @click="click"
     class="relative cursor-pointer py-1 px-2 rounded-md border-1 border-text/30 flex items-center justify-between"
-    :style="hex_color ? { borderColor: hex_color } : null"
+    :style="
+      hex_color
+        ? {
+            borderColor: hex_color,
+            backgroundColor: hex_color ? hex_color + '33' : 'transparent',
+          }
+        : null
+    "
     :class="{ 'gap-2': hasIcon && showIcon }"
   >
     <div :class="['icon-container', { 'icon-visible': showIcon }]">

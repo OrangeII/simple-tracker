@@ -1,7 +1,8 @@
 <template>
   <div
     @click.stop="$emit('onResume')"
-    class="flex flex-col items-end cursor-pointer flex-none"
+    class="flex flex-col cursor-pointer flex-none"
+    :class="suppressFlexEnd ? '' : 'items-end'"
   >
     <div>
       <slot name="duration"></slot>
@@ -21,10 +22,12 @@ withDefaults(
   defineProps<{
     hidePlay?: boolean;
     loading?: boolean;
+    suppressFlexEnd?: boolean;
   }>(),
   {
     hidePlay: false,
     loading: false,
+    suppressFlexEnd: false,
   }
 );
 
