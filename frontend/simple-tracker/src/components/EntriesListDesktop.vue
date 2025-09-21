@@ -95,7 +95,7 @@ const rowsData = computed<{
     if (!dateEntries) continue;
 
     if (props.grouped) {
-      for (const [groupId, group] of Object.entries(dateEntries.entiresById)) {
+      for (const [groupId, group] of Object.entries(dateEntries.entriesById)) {
         acc[date].push({
           id: groupId,
           isGrouped: true,

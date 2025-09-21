@@ -80,15 +80,15 @@ export const useTimelineStore = defineStore("timeline", () => {
           date,
           totalTime: 0,
           entries: [],
-          entiresById: {},
+          entriesById: {},
         };
       }
       //push entry to date group
       days[dateKey].entries.push(entry);
 
       //also group entries by id within this date group
-      if (!days[dateKey].entiresById[entry.task_id]) {
-        days[dateKey].entiresById[entry.task_id] = {
+      if (!days[dateKey].entriesById[entry.task_id]) {
+        days[dateKey].entriesById[entry.task_id] = {
           id: entry.task_id,
           date: new Date(dateKey).toISOString(),
           name: task?.name || "Unknown",
@@ -97,7 +97,7 @@ export const useTimelineStore = defineStore("timeline", () => {
         };
       }
       //push entry in the id group
-      days[dateKey].entiresById[entry.task_id].entries.push(entry);
+      days[dateKey].entriesById[entry.task_id].entries.push(entry);
 
       //add tracked time to totals
       if (entry.end_time) {
@@ -105,7 +105,7 @@ export const useTimelineStore = defineStore("timeline", () => {
           new Date(entry.end_time).getTime() -
           new Date(entry.start_time).getTime();
         days[dateKey].totalTime += trackedTime;
-        days[dateKey].entiresById[entry.task_id].totalTime += trackedTime;
+        days[dateKey].entriesById[entry.task_id].totalTime += trackedTime;
       }
     }
     return days;

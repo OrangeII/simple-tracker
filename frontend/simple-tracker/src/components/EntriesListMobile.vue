@@ -28,7 +28,7 @@
     <div v-else>
       <TransitionGroup name="list-slide-left">
         <EntriesListGroupedItem
-          v-for="group in dateEntries.entiresById"
+          v-for="group in dateEntries.entriesById"
           :key="group.id"
           :group="group"
           class="px-4"

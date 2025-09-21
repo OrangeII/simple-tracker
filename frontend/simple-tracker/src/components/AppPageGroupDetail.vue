@@ -133,7 +133,7 @@ watch(
       return;
     }
 
-    let updatedGroup = dateGroup.entiresById[props.group.id];
+    let updatedGroup = dateGroup.entriesById[props.group.id];
     if (updatedGroup == undefined) {
       //this group is not in this date anymore
       emit("close");

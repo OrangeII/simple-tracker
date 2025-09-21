@@ -50,7 +50,7 @@ export interface DateGroup {
   date: Date;
   totalTime: number;
   entries: TimeEntry[];
-  entiresById: {
+  entriesById: {
     [key: string]: TaskGroup;
   };
 }
