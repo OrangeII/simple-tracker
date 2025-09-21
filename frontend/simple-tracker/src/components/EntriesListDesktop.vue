@@ -14,22 +14,22 @@
           </td>
         </tr>
         <tr
-          v-if="!grouped"
-          v-for="entry in dateEntries.entries"
-          :key="entry.id"
-        ></tr>
-        <tr
-          v-else
-          v-for="group in dateEntries.entiresById"
-          :key="group.id"
-          @click="$emit('onGroupClick', group)"
+          v-for="rowData in rowsData[date]"
+          :key="rowData.id"
+          @click="
+            rowData.isGrouped && rowData.group
+              ? $emit('onGroupClick', rowData.group)
+              : $emit('onEntryClick', rowData.entry)
+          "
         >
-          <td>{{ tasks[group.id].name }}</td>
-          <td>{{ toDurationString(new Date(group.totalTime)) }}</td>
+          <td>{{ tasks[rowData.id].name }}</td>
+          <td>
+            {{ rowData.durationString }}
+          </td>
           <td>
             <div class="flex flex-wrap gap-2">
               <TaskTag
-                v-for="tag in tasks[group.id].tags"
+                v-for="tag in tasks[rowData.id].tags"
                 :key="tag.id"
                 :name="tag.name"
                 :hex_color="tag.hex_color"
@@ -40,16 +40,20 @@
             <div class="flex flex-row gap-2">
               <AppButtonDelete
                 :hideCaption="true"
-                @onDelete="$emit('onDeleteGroup', group)"
+                @onDelete="
+                  rowData.isGrouped && rowData.group
+                    ? $emit('onDeleteGroup', rowData.group)
+                    : $emit('onDeleteEntry', rowData.entry)
+                "
               />
               <AppButtonFavorite
                 :hideCaption="true"
-                :isFavorite="tasks[group.id]?.is_favorite"
-                @onFavoriteClick="$emit('onFavoriteClicked', group.entries[0])"
+                :isFavorite="tasks[rowData.id]?.is_favorite"
+                @onFavoriteClick="$emit('onFavoriteClicked', rowData.entry)"
               />
               <AppButtonResume
                 :suppress-flex-end="true"
-                @on-resume="$emit('onResume', group.entries[0])"
+                @on-resume="$emit('onResume', rowData.entry)"
               />
             </div>
           </td>
@@ -73,19 +77,68 @@ import AppButtonResume from "./AppButtonResume.vue";
 const timeLineStore = useTimelineStore();
 const tasksStore = useTasksStore();
 
+interface RowData {
+  id: string;
+  isGrouped: boolean;
+  group: TaskGroup | null;
+  entry: TimeEntry;
+  durationString: string;
+}
+const rowsData = computed<{
+  [date: string]: RowData[];
+}>(() => {
+  const acc = {} as { [date: string]: RowData[] };
+  for (const [date, dateEntries] of Object.entries(
+    timeLineStore.timeEntriesByDate
+  )) {
+    acc[date] = [];
+    if (!dateEntries) continue;
+
+    if (props.grouped) {
+      for (const [groupId, group] of Object.entries(dateEntries.entiresById)) {
+        acc[date].push({
+          id: groupId,
+          isGrouped: true,
+          group,
+          entry: group.entries[0],
+          durationString: toDurationString(new Date(group.totalTime)),
+        });
+      }
+    } else {
+      for (const entry of dateEntries.entries) {
+        acc[date].push({
+          id: entry.task_id,
+          isGrouped: false,
+          group: null,
+          entry,
+          durationString: entry.end_time
+            ? toDurationString(
+                new Date(
+                  new Date(entry.end_time).getTime() -
+                    new Date(entry.start_time).getTime()
+                )
+              )
+            : "ongoing",
+        });
+      }
+    }
+  }
+  return acc;
+});
+
 const tasks = computed<{
   [id: string]: Task;
 }>(() => {
-  return timeLineStore.timeEntries.reduce((ecc, entry) => {
+  return timeLineStore.timeEntries.reduce((acc, entry) => {
     const task = tasksStore.get(entry.task_id);
     if (task) {
-      ecc[task.id] = task;
+      acc[task.id] = task;
     }
-    return ecc;
+    return acc;
   }, {} as { [id: string]: Task });
 });
 
-defineProps<{
+const props = defineProps<{
   grouped: boolean;
 }>();
 
